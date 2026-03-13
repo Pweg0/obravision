@@ -111,6 +111,7 @@ model Obra {
   empresa     Empresa     @relation(fields: [empresaId], references: [id])
   members     ObraMember[]
   invitations Invitation[]
+  plantas     Planta[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
@@ -179,4 +180,107 @@ model Lead {
   empresaId String?
   empresa   Empresa? @relation(fields: [empresaId], references: [id])
   createdAt DateTime @default(now())
+}
+
+// ---- Phase 2: PDF viewer + anchored comments ----
+
+enum DisciplinaTipo {
+  ARQUITETURA
+  ESTRUTURAL
+  ELETRICA
+  HIDRAULICA
+  INCENDIO
+  TOPOGRAFIA
+  CUSTOMIZADO
+}
+
+model Planta {
+  id               String          @id @default(cuid())
+  tenantId         String
+  obraId           String
+  obra             Obra            @relation(fields: [obraId], references: [id])
+  nome             String
+  disciplina       DisciplinaTipo
+  disciplinaCustom String?         // populated when disciplina = CUSTOMIZADO
+  revisoes         PlantaRevisao[]
+  deletedAt        DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  @@index([obraId])
+  @@index([tenantId])
+}
+
+model PlantaRevisao {
+  id          String   @id @default(cuid())
+  tenantId    String
+  plantaId    String
+  planta      Planta   @relation(fields: [plantaId], references: [id])
+  revisao     String   // "R0", "R1", "R2", etc.
+  changelog   String   // required — what changed
+  r2Key       String   // original PDF key in R2
+  tilesReady  Boolean  @default(false)
+  tilesPrefix String?  // R2 prefix for WebP tiles, e.g. "tiles/plantaRevisaoId/"
+  pageCount   Int?
+  pins        Pin[]
+  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+  uploadedBy  String   // User.id
+
+  @@index([plantaId])
+  @@index([tenantId])
+}
+
+model Pin {
+  id              String        @id @default(cuid())
+  tenantId        String
+  plantaRevisaoId String
+  plantaRevisao   PlantaRevisao @relation(fields: [plantaRevisaoId], references: [id])
+  authorId        String
+  x               Float         // normalized 0.0–1.0 (left–right)
+  y               Float         // normalized 0.0–1.0 (top–bottom)
+  pageNumber      Int
+  thread          Thread?
+  deletedAt       DateTime?
+  createdAt       DateTime      @default(now())
+
+  @@index([plantaRevisaoId])
+  @@index([tenantId])
+}
+
+model Thread {
+  id        String          @id @default(cuid())
+  tenantId  String
+  pinId     String          @unique
+  pin       Pin             @relation(fields: [pinId], references: [id])
+  messages  ThreadMessage[]
+  deletedAt DateTime?
+  createdAt DateTime        @default(now())
+}
+
+model ThreadMessage {
+  id        String   @id @default(cuid())
+  tenantId  String
+  threadId  String
+  thread    Thread   @relation(fields: [threadId], references: [id])
+  authorId  String
+  content   String   @db.Text
+  mentions  String[] // array of User.id mentioned with @
+  deletedAt DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([threadId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  tenantId  String
+  userId    String   // recipient
+  type      String   // "new_pin" | "new_reply" | "new_revision" | "mention"
+  payload   Json     // { pinId?, threadId?, obraId, authorName, ... }
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([tenantId])
 }
