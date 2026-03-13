@@ -13,7 +13,7 @@ ObraVision is built in five phases that follow strict dependency order. The foun
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Auth, obra CRUD, onboarding wizard, and public landing page — the system exists and users can log in
-- [x] **Phase 2: PDF Viewer + Anchored Comments** - Core differentiator: upload plants, view them, place pins with threaded comments and real-time notifications (completed 2026-03-13)
+- [ ] **Phase 2: PDF Viewer + Anchored Comments** - Core differentiator: upload plants, view them, place pins with threaded comments and real-time notifications
 - [ ] **Phase 3: Cronograma + RDO** - Schedule management and daily diary — the table-stakes field workflow that makes the product a non-negotiable for Brazilian engineers
 - [ ] **Phase 4: Orcamento + Compras + Medicoes** - Budget, procurement, inventory, and physical measurements — the operational depth that justifies paid plans
 - [ ] **Phase 5: Relatorios + Dashboards** - Management reports, KPI dashboards, and PDF export — the output layer that closes the loop for managers and clients
@@ -46,12 +46,13 @@ Plans:
   2. User can click any point on the plant to place a pin, write a comment, and start a thread — pin coordinates survive page zoom and browser resize
   3. User can upload a new plant revision (R0, R1, R2) with a changelog entry, and older revisions remain accessible
   4. User receives a real-time notification (without page refresh) when a teammate places a new pin or replies to a thread on a plant they are viewing
-**Plans**: 3 plans
+**Plans**: 4 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Prisma models, R2 presigned upload, BullMQ PDF-to-WebP conversion pipeline, plant listing by disciplina, Vitest infrastructure
-- [ ] 02-02-PLAN.md — PDF viewer with react-pdf + tile rendering, pin overlay with normalized coordinates, threaded comment sidebar, revision dropdown
-- [ ] 02-03-PLAN.md — Socket.io WebSocket hub (room-per-obra), real-time notifications with toast + badge + sound, dedicated notifications page
+- [x] 02-01-PLAN.md — Prisma models, R2 presigned upload, BullMQ PDF-to-WebP conversion pipeline, plant listing by disciplina, Vitest infrastructure
+- [x] 02-02-PLAN.md — PDF viewer with react-pdf + tile rendering, pin overlay with normalized coordinates, threaded comment sidebar, revision dropdown
+- [x] 02-03-PLAN.md — Socket.io WebSocket hub (room-per-obra), real-time notifications with toast + badge + sound, dedicated notifications page
+- [ ] 02-04-PLAN.md — Gap closure: wire emitNotification into createPin and addMessage for real-time pin/reply/mention notifications
 
 ### Phase 3: Cronograma + RDO
 **Goal**: Engineers can manage a construction schedule with Gantt view and weather alerts, and field teams can log daily diary entries linked to active tasks — creating a closed loop between office planning and site execution
@@ -111,7 +112,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-13 |
-| 2. PDF Viewer + Anchored Comments | 3/3 | Complete   | 2026-03-13 |
+| 2. PDF Viewer + Anchored Comments | 3/4 | Gap closure | - |
 | 3. Cronograma + RDO | 0/3 | Not started | - |
 | 4. Orcamento + Compras + Medicoes | 0/5 | Not started | - |
 | 5. Relatorios + Dashboards | 0/2 | Not started | - |
