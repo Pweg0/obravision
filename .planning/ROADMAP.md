@@ -111,7 +111,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-13 |
-| 2. PDF Viewer + Anchored Comments | 0/3 | Not started | - |
+| 2. PDF Viewer + Anchored Comments | 1/3 | In Progress|  |
 | 3. Cronograma + RDO | 0/3 | Not started | - |
 | 4. Orcamento + Compras + Medicoes | 0/5 | Not started | - |
 | 5. Relatorios + Dashboards | 0/2 | Not started | - |

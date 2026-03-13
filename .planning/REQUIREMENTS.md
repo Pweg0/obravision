@@ -23,9 +23,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Plantas & Viewer
 
-- [ ] **PLNT-01**: User can upload plantas in PDF format
+- [x] **PLNT-01**: User can upload plantas in PDF format
 - [ ] **PLNT-02**: User can view plantas in full-screen PDF viewer with zoom and navigation
-- [ ] **PLNT-03**: User can create new plant revisions (R0, R1, R2...) with changelog
+- [x] **PLNT-03**: User can create new plant revisions (R0, R1, R2...) with changelog
 - [ ] **PLNT-04**: User can click on any point of a planta to create an anchored comment with pin and thread
 - [ ] **PLNT-05**: User receives real-time notifications when new comments are added via WebSocket
 
@@ -152,9 +152,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OBRA-02 | Phase 1 | Complete |
 | OBRA-03 | Phase 1 | Complete |
 | MKT-01 | Phase 1 | Complete |
-| PLNT-01 | Phase 2 | Pending |
+| PLNT-01 | Phase 2 | Complete |
 | PLNT-02 | Phase 2 | Pending |
-| PLNT-03 | Phase 2 | Pending |
+| PLNT-03 | Phase 2 | Complete |
 | PLNT-04 | Phase 2 | Pending |
 | PLNT-05 | Phase 2 | Pending |
 | CRON-01 | Phase 3 | Pending |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-13T21:21:16.359Z"
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-13T22:05:47.837Z"
 last_activity: "2026-03-13 — Completed Plan 01-02: onboarding, obra CRUD, invitations, dashboard"
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  total_plans: 6
+  completed_plans: 4
   percent: 60
 ---
 
@@ -53,6 +53,7 @@ Progress: [██████░░░░] 60%
 | Phase 01-foundation P01 | 15 | 2 tasks | 43 files |
 | Phase 01-foundation P02 | 3 | 2 tasks | 38 files |
 | Phase 01-foundation P03 | 35 | 1 tasks | 12 files |
+| Phase 02-pdf-viewer-anchored-comments P01 | 12 | 2 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,10 @@ Recent decisions affecting current work:
 - [Phase 01-foundation Plan 02]: localStorage for view toggle persistence — no Zustand needed for single key
 - [Phase 01-foundation Plan 02]: Cookie deletion for session refresh on empresa-level invite — unstable_update() not available in Auth.js beta.25
 - [Phase 01-foundation Plan 02]: Derived activity feed from timestamps — no audit log table in Phase 1
+- [Phase 02-pdf-viewer-anchored-comments]: Vitest alias for @obravision/db/rls-client must be listed BEFORE @obravision/db in alias map to prevent resolution overlap
+- [Phase 02-pdf-viewer-anchored-comments]: listPlantasByObra returns Record<string, PlantaWithRevisoes[]> not array — direct group-by-disciplina without re-grouping on client
+- [Phase 02-pdf-viewer-anchored-comments]: Enqueue-conversion failure is non-fatal — logged but createRevisao succeeds; tiles ready eventually via retry
+- [Phase 02-pdf-viewer-anchored-comments]: R2 key format: plantas/{tenantId}/{timestamp}-{filename} — tenantId embedded for auditing without DB lookup
 
 ### Pending Todos
 
@@ -89,6 +94,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T21:21:16.334Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-pdf-viewer-anchored-comments/02-CONTEXT.md
+Last session: 2026-03-13T22:05:47.830Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None
