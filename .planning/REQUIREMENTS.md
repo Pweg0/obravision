@@ -9,10 +9,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication & Onboarding
 
-- [ ] **AUTH-01**: User can sign up with email and password
-- [ ] **AUTH-02**: User can log in with Google OAuth
-- [ ] **AUTH-03**: User session persists across browser refresh
-- [ ] **AUTH-04**: User can reset password via email link
+- [x] **AUTH-01**: User can sign up with email and password
+- [x] **AUTH-02**: User can log in with Google OAuth
+- [x] **AUTH-03**: User session persists across browser refresh
+- [x] **AUTH-04**: User can reset password via email link
 - [ ] **AUTH-05**: User completes onboarding wizard (create empresa > create obra > invite equipe)
 
 ### Gestao de Obras
@@ -143,10 +143,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | AUTH-05 | Phase 1 | Pending |
 | OBRA-01 | Phase 1 | Pending |
 | OBRA-02 | Phase 1 | Pending |

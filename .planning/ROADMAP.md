@@ -110,7 +110,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 1/3 | In Progress|  |
+| 1. Foundation | 2/3 | In Progress|  |
 | 2. PDF Viewer + Anchored Comments | 0/3 | Not started | - |
 | 3. Cronograma + RDO | 0/3 | Not started | - |
 | 4. Orcamento + Compras + Medicoes | 0/5 | Not started | - |

@@ -10,8 +10,8 @@ progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 0
+  completed_plans: 2
+  percent: 40
 ---
 
 # Project State
@@ -26,9 +26,9 @@ See: .planning/PROJECT.md (updated 2026-03-13)
 ## Current Position
 
 Phase: 1 of 5 (Foundation)
-Plan: 0 of 3 in current phase
-Status: Ready to plan
-Last activity: 2026-03-13 — Roadmap created, phases derived from 37 v1 requirements
+Plan: 1 of 3 in current phase (01-01 complete)
+Status: Executing
+Last activity: 2026-03-13 — Completed Plan 01-01: monorepo scaffold + auth + RLS
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 01-foundation P01 | 15 | 2 tasks | 43 files |
 | Phase 01-foundation P03 | 35 | 1 tasks | 12 files |
 
 ## Accumulated Context
@@ -66,6 +67,10 @@ Recent decisions affecting current work:
 - [Phase 01-foundation]: Used prisma.lead.upsert with empty update{} since Lead model has no updatedAt — re-submissions succeed silently
 - [Phase 01-foundation]: No auth() call in marketing layout — zero session overhead on landing page (RESEARCH.md pitfall 6)
 - [Phase 01-foundation]: LeadCaptureForm is Client Component, captureLead is Server Action — clean boundary for form validation UX vs server persistence
+- [Phase 01-foundation Plan 01]: JWT session strategy (not database) — mandatory for Auth.js Credentials provider
+- [Phase 01-foundation Plan 01]: Manual passwordHash in Server Action — Prisma adapter doesn't store passwords
+- [Phase 01-foundation Plan 01]: RLS via SQL migration with USING + WITH CHECK on all tenant-scoped tables
+- [Phase 01-foundation Plan 01]: set_config with TRUE (transaction-scoped) — safe with connection poolers
 
 ### Pending Todos
 
@@ -80,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T18:13:48.965Z
-Stopped at: Completed 01-foundation-01-03-PLAN.md
+Last session: 2026-03-13T18:20:00Z
+Stopped at: Completed 01-foundation-01-01-PLAN.md
 Resume file: None
