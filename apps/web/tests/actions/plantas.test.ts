@@ -1,5 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// Mock next/navigation
+vi.mock("next/navigation", () => ({
+  redirect: vi.fn((url: string) => {
+    throw new Error(`REDIRECT:${url}`)
+  }),
+}))
+
+// Mock next/cache
+vi.mock("next/cache", () => ({
+  revalidatePath: vi.fn(),
+}))
+
 // Mock next-auth
 vi.mock("@/lib/auth", () => ({
   auth: vi.fn().mockResolvedValue({
@@ -11,7 +23,7 @@ vi.mock("@/lib/auth", () => ({
   }),
 }))
 
-// Mock Prisma
+// Mock @obravision/db (prisma singleton)
 vi.mock("@obravision/db", () => ({
   prisma: {
     empresa: {
@@ -20,15 +32,11 @@ vi.mock("@obravision/db", () => ({
         tenantId: "tenant-1",
       }),
     },
-    planta: {
-      create: vi.fn(),
-      findMany: vi.fn(),
-    },
-    plantaRevisao: {
-      count: vi.fn().mockResolvedValue(0),
-      create: vi.fn(),
-    },
   },
+}))
+
+// Mock @obravision/db/rls-client
+vi.mock("@obravision/db/rls-client", () => ({
   createTenantClient: vi.fn(() => ({
     planta: {
       create: vi.fn().mockResolvedValue({ id: "planta-1", nome: "Planta A" }),
@@ -44,7 +52,7 @@ vi.mock("@obravision/db", () => ({
 // Mock R2 / AWS SDK
 vi.mock("@aws-sdk/client-s3", () => ({
   S3Client: vi.fn().mockImplementation(() => ({})),
-  PutObjectCommand: vi.fn().mockImplementation((params) => ({ ...params })),
+  PutObjectCommand: vi.fn().mockImplementation((params: unknown) => params),
 }))
 
 vi.mock("@aws-sdk/s3-request-presigner", () => ({

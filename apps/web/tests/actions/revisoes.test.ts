@@ -1,5 +1,16 @@
 import { describe, it, expect, vi, beforeEach } from "vitest"
 
+// vi.hoisted ensures these are available when vi.mock factories run (hoisted to top)
+const mocks = vi.hoisted(() => {
+  const mockTenantClient = vi.fn()
+  const mockPrismaEmpresaFindUnique = vi.fn().mockResolvedValue({
+    id: "empresa-1",
+    tenantId: "tenant-1",
+  })
+
+  return { mockTenantClient, mockPrismaEmpresaFindUnique }
+})
+
 // Mock next/navigation (redirect)
 vi.mock("next/navigation", () => ({
   redirect: vi.fn((url: string) => {
@@ -23,27 +34,23 @@ vi.mock("@/lib/auth", () => ({
   }),
 }))
 
-// Create a mutable mock for plantaRevisao operations
-const mockPlantaRevisaoCount = vi.fn()
-const mockPlantaRevisaoCreate = vi.fn()
-const mockPlantaFindUnique = vi.fn()
-const mockTenantClient = vi.fn()
-
+// Mock @obravision/db (the prisma singleton)
 vi.mock("@obravision/db", () => ({
   prisma: {
     empresa: {
-      findUnique: vi.fn().mockResolvedValue({
-        id: "empresa-1",
-        tenantId: "tenant-1",
-      }),
+      findUnique: mocks.mockPrismaEmpresaFindUnique,
     },
   },
-  createTenantClient: mockTenantClient,
+}))
+
+// Mock @obravision/db/rls-client (createTenantClient)
+vi.mock("@obravision/db/rls-client", () => ({
+  createTenantClient: mocks.mockTenantClient,
 }))
 
 vi.mock("@aws-sdk/client-s3", () => ({
   S3Client: vi.fn().mockImplementation(() => ({})),
-  PutObjectCommand: vi.fn().mockImplementation((params) => ({ ...params })),
+  PutObjectCommand: vi.fn().mockImplementation((params: unknown) => params),
 }))
 
 vi.mock("@aws-sdk/s3-request-presigner", () => ({
@@ -55,6 +62,13 @@ import { createRevisao } from "@/lib/actions/planta"
 describe("createRevisao", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+
+    // Reset empresa mock
+    mocks.mockPrismaEmpresaFindUnique.mockResolvedValue({
+      id: "empresa-1",
+      tenantId: "tenant-1",
+    })
+
     process.env.CF_ACCOUNT_ID = "test-account"
     process.env.R2_ACCESS_KEY_ID = "test-key"
     process.env.R2_SECRET_ACCESS_KEY = "test-secret"
@@ -62,8 +76,8 @@ describe("createRevisao", () => {
     process.env.API_URL = "http://localhost:4000"
   })
 
-  it("returns an error when changelog is empty", async () => {
-    mockTenantClient.mockReturnValue({
+  const makeClientWithCount = (count: number, createFn = vi.fn()) => {
+    mocks.mockTenantClient.mockReturnValue({
       planta: {
         findUnique: vi.fn().mockResolvedValue({
           id: "planta-1",
@@ -72,10 +86,19 @@ describe("createRevisao", () => {
         }),
       },
       plantaRevisao: {
-        count: vi.fn().mockResolvedValue(0),
+        count: vi.fn().mockResolvedValue(count),
+        create: createFn,
+        findFirst: vi.fn().mockResolvedValue(null),
+      },
+      pin: {
         create: vi.fn(),
       },
     })
+    return createFn
+  }
+
+  it("returns an error when changelog is empty", async () => {
+    makeClientWithCount(0)
 
     const formData = new FormData()
     formData.set("changelog", "")
@@ -87,22 +110,10 @@ describe("createRevisao", () => {
   })
 
   it("returns an error when changelog is missing", async () => {
-    mockTenantClient.mockReturnValue({
-      planta: {
-        findUnique: vi.fn().mockResolvedValue({
-          id: "planta-1",
-          obraId: "obra-1",
-          tenantId: "tenant-1",
-        }),
-      },
-      plantaRevisao: {
-        count: vi.fn().mockResolvedValue(0),
-        create: vi.fn(),
-      },
-    })
+    makeClientWithCount(0)
 
     const formData = new FormData()
-    // no changelog set
+    // no changelog — will be null -> empty string -> fails validation
     formData.set("r2Key", "plantas/test.pdf")
     formData.set("fileSize", "1000")
 
@@ -116,20 +127,7 @@ describe("createRevisao", () => {
       revisao: "R0",
       changelog: "Initial version",
     })
-
-    mockTenantClient.mockReturnValue({
-      planta: {
-        findUnique: vi.fn().mockResolvedValue({
-          id: "planta-1",
-          obraId: "obra-1",
-          tenantId: "tenant-1",
-        }),
-      },
-      plantaRevisao: {
-        count: vi.fn().mockResolvedValue(0),
-        create: mockCreate,
-      },
-    })
+    makeClientWithCount(0, mockCreate)
 
     const formData = new FormData()
     formData.set("changelog", "Initial version")
@@ -154,20 +152,7 @@ describe("createRevisao", () => {
       revisao: "R1",
       changelog: "Updated design",
     })
-
-    mockTenantClient.mockReturnValue({
-      planta: {
-        findUnique: vi.fn().mockResolvedValue({
-          id: "planta-1",
-          obraId: "obra-1",
-          tenantId: "tenant-1",
-        }),
-      },
-      plantaRevisao: {
-        count: vi.fn().mockResolvedValue(1),
-        create: mockCreate,
-      },
-    })
+    makeClientWithCount(1, mockCreate)
 
     const formData = new FormData()
     formData.set("changelog", "Updated design")
@@ -191,20 +176,7 @@ describe("createRevisao", () => {
       revisao: "R2",
       changelog: "Final revision",
     })
-
-    mockTenantClient.mockReturnValue({
-      planta: {
-        findUnique: vi.fn().mockResolvedValue({
-          id: "planta-1",
-          obraId: "obra-1",
-          tenantId: "tenant-1",
-        }),
-      },
-      plantaRevisao: {
-        count: vi.fn().mockResolvedValue(2),
-        create: mockCreate,
-      },
-    })
+    makeClientWithCount(2, mockCreate)
 
     const formData = new FormData()
     formData.set("changelog", "Final revision")
