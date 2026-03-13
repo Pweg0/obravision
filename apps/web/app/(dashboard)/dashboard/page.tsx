@@ -4,6 +4,8 @@ import { createTenantClient } from "@obravision/db/rls-client"
 import { ObraListWidget } from "@/components/dashboard/ObraListWidget"
 import { ActivityWidget } from "@/components/dashboard/ActivityWidget"
 import { PlaceholderWidget } from "@/components/dashboard/PlaceholderWidget"
+import { ProgressWidget } from "@/components/cronograma/ProgressWidget"
+import { getProgressData } from "@/lib/actions/rdo"
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -69,6 +71,12 @@ export default async function DashboardPage() {
     .sort((a, b) => new Date(b.time).getTime() - new Date(a.time).getTime())
     .slice(0, 8)
 
+  // Fetch progress data for the most recently updated active obra
+  const firstActiveObra = obras[0] ?? null
+  const progressData = firstActiveObra
+    ? await getProgressData(firstActiveObra.id)
+    : []
+
   const displayName = session.user.name ?? session.user.email ?? "Usuario"
 
   return (
@@ -91,6 +99,19 @@ export default async function DashboardPage() {
         <div>
           <ActivityWidget items={activityItems} />
         </div>
+
+        {/* Progress widget (S-curve) for first active obra */}
+        {firstActiveObra ? (
+          <ProgressWidget
+            data={progressData}
+            obraName={firstActiveObra.nome}
+          />
+        ) : (
+          <PlaceholderWidget
+            title="Progresso da Obra"
+            description="Adicione um cronograma para ver o progresso planejado vs real."
+          />
+        )}
 
         {/* Placeholder widgets */}
         <PlaceholderWidget
