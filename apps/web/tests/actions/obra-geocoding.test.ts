@@ -23,6 +23,40 @@ vi.mock("@/lib/auth", () => ({
   }),
 }))
 
+// Mock tenant client factory — must be defined before vi.mock to avoid TDZ
+const mockTenantClient = {
+  obra: {
+    create: vi.fn(),
+    update: vi.fn(),
+  },
+}
+
+vi.mock("@obravision/db/rls-client", () => ({
+  createTenantClient: vi.fn(() => mockTenantClient),
+}))
+
+vi.mock("@obravision/db", () => ({
+  prisma: {
+    empresa: {
+      findUnique: vi.fn().mockResolvedValue({
+        id: "empresa-1",
+        tenantId: "tenant-1",
+      }),
+    },
+    obraStatus: {
+      findFirst: vi.fn().mockResolvedValue({
+        id: "status-1",
+        tenantId: "tenant-1",
+        name: "Em andamento",
+        color: "#1A6B5A",
+        empresaId: "empresa-1",
+      }),
+    },
+  },
+}))
+
+import { geocodeAddress, createObra } from "@/lib/actions/obra"
+
 const mockObra = {
   id: "obra-1",
   tenantId: "tenant-1",
@@ -42,45 +76,6 @@ const mockObra = {
   createdAt: new Date("2026-01-01"),
   updatedAt: new Date("2026-01-01"),
 }
-
-const mockObraStatus = {
-  id: "status-1",
-  tenantId: "tenant-1",
-  name: "Em andamento",
-  color: "#1A6B5A",
-  empresaId: "empresa-1",
-}
-
-// Mock tenant client factory
-const mockTenantClient = {
-  obra: {
-    create: vi.fn().mockResolvedValue(mockObra),
-    update: vi.fn().mockResolvedValue(mockObra),
-  },
-}
-
-vi.mock("@obravision/db/rls-client", () => ({
-  createTenantClient: vi.fn(() => mockTenantClient),
-}))
-
-vi.mock("@obravision/db", () => ({
-  prisma: {
-    empresa: {
-      findUnique: vi.fn().mockResolvedValue({
-        id: "empresa-1",
-        tenantId: "tenant-1",
-      }),
-    },
-    obraStatus: {
-      findFirst: vi.fn().mockResolvedValue(mockObraStatus),
-    },
-  },
-}))
-
-// We need to import the functions AFTER mocks are set up
-// The geocodeAddress function is exported for testing
-import { geocodeAddress } from "@/lib/actions/obra"
-import { createObra } from "@/lib/actions/obra"
 
 describe("geocodeAddress", () => {
   const originalFetch = global.fetch
@@ -153,23 +148,26 @@ describe("geocodeAddress", () => {
 })
 
 describe("createObra with geocoding", () => {
+  const originalFetch = global.fetch
+
   beforeEach(() => {
-    vi.clearAllMocks()
+    // Reset only the tenant client mocks (not all mocks, to preserve prisma vi.fn defaults)
+    mockTenantClient.obra.create.mockReset()
+    mockTenantClient.obra.update.mockReset()
+    mockTenantClient.obra.create.mockResolvedValue(mockObra)
+    mockTenantClient.obra.update.mockResolvedValue({ ...mockObra, lat: -23.5505, lon: -46.6333 })
+  })
+
+  afterEach(() => {
+    global.fetch = originalFetch
   })
 
   it("calls geocodeAddress and updates obra with lat/lon on success", async () => {
-    // Mock fetch for Nominatim — returns valid coordinates
+    // Mock Nominatim to succeed
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => [{ lat: "-23.5505", lon: "-46.6333" }],
     } as Response)
-
-    // Mock the update call to return obra with lat/lon
-    mockTenantClient.obra.update.mockResolvedValueOnce({
-      ...mockObra,
-      lat: -23.5505,
-      lon: -46.6333,
-    })
 
     const formData = new FormData()
     formData.set("nome", "Edificio Alpha")
@@ -177,7 +175,7 @@ describe("createObra with geocoding", () => {
     formData.set("numero", "100")
     formData.set("cidade", "Sao Paulo")
     formData.set("estado", "SP")
-    formData.set("cep", "01310-100")
+    formData.set("cep", "01310100")
     formData.set("tipo", "RESIDENCIAL")
     formData.set("area", "200")
 
@@ -196,7 +194,7 @@ describe("createObra with geocoding", () => {
   })
 
   it("still creates obra when geocoding fails (non-fatal)", async () => {
-    // Mock fetch to fail
+    // Mock Nominatim to fail
     global.fetch = vi.fn().mockRejectedValue(new Error("Nominatim unreachable"))
 
     const formData = new FormData()
@@ -205,7 +203,7 @@ describe("createObra with geocoding", () => {
     formData.set("numero", "1000")
     formData.set("cidade", "Sao Paulo")
     formData.set("estado", "SP")
-    formData.set("cep", "01310-200")
+    formData.set("cep", "01310200")
     formData.set("tipo", "COMERCIAL")
     formData.set("area", "500")
 

@@ -319,5 +319,55 @@ export async function listCronograma(obraId: string) {
     orderBy: { ordem: "asc" },
   })
 
-  return etapas
+  // Query active weather alerts from Notification table
+  // An alert is "active" if the alertDate in the payload is in the future
+  const now = new Date()
+  const allTarefaIds = etapas.flatMap((e) => e.tarefas.map((t) => t.id))
+
+  // Find all weather alert notifications for these tarefas that are still relevant
+  // We use prisma directly (not tenant client) since Notification uses userId-based access, not tenantId filter
+  const weatherAlerts = allTarefaIds.length > 0
+    ? await prisma.notification.findMany({
+        where: {
+          tenantId: empresa.tenantId,
+          type: { in: ["weather_preliminary", "weather_confirmed"] },
+          // Check payload.tarefaId via JSON path — Prisma supports path-based JSON query
+          // We'll filter by tarefaId in the payload using raw comparison
+        },
+        select: {
+          type: true,
+          payload: true,
+        },
+      })
+    : []
+
+  // Build a set of tarefaIds with active alerts (alertDate in the future)
+  const activeAlertMap = new Map<string, "weather_preliminary" | "weather_confirmed">()
+  for (const notification of weatherAlerts) {
+    const payload = notification.payload as { tarefaId?: string; alertDate?: string }
+    if (
+      payload?.tarefaId &&
+      allTarefaIds.includes(payload.tarefaId) &&
+      payload.alertDate &&
+      new Date(payload.alertDate) > now
+    ) {
+      const existing = activeAlertMap.get(payload.tarefaId)
+      // Prefer "weather_confirmed" over "weather_preliminary"
+      if (!existing || notification.type === "weather_confirmed") {
+        activeAlertMap.set(
+          payload.tarefaId,
+          notification.type as "weather_preliminary" | "weather_confirmed"
+        )
+      }
+    }
+  }
+
+  // Attach temAlertaChuva to each tarefa
+  return etapas.map((etapa) => ({
+    ...etapa,
+    tarefas: etapa.tarefas.map((tarefa) => ({
+      ...tarefa,
+      temAlertaChuva: activeAlertMap.has(tarefa.id) ? activeAlertMap.get(tarefa.id)! : null,
+    })),
+  }))
 }

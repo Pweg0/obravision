@@ -31,6 +31,62 @@ function requireAdminOrEngenheiro(role: string) {
   return null
 }
 
+// ---- Geocoding helper ----
+
+interface GeocodingResult {
+  lat: number
+  lon: number
+}
+
+/**
+ * Geocodes an address using Nominatim (OpenStreetMap).
+ * Returns { lat, lon } on success or null on any failure.
+ *
+ * Rate limit: 1 req/sec is fine since obras are created infrequently.
+ * Non-fatal: callers must handle null gracefully.
+ *
+ * @see https://nominatim.openstreetmap.org/
+ */
+export async function geocodeAddress(
+  logradouro: string,
+  numero: string,
+  cidade: string,
+  estado: string,
+  cep: string
+): Promise<GeocodingResult | null> {
+  try {
+    const addressQuery = `${logradouro}, ${numero}, ${cidade}, ${estado}, ${cep}, Brasil`
+    const encodedQuery = encodeURIComponent(addressQuery)
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodedQuery}&format=json&limit=1`
+
+    const res = await fetch(url, {
+      headers: {
+        "User-Agent": "ObraVision/1.0",
+      },
+    })
+
+    if (!res.ok) {
+      console.warn(`[geocodeAddress] Nominatim returned ${res.status}: ${res.statusText}`)
+      return null
+    }
+
+    const results = (await res.json()) as Array<{ lat: string; lon: string }>
+
+    if (!results || results.length === 0) {
+      return null
+    }
+
+    return {
+      lat: parseFloat(results[0].lat),
+      lon: parseFloat(results[0].lon),
+    }
+  } catch (err) {
+    // Non-fatal — geocoding failure should never block obra creation
+    console.warn("[geocodeAddress] Failed to geocode address:", err)
+    return null
+  }
+}
+
 export async function createObra(formData: FormData) {
   const { session, empresa, tenantClient } = await getTenantContext()
 
@@ -84,6 +140,15 @@ export async function createObra(formData: FormData) {
     },
   })
 
+  // Geocode address and populate lat/lon — non-fatal if it fails
+  const coords = await geocodeAddress(data.logradouro, data.numero, data.cidade, data.estado, data.cep)
+  if (coords) {
+    await tenantClient.obra.update({
+      where: { id: obra.id },
+      data: { lat: coords.lat, lon: coords.lon },
+    })
+  }
+
   revalidatePath("/dashboard/obras")
   return { success: true, obra }
 }
@@ -127,6 +192,23 @@ export async function updateObra(id: string, formData: FormData) {
       statusId: data.statusId,
     },
   })
+
+  // Re-geocode if address fields were provided — non-fatal if it fails
+  if (data.logradouro && data.cidade && data.estado) {
+    const coords = await geocodeAddress(
+      data.logradouro,
+      data.numero ?? "",
+      data.cidade,
+      data.estado,
+      data.cep ?? ""
+    )
+    if (coords) {
+      await tenantClient.obra.update({
+        where: { id },
+        data: { lat: coords.lat, lon: coords.lon },
+      })
+    }
+  }
 
   revalidatePath("/dashboard/obras")
   revalidatePath(`/dashboard/obras/${id}`)

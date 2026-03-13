@@ -3,6 +3,7 @@
 import React, { useState, useTransition } from "react"
 import dynamic from "next/dynamic"
 import { differenceInDays } from "date-fns"
+import { CloudRain } from "lucide-react"
 import { updateTarefaDates } from "@/lib/actions/cronograma"
 import { EtapaForm } from "./EtapaForm"
 import { TarefaForm } from "./TarefaForm"
@@ -28,6 +29,8 @@ export interface TarefaData {
   progressoReal: number
   createdAt: Date
   updatedAt: Date
+  /** Populated by listCronograma when an active weather alert exists for this tarefa */
+  temAlertaChuva?: "weather_preliminary" | "weather_confirmed" | null
 }
 
 export interface EtapaData {
@@ -68,6 +71,7 @@ type GanttTask = {
   _status?: string
   _climaSensivel?: boolean | null
   _delayDays?: number
+  _alertaChuva?: "weather_preliminary" | "weather_confirmed" | null
 }
 
 function getTaskColor(tarefa: TarefaData): string {
@@ -143,6 +147,7 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
         _status: tarefa.status,
         _climaSensivel: tarefa.climaSensivel,
         _delayDays: delayDays,
+        _alertaChuva: tarefa.temAlertaChuva ?? null,
       })
     }
   }
@@ -190,6 +195,46 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
           </div>
         )}
       </div>
+
+      {/* Weather alert indicator: tarefas with active rain alerts */}
+      {(() => {
+        const alertTarefas = etapas
+          .flatMap((e) => e.tarefas)
+          .filter((t) => t.temAlertaChuva != null)
+        if (alertTarefas.length === 0) return null
+        return (
+          <div className="rounded-lg border border-orange-200 bg-orange-50 px-4 py-3">
+            <div className="flex items-center gap-2 mb-1">
+              <CloudRain className="h-4 w-4 text-orange-600" />
+              <span className="text-sm font-medium text-orange-800">
+                Alertas de chuva ativos ({alertTarefas.length} tarefa{alertTarefas.length > 1 ? "s" : ""})
+              </span>
+            </div>
+            <ul className="space-y-1">
+              {alertTarefas.map((t) => {
+                const isConfirmed = t.temAlertaChuva === "weather_confirmed"
+                return (
+                  <li key={t.id} className="flex items-center gap-2 text-xs">
+                    <CloudRain
+                      className="h-3 w-3 flex-shrink-0"
+                      style={{ color: isConfirmed ? "#DC2626" : "#EA580C" }}
+                    />
+                    <span className="text-orange-900">
+                      {t.nome}
+                      <span
+                        className="ml-1 font-medium"
+                        style={{ color: isConfirmed ? "#DC2626" : "#EA580C" }}
+                      >
+                        ({isConfirmed ? "chuva confirmada amanha" : "chuva prevista em 3 dias"})
+                      </span>
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        )
+      })()}
 
       {/* Etapa list with inline actions */}
       {etapas.length > 0 && (

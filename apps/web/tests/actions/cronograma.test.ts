@@ -32,6 +32,9 @@ vi.mock("@obravision/db", () => ({
         tenantId: "tenant-1",
       }),
     },
+    notification: {
+      findMany: vi.fn().mockResolvedValue([]),
+    },
   },
 }))
 
@@ -342,7 +345,15 @@ describe("cronograma actions", () => {
       mockTenantClient.etapa.findMany.mockResolvedValueOnce([etapaWithTarefas])
 
       const result = await listCronograma("obra-1")
-      expect(result).toEqual([etapaWithTarefas])
+      // listCronograma adds temAlertaChuva to each tarefa — use objectContaining to ignore that field
+      expect(result).toEqual([
+        expect.objectContaining({
+          ...etapaWithTarefas,
+          tarefas: [
+            expect.objectContaining(mockTarefa),
+          ],
+        }),
+      ])
       expect(mockTenantClient.etapa.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { obraId: "obra-1" },
