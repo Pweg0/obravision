@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@obravision/db"
 import { createTenantClient } from "@obravision/db/rls-client"
 import { createPinSchema } from "@/lib/validations/pin"
+import { emitNotification, getObraMemberIds } from "./notification"
 
 async function getTenantContext() {
   const session = await auth()
@@ -91,6 +92,31 @@ export async function createPin(
   revalidatePath(
     `/dashboard/obras/${revisao.planta.obraId}/plantas/${revisao.plantaId}`
   )
+
+  // Notify all obra members about the new pin (except the author)
+  try {
+    const recipientIds = await getObraMemberIds(revisao.planta.obraId, session.user.id)
+    if (recipientIds.length > 0) {
+      await emitNotification(
+        revisao.planta.obraId,
+        "new-pin",
+        { pinId: pin.id, obraId: revisao.planta.obraId, authorName: session.user.name ?? "Usuario" },
+        recipientIds,
+        "new_pin",
+        {
+          obraId: revisao.planta.obraId,
+          plantaId: revisao.plantaId,
+          plantaName: revisao.planta.nome,
+          pinId: pin.id,
+          authorName: session.user.name ?? "Usuario",
+          authorId: session.user.id,
+        }
+      )
+    }
+  } catch (err) {
+    // Non-fatal: notification failure should not break pin creation
+    console.error("[createPin] Failed to emit notification:", err)
+  }
 
   return { success: true, pin }
 }
