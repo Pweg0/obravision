@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-03-PLAN.md
-last_updated: "2026-03-13T22:21:13.145Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-03-13T22:21:51.258Z"
 last_activity: "2026-03-13 — Completed Plan 01-02: onboarding, obra CRUD, invitations, dashboard"
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
   percent: 60
 ---
 
@@ -55,6 +55,7 @@ Progress: [██████░░░░] 60%
 | Phase 01-foundation P03 | 35 | 1 tasks | 12 files |
 | Phase 02-pdf-viewer-anchored-comments P01 | 12 | 2 tasks | 18 files |
 | Phase 02-pdf-viewer-anchored-comments P03 | 12 | 2 tasks | 14 files |
+| Phase 02-pdf-viewer-anchored-comments P02 | 13 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,9 @@ Recent decisions affecting current work:
 - [Phase 02-pdf-viewer-anchored-comments]: Socket.io extracted into Fastify plugin with fp() so io decoration is available on all route handlers
 - [Phase 02-pdf-viewer-anchored-comments]: SocketProvider uses dynamic import() in useEffect — only browser-side execution, avoids SSR crash
 - [Phase 02-pdf-viewer-anchored-comments]: emitNotification is non-fatal — socket/notification errors never fail primary server actions
+- [Phase 02-pdf-viewer-anchored-comments]: PinLayer uses CSS percentage positioning (left: x*100%, top: y*100%) not normalizedToPixels — percentage approach requires zero JS on zoom/resize
+- [Phase 02-pdf-viewer-anchored-comments]: scrollIntoView guarded with typeof check — jsdom doesn't implement it; avoids test breakage without mocking
+- [Phase 02-pdf-viewer-anchored-comments]: useTransition instead of useFormStatus for PinPopup — createPin called programmatically not via form action binding
 
 ### Pending Todos
 
@@ -98,6 +102,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T22:21:13.139Z
-Stopped at: Completed 02-03-PLAN.md
+Last session: 2026-03-13T22:21:51.253Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None

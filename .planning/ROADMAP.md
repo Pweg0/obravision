@@ -13,7 +13,7 @@ ObraVision is built in five phases that follow strict dependency order. The foun
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Auth, obra CRUD, onboarding wizard, and public landing page — the system exists and users can log in
-- [ ] **Phase 2: PDF Viewer + Anchored Comments** - Core differentiator: upload plants, view them, place pins with threaded comments and real-time notifications
+- [x] **Phase 2: PDF Viewer + Anchored Comments** - Core differentiator: upload plants, view them, place pins with threaded comments and real-time notifications (completed 2026-03-13)
 - [ ] **Phase 3: Cronograma + RDO** - Schedule management and daily diary — the table-stakes field workflow that makes the product a non-negotiable for Brazilian engineers
 - [ ] **Phase 4: Orcamento + Compras + Medicoes** - Budget, procurement, inventory, and physical measurements — the operational depth that justifies paid plans
 - [ ] **Phase 5: Relatorios + Dashboards** - Management reports, KPI dashboards, and PDF export — the output layer that closes the loop for managers and clients
@@ -111,7 +111,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-13 |
-| 2. PDF Viewer + Anchored Comments | 1/3 | In Progress|  |
+| 2. PDF Viewer + Anchored Comments | 3/3 | Complete   | 2026-03-13 |
 | 3. Cronograma + RDO | 0/3 | Not started | - |
 | 4. Orcamento + Compras + Medicoes | 0/5 | Not started | - |
 | 5. Relatorios + Dashboards | 0/2 | Not started | - |
