@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 3 context gathered
-last_updated: "2026-03-13T22:50:25.798Z"
+stopped_at: "Completed 03-01-PLAN.md: Cronograma schema + Gantt chart"
+last_updated: "2026-03-13T23:33:21.057Z"
 last_activity: "2026-03-13 — Completed Plan 01-02: onboarding, obra CRUD, invitations, dashboard"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 7
-  completed_plans: 7
+  total_plans: 10
+  completed_plans: 8
   percent: 60
 ---
 
@@ -57,6 +57,7 @@ Progress: [██████░░░░] 60%
 | Phase 02-pdf-viewer-anchored-comments P03 | 12 | 2 tasks | 14 files |
 | Phase 02-pdf-viewer-anchored-comments P02 | 13 | 2 tasks | 12 files |
 | Phase 02-pdf-viewer-anchored-comments P04 | 8 | 2 tasks | 3 files |
+| Phase 03-cronograma-rdo P01 | 62 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,9 @@ Recent decisions affecting current work:
 - [Phase 02-pdf-viewer-anchored-comments]: useTransition instead of useFormStatus for PinPopup — createPin called programmatically not via form action binding
 - [Phase 02-pdf-viewer-anchored-comments]: Thread participants for new-reply queried at notification time via distinct authorId — no participant list stored
 - [Phase 02-pdf-viewer-anchored-comments]: @mentioned users receive mention event only (not new-reply), preventing duplicate notifications for the same message
+- [Phase 03-cronograma-rdo]: GanttView uses dynamic() with ssr:false — @svar-ui/react-gantt uses browser DOM APIs incompatible with Next.js SSR
+- [Phase 03-cronograma-rdo]: deleteEtapa checks tarefa count before deletion — prevents orphaned child records
+- [Phase 03-cronograma-rdo]: Cronograma tab is a Link to a separate server-rendered page rather than inline client tab — keeps Gantt data fetch in server component
 
 ### Pending Todos
 
@@ -105,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T22:50:25.794Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-cronograma-rdo/03-CONTEXT.md
+Last session: 2026-03-13T23:33:21.052Z
+Stopped at: Completed 03-01-PLAN.md: Cronograma schema + Gantt chart
+Resume file: None
