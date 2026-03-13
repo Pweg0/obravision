@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-03-13T22:21:51.258Z"
+stopped_at: Completed 02-04-PLAN.md
+last_updated: "2026-03-13T22:37:20.495Z"
 last_activity: "2026-03-13 — Completed Plan 01-02: onboarding, obra CRUD, invitations, dashboard"
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 7
+  completed_plans: 7
   percent: 60
 ---
 
@@ -56,6 +56,7 @@ Progress: [██████░░░░] 60%
 | Phase 02-pdf-viewer-anchored-comments P01 | 12 | 2 tasks | 18 files |
 | Phase 02-pdf-viewer-anchored-comments P03 | 12 | 2 tasks | 14 files |
 | Phase 02-pdf-viewer-anchored-comments P02 | 13 | 2 tasks | 12 files |
+| Phase 02-pdf-viewer-anchored-comments P04 | 8 | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,8 @@ Recent decisions affecting current work:
 - [Phase 02-pdf-viewer-anchored-comments]: PinLayer uses CSS percentage positioning (left: x*100%, top: y*100%) not normalizedToPixels — percentage approach requires zero JS on zoom/resize
 - [Phase 02-pdf-viewer-anchored-comments]: scrollIntoView guarded with typeof check — jsdom doesn't implement it; avoids test breakage without mocking
 - [Phase 02-pdf-viewer-anchored-comments]: useTransition instead of useFormStatus for PinPopup — createPin called programmatically not via form action binding
+- [Phase 02-pdf-viewer-anchored-comments]: Thread participants for new-reply queried at notification time via distinct authorId — no participant list stored
+- [Phase 02-pdf-viewer-anchored-comments]: @mentioned users receive mention event only (not new-reply), preventing duplicate notifications for the same message
 
 ### Pending Todos
 
@@ -102,6 +105,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T22:21:51.253Z
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-03-13T22:37:20.490Z
+Stopped at: Completed 02-04-PLAN.md
 Resume file: None
