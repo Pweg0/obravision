@@ -143,49 +143,49 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | — | Pending |
-| AUTH-02 | — | Pending |
-| AUTH-03 | — | Pending |
-| AUTH-04 | — | Pending |
-| AUTH-05 | — | Pending |
-| OBRA-01 | — | Pending |
-| OBRA-02 | — | Pending |
-| OBRA-03 | — | Pending |
-| PLNT-01 | — | Pending |
-| PLNT-02 | — | Pending |
-| PLNT-03 | — | Pending |
-| PLNT-04 | — | Pending |
-| PLNT-05 | — | Pending |
-| CRON-01 | — | Pending |
-| CRON-02 | — | Pending |
-| CRON-03 | — | Pending |
-| RDO-01 | — | Pending |
-| RDO-02 | — | Pending |
-| RDO-03 | — | Pending |
-| ORC-01 | — | Pending |
-| ORC-02 | — | Pending |
-| ORC-03 | — | Pending |
-| ORC-04 | — | Pending |
-| ORC-05 | — | Pending |
-| ORC-06 | — | Pending |
-| COMP-01 | — | Pending |
-| COMP-02 | — | Pending |
-| COMP-03 | — | Pending |
-| COMP-04 | — | Pending |
-| COMP-05 | — | Pending |
-| COMP-06 | — | Pending |
-| MED-01 | — | Pending |
-| MED-02 | — | Pending |
-| REL-01 | — | Pending |
-| REL-02 | — | Pending |
-| REL-03 | — | Pending |
-| MKT-01 | — | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| AUTH-05 | Phase 1 | Pending |
+| OBRA-01 | Phase 1 | Pending |
+| OBRA-02 | Phase 1 | Pending |
+| OBRA-03 | Phase 1 | Pending |
+| MKT-01 | Phase 1 | Pending |
+| PLNT-01 | Phase 2 | Pending |
+| PLNT-02 | Phase 2 | Pending |
+| PLNT-03 | Phase 2 | Pending |
+| PLNT-04 | Phase 2 | Pending |
+| PLNT-05 | Phase 2 | Pending |
+| CRON-01 | Phase 3 | Pending |
+| CRON-02 | Phase 3 | Pending |
+| CRON-03 | Phase 3 | Pending |
+| RDO-01 | Phase 3 | Pending |
+| RDO-02 | Phase 3 | Pending |
+| RDO-03 | Phase 3 | Pending |
+| ORC-01 | Phase 4 | Pending |
+| ORC-02 | Phase 4 | Pending |
+| ORC-03 | Phase 4 | Pending |
+| ORC-04 | Phase 4 | Pending |
+| ORC-05 | Phase 4 | Pending |
+| ORC-06 | Phase 4 | Pending |
+| COMP-01 | Phase 4 | Pending |
+| COMP-02 | Phase 4 | Pending |
+| COMP-03 | Phase 4 | Pending |
+| COMP-04 | Phase 4 | Pending |
+| COMP-05 | Phase 4 | Pending |
+| COMP-06 | Phase 4 | Pending |
+| MED-01 | Phase 4 | Pending |
+| MED-02 | Phase 4 | Pending |
+| REL-01 | Phase 5 | Pending |
+| REL-02 | Phase 5 | Pending |
+| REL-03 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 37 total
-- Mapped to phases: 0
-- Unmapped: 37 ⚠️
+- Mapped to phases: 37
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-13*
-*Last updated: 2026-03-13 after initial definition*
+*Last updated: 2026-03-13 after roadmap creation*
