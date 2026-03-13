@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: "Completed 03-01-PLAN.md: Cronograma schema + Gantt chart"
-last_updated: "2026-03-13T23:33:21.057Z"
+stopped_at: "Completed 03-03-PLAN.md: RDO Diario de Obra"
+last_updated: "2026-03-13T23:44:31.212Z"
 last_activity: "2026-03-13 — Completed Plan 01-02: onboarding, obra CRUD, invitations, dashboard"
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
   percent: 60
 ---
 
@@ -58,6 +58,7 @@ Progress: [██████░░░░] 60%
 | Phase 02-pdf-viewer-anchored-comments P02 | 13 | 2 tasks | 12 files |
 | Phase 02-pdf-viewer-anchored-comments P04 | 8 | 2 tasks | 3 files |
 | Phase 03-cronograma-rdo P01 | 62 | 2 tasks | 10 files |
+| Phase 03-cronograma-rdo P03 | 8 | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,9 @@ Recent decisions affecting current work:
 - [Phase 03-cronograma-rdo]: GanttView uses dynamic() with ssr:false — @svar-ui/react-gantt uses browser DOM APIs incompatible with Next.js SSR
 - [Phase 03-cronograma-rdo]: deleteEtapa checks tarefa count before deletion — prevents orphaned child records
 - [Phase 03-cronograma-rdo]: Cronograma tab is a Link to a separate server-rendered page rather than inline client tab — keeps Gantt data fetch in server component
+- [Phase 03-cronograma-rdo]: ProgressWidget uses pure SVG S-curve rendering — recharts not installed, no extra dependency needed
+- [Phase 03-cronograma-rdo]: getTenantContextSafe helper returns null instead of redirect — safe for actions called from client components and GET contexts
+- [Phase 03-cronograma-rdo]: calcProgressoReal uses Set of date-fns format strings for distinct-date deduplication — avoids DB-level COUNT DISTINCT
 
 ### Pending Todos
 
@@ -109,6 +113,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T23:33:21.052Z
-Stopped at: Completed 03-01-PLAN.md: Cronograma schema + Gantt chart
+Last session: 2026-03-13T23:44:31.208Z
+Stopped at: Completed 03-03-PLAN.md: RDO Diario de Obra
 Resume file: None

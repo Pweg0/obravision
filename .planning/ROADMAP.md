@@ -113,6 +113,6 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 |-------|----------------|--------|-----------|
 | 1. Foundation | 3/3 | Complete | 2026-03-13 |
 | 2. PDF Viewer + Anchored Comments | 3/4 | Gap closure | - |
-| 3. Cronograma + RDO | 0/3 | Not started | - |
+| 3. Cronograma + RDO | 2/3 | In Progress|  |
 | 4. Orcamento + Compras + Medicoes | 0/5 | Not started | - |
 | 5. Relatorios + Dashboards | 0/2 | Not started | - |

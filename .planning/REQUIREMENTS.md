@@ -37,9 +37,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Diario de Obra (RDO)
 
-- [ ] **RDO-01**: User can create daily diary entry with text, photos, and weather of the day
-- [ ] **RDO-02**: System auto-detects active task and pre-fills diary entry
-- [ ] **RDO-03**: System calculates real progress vs planned by cross-referencing diary with schedule
+- [x] **RDO-01**: User can create daily diary entry with text, photos, and weather of the day
+- [x] **RDO-02**: System auto-detects active task and pre-fills diary entry
+- [x] **RDO-03**: System calculates real progress vs planned by cross-referencing diary with schedule
 
 ### Orcamento
 
@@ -160,9 +160,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CRON-01 | Phase 3 | Complete |
 | CRON-02 | Phase 3 | Complete |
 | CRON-03 | Phase 3 | Pending |
-| RDO-01 | Phase 3 | Pending |
-| RDO-02 | Phase 3 | Pending |
-| RDO-03 | Phase 3 | Pending |
+| RDO-01 | Phase 3 | Complete |
+| RDO-02 | Phase 3 | Complete |
+| RDO-03 | Phase 3 | Complete |
 | ORC-01 | Phase 4 | Pending |
 | ORC-02 | Phase 4 | Pending |
 | ORC-03 | Phase 4 | Pending |
