@@ -4,6 +4,8 @@ import { plantasRoutes } from "./routes/plantas"
 import { notificationsRoutes } from "./routes/notifications"
 import socketioPlugin, { setIoInstance } from "./plugins/socketio"
 import { setSocketIo } from "./queues/pdf-conversion.worker"
+import { registerWeatherAlertScheduler } from "./queues/weather-alert.queue"
+import { weatherAlertWorker, setWeatherAlertSocketIo } from "./queues/weather-alert.worker"
 
 const fastify = Fastify({
   logger: true,
@@ -40,11 +42,24 @@ const start = async () => {
 
     // Also expose via module-level setter for any code outside fastify context
     setIoInstance(fastify.io)
+
+    // Inject io into the weather alert worker for socket notifications
+    setWeatherAlertSocketIo(fastify.io)
+
+    // Register the daily weather alert BullMQ cron (idempotent — safe to call on each restart)
+    await registerWeatherAlertScheduler()
+    fastify.log.info("[weather-alert] Daily weather alert scheduler registered (07:00 BRT)")
+
+    // Log worker startup
+    fastify.log.info("[weather-alert] Weather alert worker started")
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
   }
 }
+
+// Reference weatherAlertWorker to prevent tree-shaking and ensure it is initialized
+void weatherAlertWorker
 
 start()
 
