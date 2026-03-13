@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-03-13T22:05:47.837Z"
+stopped_at: Completed 02-03-PLAN.md
+last_updated: "2026-03-13T22:21:13.145Z"
 last_activity: "2026-03-13 — Completed Plan 01-02: onboarding, obra CRUD, invitations, dashboard"
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 60
 ---
 
@@ -54,6 +54,7 @@ Progress: [██████░░░░] 60%
 | Phase 01-foundation P02 | 3 | 2 tasks | 38 files |
 | Phase 01-foundation P03 | 35 | 1 tasks | 12 files |
 | Phase 02-pdf-viewer-anchored-comments P01 | 12 | 2 tasks | 18 files |
+| Phase 02-pdf-viewer-anchored-comments P03 | 12 | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,9 @@ Recent decisions affecting current work:
 - [Phase 02-pdf-viewer-anchored-comments]: listPlantasByObra returns Record<string, PlantaWithRevisoes[]> not array — direct group-by-disciplina without re-grouping on client
 - [Phase 02-pdf-viewer-anchored-comments]: Enqueue-conversion failure is non-fatal — logged but createRevisao succeeds; tiles ready eventually via retry
 - [Phase 02-pdf-viewer-anchored-comments]: R2 key format: plantas/{tenantId}/{timestamp}-{filename} — tenantId embedded for auditing without DB lookup
+- [Phase 02-pdf-viewer-anchored-comments]: Socket.io extracted into Fastify plugin with fp() so io decoration is available on all route handlers
+- [Phase 02-pdf-viewer-anchored-comments]: SocketProvider uses dynamic import() in useEffect — only browser-side execution, avoids SSR crash
+- [Phase 02-pdf-viewer-anchored-comments]: emitNotification is non-fatal — socket/notification errors never fail primary server actions
 
 ### Pending Todos
 
@@ -94,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T22:05:47.830Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-03-13T22:21:13.139Z
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None

@@ -27,7 +27,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [ ] **PLNT-02**: User can view plantas in full-screen PDF viewer with zoom and navigation
 - [x] **PLNT-03**: User can create new plant revisions (R0, R1, R2...) with changelog
 - [ ] **PLNT-04**: User can click on any point of a planta to create an anchored comment with pin and thread
-- [ ] **PLNT-05**: User receives real-time notifications when new comments are added via WebSocket
+- [x] **PLNT-05**: User receives real-time notifications when new comments are added via WebSocket
 
 ### Cronograma
 
@@ -156,7 +156,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLNT-02 | Phase 2 | Pending |
 | PLNT-03 | Phase 2 | Complete |
 | PLNT-04 | Phase 2 | Pending |
-| PLNT-05 | Phase 2 | Pending |
+| PLNT-05 | Phase 2 | Complete |
 | CRON-01 | Phase 3 | Pending |
 | CRON-02 | Phase 3 | Pending |
 | CRON-03 | Phase 3 | Pending |
