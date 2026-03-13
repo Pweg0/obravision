@@ -33,7 +33,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **CRON-01**: User can create tasks with start/end date, responsavel, status, and parent stage
 - [x] **CRON-02**: User can view and edit interactive Gantt chart with task dependencies
-- [ ] **CRON-03**: System alerts user when weather forecast predicts rain for climate-sensitive tasks
+- [x] **CRON-03**: System alerts user when weather forecast predicts rain for climate-sensitive tasks
 
 ### Diario de Obra (RDO)
 
@@ -159,7 +159,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PLNT-05 | Phase 2 | Complete |
 | CRON-01 | Phase 3 | Complete |
 | CRON-02 | Phase 3 | Complete |
-| CRON-03 | Phase 3 | Pending |
+| CRON-03 | Phase 3 | Complete |
 | RDO-01 | Phase 3 | Complete |
 | RDO-02 | Phase 3 | Complete |
 | RDO-03 | Phase 3 | Complete |
