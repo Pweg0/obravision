@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can complete the 3-step onboarding wizard (create empresa > create obra > invite equipe) in under 5 minutes
   4. User can create, edit, and archive obras with addresses and status, and invite members with admin/engenheiro/cliente roles
   5. Public landing page exists with lead capture form so potential users can find and evaluate the product
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
 - [ ] 01-01: Monorepo setup, PostgreSQL schema with RLS multi-tenancy, Auth.js v5 with email/password + Google OAuth
