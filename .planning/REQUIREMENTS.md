@@ -13,13 +13,13 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **AUTH-02**: User can log in with Google OAuth
 - [x] **AUTH-03**: User session persists across browser refresh
 - [x] **AUTH-04**: User can reset password via email link
-- [ ] **AUTH-05**: User completes onboarding wizard (create empresa > create obra > invite equipe)
+- [x] **AUTH-05**: User completes onboarding wizard (create empresa > create obra > invite equipe)
 
 ### Gestao de Obras
 
-- [ ] **OBRA-01**: User can create, edit, and archive obras with status and progress
-- [ ] **OBRA-02**: User can invite members with roles (admin, engenheiro, cliente)
-- [ ] **OBRA-03**: User can set obra details (endereco, tipo, area construida)
+- [x] **OBRA-01**: User can create, edit, and archive obras with status and progress
+- [x] **OBRA-02**: User can invite members with roles (admin, engenheiro, cliente)
+- [x] **OBRA-03**: User can set obra details (endereco, tipo, area construida)
 
 ### Plantas & Viewer
 
@@ -147,10 +147,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| AUTH-05 | Phase 1 | Pending |
-| OBRA-01 | Phase 1 | Pending |
-| OBRA-02 | Phase 1 | Pending |
-| OBRA-03 | Phase 1 | Pending |
+| AUTH-05 | Phase 1 | Complete |
+| OBRA-01 | Phase 1 | Complete |
+| OBRA-02 | Phase 1 | Complete |
+| OBRA-03 | Phase 1 | Complete |
 | MKT-01 | Phase 1 | Complete |
 | PLNT-01 | Phase 2 | Pending |
 | PLNT-02 | Phase 2 | Pending |
