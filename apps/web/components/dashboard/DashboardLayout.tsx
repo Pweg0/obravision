@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
+import { NotificationBell } from "@/components/notifications/NotificationBell"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -34,6 +35,16 @@ const NAV_ITEMS = [
       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
           d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      </svg>
+    ),
+  },
+  {
+    href: "/dashboard/notificacoes",
+    label: "Notificacoes",
+    icon: (
+      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
       </svg>
     ),
   },
@@ -147,17 +158,25 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Mobile header */}
-        <header className="h-16 border-b flex items-center px-4 lg:hidden flex-shrink-0">
-          <button
-            onClick={() => setMobileOpen(true)}
-            className="text-muted-foreground hover:text-foreground"
-            aria-label="Abrir menu"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-          <span className="ml-3 font-bold text-primary">ObraVision</span>
+        <header className="h-16 border-b flex items-center justify-between px-4 lg:hidden flex-shrink-0">
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setMobileOpen(true)}
+              className="text-muted-foreground hover:text-foreground"
+              aria-label="Abrir menu"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <span className="font-bold text-primary">ObraVision</span>
+          </div>
+          <NotificationBell />
+        </header>
+
+        {/* Desktop top bar (hidden on mobile) */}
+        <header className="h-16 border-b hidden lg:flex items-center justify-end px-6 flex-shrink-0">
+          <NotificationBell />
         </header>
 
         {/* Page content */}
