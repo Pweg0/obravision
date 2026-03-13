@@ -103,6 +103,8 @@ model Obra {
   cep         String
   tipo        ObraTipo
   area        Decimal     @db.Decimal(10, 2) // m²
+  lat         Float?      // geocoded latitude — for weather alerts (Phase 3)
+  lon         Float?      // geocoded longitude — for weather alerts (Phase 3)
   archived    Boolean     @default(false)
   coverUrl    String? // R2 key — null in Phase 1
   statusId    String?
@@ -112,6 +114,7 @@ model Obra {
   members     ObraMember[]
   invitations Invitation[]
   plantas     Planta[]
+  etapas      Etapa[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
@@ -282,5 +285,51 @@ model Notification {
   createdAt DateTime @default(now())
 
   @@index([userId])
+  @@index([tenantId])
+}
+
+// ---- Phase 3: Cronograma + RDO ----
+
+enum TarefaStatus {
+  PENDENTE
+  EM_ANDAMENTO
+  CONCLUIDA
+  ATRASADA
+}
+
+model Etapa {
+  id            String   @id @default(cuid())
+  tenantId      String
+  obraId        String
+  obra          Obra     @relation(fields: [obraId], references: [id])
+  nome          String   // "Fundacao", "Alvenaria", etc.
+  ordem         Int      // display order in Gantt
+  climaSensivel Boolean  @default(false) // default for child tasks
+  tarefas       Tarefa[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([obraId])
+  @@index([tenantId])
+}
+
+model Tarefa {
+  id            String       @id @default(cuid())
+  tenantId      String
+  obraId        String
+  etapaId       String
+  etapa         Etapa        @relation(fields: [etapaId], references: [id])
+  nome          String
+  responsavelId String?      // User.id
+  status        TarefaStatus @default(PENDENTE)
+  startDate     DateTime
+  endDate       DateTime
+  climaSensivel Boolean?     // null = inherit from Etapa; true/false = override
+  progressoReal Int          @default(0) // 0-100, updated from RDO entries
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([obraId])
+  @@index([etapaId])
   @@index([tenantId])
 }
