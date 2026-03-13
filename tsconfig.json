@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "@obravision/db": ["./packages/db/src/index.ts"],
+      "@obravision/types": ["./packages/types/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

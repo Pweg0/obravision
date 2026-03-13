@@ -1,0 +1,182 @@
+// packages/db/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  ENGENHEIRO
+  CLIENTE
+}
+
+enum ObraTipo {
+  RESIDENCIAL
+  COMERCIAL
+  REFORMA
+}
+
+// ---- Auth.js required models (do not rename) ----
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ---- Application models ----
+
+model User {
+  id             String               @id @default(cuid())
+  name           String?
+  email          String               @unique
+  emailVerified  DateTime?
+  image          String?
+  passwordHash   String?
+  role           Role                 @default(ENGENHEIRO)
+  empresaId      String?
+  empresa        Empresa?             @relation(fields: [empresaId], references: [id])
+  onboardingStep Int                  @default(0) // 0=not started, 1=empresa done, 2=obra done, 3=complete
+  accounts       Account[]
+  sessions       Session[]
+  resetTokens    PasswordResetToken[]
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+}
+
+model Empresa {
+  id        String       @id @default(cuid())
+  tenantId  String       @unique @default(cuid()) // used for RLS set_config
+  nome      String
+  cnpj      String?
+  logoUrl   String? // R2 key — null in Phase 1, prepared for Phase 2
+  members   User[]
+  obras     Obra[]
+  statuses  ObraStatus[]
+  invites   Invitation[]
+  leads     Lead[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Obra {
+  id          String      @id @default(cuid())
+  tenantId    String // = empresa.tenantId — RLS uses this
+  nome        String
+  logradouro  String
+  numero      String
+  cidade      String
+  estado      String      @db.Char(2)
+  cep         String
+  tipo        ObraTipo
+  area        Decimal     @db.Decimal(10, 2) // m²
+  archived    Boolean     @default(false)
+  coverUrl    String? // R2 key — null in Phase 1
+  statusId    String?
+  status      ObraStatus? @relation(fields: [statusId], references: [id])
+  empresaId   String
+  empresa     Empresa     @relation(fields: [empresaId], references: [id])
+  members     ObraMember[]
+  invitations Invitation[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([empresaId])
+  @@index([tenantId])
+}
+
+model ObraStatus {
+  id        String @id @default(cuid())
+  tenantId  String
+  name      String
+  color     String @default("#1A6B5A")
+  empresaId String
+  empresa   Empresa @relation(fields: [empresaId], references: [id])
+  obras     Obra[]
+
+  @@index([empresaId])
+}
+
+model ObraMember {
+  id          String   @id @default(cuid())
+  tenantId    String
+  userId      String
+  obraId      String
+  role        Role
+  permissions Json? // Cliente permissions (Phase 1: stored, enforced in Phase 2)
+  obra        Obra     @relation(fields: [obraId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([userId, obraId])
+}
+
+model Invitation {
+  id        String    @id @default(cuid())
+  tenantId  String
+  token     String    @unique
+  email     String? // null = shareable link
+  role      Role
+  obraId    String?
+  obra      Obra?     @relation(fields: [obraId], references: [id])
+  empresaId String
+  empresa   Empresa   @relation(fields: [empresaId], references: [id])
+  invitedBy String // User.id
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([token])
+  @@index([email])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String   @default("landing")
+  empresaId String?
+  empresa   Empresa? @relation(fields: [empresaId], references: [id])
+  createdAt DateTime @default(now())
+}
