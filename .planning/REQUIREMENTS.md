@@ -72,7 +72,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Marketing
 
-- [ ] **MKT-01**: Public landing page with lead capture form and product showcase
+- [x] **MKT-01**: Public landing page with lead capture form and product showcase
 
 ## v2 Requirements
 
@@ -151,7 +151,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OBRA-01 | Phase 1 | Pending |
 | OBRA-02 | Phase 1 | Pending |
 | OBRA-03 | Phase 1 | Pending |
-| MKT-01 | Phase 1 | Pending |
+| MKT-01 | Phase 1 | Complete |
 | PLNT-01 | Phase 2 | Pending |
 | PLNT-02 | Phase 2 | Pending |
 | PLNT-03 | Phase 2 | Pending |

@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-03-13T17:28:41.522Z"
+stopped_at: Completed 01-foundation-01-03-PLAN.md
+last_updated: "2026-03-13T18:13:48.972Z"
 last_activity: 2026-03-13 — Roadmap created, phases derived from 37 v1 requirements
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 3
+  completed_plans: 1
   percent: 0
 ---
 
@@ -50,6 +50,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 01-foundation P03 | 35 | 1 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,9 @@ Recent decisions affecting current work:
 - [Pre-Phase 1]: PostgreSQL RLS multi-tenancy (single schema, not database-per-tenant) — non-negotiable for solo dev operational simplicity
 - [Pre-Phase 1]: Cloudflare R2 for PDF/photo storage (zero egress fees, decisive for PDF-heavy product)
 - [Pre-Phase 1]: Billing model is per obra-ativa, not per seat — more intuitive for Brazilian construtoras
+- [Phase 01-foundation]: Used prisma.lead.upsert with empty update{} since Lead model has no updatedAt — re-submissions succeed silently
+- [Phase 01-foundation]: No auth() call in marketing layout — zero session overhead on landing page (RESEARCH.md pitfall 6)
+- [Phase 01-foundation]: LeadCaptureForm is Client Component, captureLead is Server Action — clean boundary for form validation UX vs server persistence
 
 ### Pending Todos
 
@@ -76,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-13T17:28:41.491Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-foundation/01-CONTEXT.md
+Last session: 2026-03-13T18:13:48.965Z
+Stopped at: Completed 01-foundation-01-03-PLAN.md
+Resume file: None
