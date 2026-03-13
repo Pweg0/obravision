@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@obravision/db"
 import { createTenantClient } from "@obravision/db/rls-client"
 import { addMessageSchema } from "@/lib/validations/pin"
+import { emitNotification } from "./notification"
 
 async function getTenantContext() {
   const session = await auth()
@@ -92,6 +93,73 @@ export async function addMessage(threadId: string, formData: FormData) {
   revalidatePath(
     `/dashboard/obras/${thread.pin.plantaRevisao.planta.obraId}/plantas/${thread.pin.plantaRevisao.plantaId}`
   )
+
+  // Notify thread participants and @mentioned users (non-fatal)
+  try {
+    const obraId = thread.pin.plantaRevisao.planta.obraId
+    const plantaId = thread.pin.plantaRevisao.plantaId
+    const plantaName = thread.pin.plantaRevisao.planta.nome
+    const authorName = session.user.name ?? "Usuario"
+    const preview = validData.content.substring(0, 100)
+
+    // Filter out self-mentions
+    const mentionedUserIds = mentions.filter((id) => id !== session.user.id)
+
+    // Block 1 — "new-reply" to thread participants (excluding author and @mentioned users)
+    const participantRows = await tenantClient.threadMessage.findMany({
+      where: { threadId, deletedAt: null },
+      select: { authorId: true },
+      distinct: ["authorId"],
+    })
+    const participantIds = participantRows
+      .map((r) => r.authorId)
+      .filter((id) => id !== session.user.id && !mentionedUserIds.includes(id))
+
+    if (participantIds.length > 0) {
+      await emitNotification(
+        obraId,
+        "new-reply",
+        { threadId, pinId: thread.pinId, obraId, authorName },
+        participantIds,
+        "new_reply",
+        {
+          obraId,
+          plantaId,
+          plantaName,
+          pinId: thread.pinId,
+          threadId,
+          authorName,
+          authorId: session.user.id,
+          preview,
+        }
+      )
+    }
+
+    // Block 2 — "mention" for each @mentioned user
+    for (const userId of mentionedUserIds) {
+      await emitNotification(
+        obraId,
+        "mention",
+        { threadId, pinId: thread.pinId, obraId, authorName, mentionedUserId: userId },
+        [userId],
+        "mention",
+        {
+          obraId,
+          plantaId,
+          plantaName,
+          pinId: thread.pinId,
+          threadId,
+          authorName,
+          authorId: session.user.id,
+          mentionedUserId: userId,
+          preview,
+        }
+      )
+    }
+  } catch (err) {
+    // Non-fatal: notification failure should not break message creation
+    console.error("[addMessage] Failed to emit notification:", err)
+  }
 
   return { success: true, message }
 }
