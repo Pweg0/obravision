@@ -13,6 +13,7 @@ const PUBLIC_PATHS = [
   "/forgot-password",
   "/reset-password",
   "/api/auth",
+  "/invite",
 ]
 
 export default auth((req: NextRequest & { auth: { user?: { empresaId?: string | null; onboardingStep?: number } } | null }) => {
