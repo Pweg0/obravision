@@ -46,12 +46,12 @@ Plans:
   2. User can click any point on the plant to place a pin, write a comment, and start a thread — pin coordinates survive page zoom and browser resize
   3. User can upload a new plant revision (R0, R1, R2) with a changelog entry, and older revisions remain accessible
   4. User receives a real-time notification (without page refresh) when a teammate places a new pin or replies to a thread on a plant they are viewing
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: PDF upload to R2, BullMQ server-side conversion pipeline (PDFium to WebP tiles), plant version model with revision_id FK
-- [ ] 02-02: PDF.js viewer with SVG overlay layer, normalized (0.0–1.0) pin coordinate system, pin + thread CRUD
-- [ ] 02-03: Socket.io WebSocket hub (room-per-obra), real-time notification events for new pins and replies
+- [ ] 02-01-PLAN.md — Prisma models, R2 presigned upload, BullMQ PDF-to-WebP conversion pipeline, plant listing by disciplina, Vitest infrastructure
+- [ ] 02-02-PLAN.md — PDF viewer with react-pdf + tile rendering, pin overlay with normalized coordinates, threaded comment sidebar, revision dropdown
+- [ ] 02-03-PLAN.md — Socket.io WebSocket hub (room-per-obra), real-time notifications with toast + badge + sound, dedicated notifications page
 
 ### Phase 3: Cronograma + RDO
 **Goal**: Engineers can manage a construction schedule with Gantt view and weather alerts, and field teams can log daily diary entries linked to active tasks — creating a closed loop between office planning and site execution
