@@ -67,6 +67,7 @@ export function ObraDetailClient({
   const [showArchiveConfirm, setShowArchiveConfirm] = useState(false)
   const [archiving, setArchiving] = useState(false)
   const [activeTab, setActiveTab] = useState<"details" | "members" | "statuses">("details")
+  const obraId = obra.id
   const router = useRouter()
 
   const areaNum = parseFloat(String(obra.area))
@@ -137,6 +138,12 @@ export function ObraDetailClient({
             {tab === "details" ? "Detalhes" : tab === "members" ? "Equipe" : "Status"}
           </button>
         ))}
+        <Link
+          href={`/dashboard/obras/${obraId}/cronograma`}
+          className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
+        >
+          Cronograma
+        </Link>
       </div>
 
       {/* Details tab */}
