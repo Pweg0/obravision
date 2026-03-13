@@ -8,6 +8,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@obravision/db"
 import { createTenantClient } from "@obravision/db/rls-client"
 import { createPlantaSchema, createRevisaoSchema } from "@/lib/validations/planta"
+import { emitNotification, getObraMemberIds } from "./notification"
 
 async function getTenantContext() {
   const session = await auth()
@@ -225,6 +226,42 @@ export async function createRevisao(plantaId: string, formData: FormData) {
       console.error("[createRevisao] Failed to enqueue PDF conversion:", err)
     }
   }
+
+  // Notify all obra members about the new revision (except the uploader)
+  try {
+    const recipientIds = await getObraMemberIds(planta.obraId, session.user.id)
+    if (recipientIds.length > 0) {
+      await emitNotification(
+        planta.obraId,
+        "new-revision",
+        {
+          revisaoId: revisao.id,
+          plantaId,
+          obraId: planta.obraId,
+          revisaoLabel,
+          authorName: session.user.name ?? session.user.email ?? "Alguem",
+        },
+        recipientIds,
+        "new_revision",
+        {
+          revisaoId: revisao.id,
+          plantaId,
+          obraId: planta.obraId,
+          plantaName: planta.nome,
+          revisaoLabel,
+          authorId: session.user.id,
+          authorName: session.user.name ?? session.user.email ?? "Alguem",
+        }
+      )
+    }
+  } catch (err) {
+    // Non-fatal: notification failure should not break revision creation
+    console.error("[createRevisao] Failed to emit notification:", err)
+  }
+
+  // TODO: Wire emitNotification for createPin and addMessage after Plan 02 creates those actions
+  // createPin → emit "new-pin" to obra room, notify all obra members except author
+  // addMessage → emit "new-reply" to obra room, notify thread participants + @mentioned users
 
   revalidatePath(`/dashboard/obras/${planta.obraId}`)
   return { success: true, revisao }

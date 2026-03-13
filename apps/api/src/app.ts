@@ -1,7 +1,8 @@
 import Fastify from "fastify"
 import cors from "@fastify/cors"
-import { Server as SocketIOServer } from "socket.io"
 import { plantasRoutes } from "./routes/plantas"
+import { notificationsRoutes } from "./routes/notifications"
+import socketioPlugin, { setIoInstance } from "./plugins/socketio"
 import { setSocketIo } from "./queues/pdf-conversion.worker"
 
 const fastify = Fastify({
@@ -14,6 +15,9 @@ await fastify.register(cors, {
   credentials: true,
 })
 
+// Socket.io plugin — attaches io to fastify.server after fastify.ready()
+await fastify.register(socketioPlugin)
+
 // Health check
 fastify.get("/health", async () => {
   return { status: "ok", service: "obravision-api", timestamp: new Date().toISOString() }
@@ -21,6 +25,7 @@ fastify.get("/health", async () => {
 
 // Register routes
 await fastify.register(plantasRoutes)
+await fastify.register(notificationsRoutes)
 
 // Start server
 const start = async () => {
@@ -29,38 +34,12 @@ const start = async () => {
     await fastify.listen({ port, host: "0.0.0.0" })
     fastify.log.info(`Server listening on port ${port}`)
 
-    // Attach Socket.io directly to Fastify's Node.js HTTP server
-    // (fastify-socket.io is abandoned for Fastify 5 — direct attachment is the recommended approach)
-    const io = new SocketIOServer(fastify.server, {
-      cors: {
-        origin: process.env.WEB_URL ?? "http://localhost:3000",
-        credentials: true,
-      },
-    })
-
-    // Room management: per-obra rooms for real-time notifications
-    io.on("connection", (socket) => {
-      fastify.log.info(`Socket connected: ${socket.id}`)
-
-      socket.on("join-obra", (obraId: string) => {
-        socket.join(`obra:${obraId}`)
-        fastify.log.info(`Socket ${socket.id} joined obra:${obraId}`)
-      })
-
-      socket.on("leave-obra", (obraId: string) => {
-        socket.leave(`obra:${obraId}`)
-      })
-
-      socket.on("disconnect", () => {
-        fastify.log.info(`Socket disconnected: ${socket.id}`)
-      })
-    })
-
+    // After listen, the Socket.io instance is available via fastify.io (set in onReady hook)
     // Inject io into the PDF conversion worker for tiles-ready events
-    setSocketIo(io)
+    setSocketIo(fastify.io)
 
-    // Export io for use in routes/workers
-    return io
+    // Also expose via module-level setter for any code outside fastify context
+    setIoInstance(fastify.io)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
