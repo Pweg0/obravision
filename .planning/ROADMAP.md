@@ -64,12 +64,12 @@ Plans:
   3. User can create a daily RDO entry with text, photos, and auto-detected weather for the day
   4. System pre-fills the diary with the active task from the schedule so field teams do not have to search manually
   5. System calculates real vs planned progress by cross-referencing diary entries with the schedule, visible to the engineer
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: Task model with stages, status, responsavel; Gantt chart with task dependencies (interactive drag-and-edit)
-- [ ] 03-02: Weather BullMQ cron job (Open-Meteo or similar), climate-sensitive task alerting
-- [ ] 03-03: RDO model with photos (R2), auto-detect active task, real vs planned progress calculation
+- [ ] 03-01-PLAN.md — Etapa + Tarefa Prisma models with RLS, CRUD server actions, interactive Gantt chart with @svar-ui/react-gantt, drag-to-reschedule
+- [ ] 03-02-PLAN.md — BullMQ weather cron job with Open-Meteo API, climate-sensitive task alerting, Obra geocoding, Gantt rain icons
+- [ ] 03-03-PLAN.md — RDO diary model with R2 photo upload, auto-detect active task, progress calculation, S-curve dashboard widget
 
 ### Phase 4: Orcamento + Compras + Medicoes
 **Goal**: Engineers can build a complete obra budget with SINAPI codes and BDI, manage procurement from purchase request to purchase order, track inventory across storage locations, and record physical and contract measurements — turning ObraVision into the operational hub for a construction project
