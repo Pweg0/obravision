@@ -55,20 +55,6 @@ export default async function RdoPage({ params }: PageProps) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-            <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">
-              Obras
-            </Link>
-            <span>/</span>
-            <Link
-              href={`/dashboard/obras/${obraId}`}
-              className="hover:text-foreground transition-colors"
-            >
-              {obra.nome}
-            </Link>
-            <span>/</span>
-            <span>Diario de Obra</span>
-          </div>
           <h1 className="text-2xl font-bold">Diario de Obra</h1>
           <p className="text-sm text-muted-foreground mt-0.5">
             {entradas.length} {entradas.length === 1 ? "entrada" : "entradas"} registradas

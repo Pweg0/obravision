@@ -2,7 +2,6 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@projetapro/db"
 import { createTenantClient } from "@projetapro/db/rls-client"
 import { redirect } from "next/navigation"
-import Link from "next/link"
 import { RdoForm } from "@/components/rdo/RdoForm"
 
 interface PageProps {
@@ -60,32 +59,10 @@ export default async function NovaRdoPage({ params }: PageProps) {
 
   return (
     <div className="max-w-2xl space-y-6">
-      {/* Breadcrumb */}
       <div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-          <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">
-            Obras
-          </Link>
-          <span>/</span>
-          <Link
-            href={`/dashboard/obras/${obraId}`}
-            className="hover:text-foreground transition-colors"
-          >
-            {obra.nome}
-          </Link>
-          <span>/</span>
-          <Link
-            href={`/dashboard/obras/${obraId}/rdo`}
-            className="hover:text-foreground transition-colors"
-          >
-            Diario de Obra
-          </Link>
-          <span>/</span>
-          <span>Nova Entrada</span>
-        </div>
         <h1 className="text-2xl font-bold">Nova Entrada no Diario</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          Registre as atividades, fotos e condicoes do dia para {obra.nome}
+          Registre as atividades, fotos e condicoes do dia
         </p>
       </div>
 

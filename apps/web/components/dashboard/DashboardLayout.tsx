@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
+import { useObraNav } from "@/providers/ObraNavProvider"
 import { NotificationBell } from "@/components/notifications/NotificationBell"
 import { ThemeToggle } from "@/components/ThemeToggle"
 import {
@@ -14,6 +15,17 @@ import {
   LogOut,
   Menu,
   X,
+  ArrowLeft,
+  Info,
+  Users,
+  Tags,
+  Map,
+  CalendarDays,
+  BookOpen,
+  DollarSign,
+  ShoppingCart,
+  Package,
+  Ruler,
 } from "lucide-react"
 
 interface DashboardLayoutProps {
@@ -50,9 +62,26 @@ const ROLE_LABELS: Record<string, string> = {
   CLIENTE: "Cliente",
 }
 
+function getObraNavItems(obraId: string) {
+  return [
+    { href: `/dashboard/obras/${obraId}`, label: "Dashboard", icon: LayoutDashboard, exact: true },
+    { href: `/dashboard/obras/${obraId}/detalhes`, label: "Detalhes", icon: Info },
+    { href: `/dashboard/obras/${obraId}/equipe`, label: "Equipe", icon: Users },
+    { href: `/dashboard/obras/${obraId}/status`, label: "Status", icon: Tags },
+    { href: `/dashboard/obras/${obraId}/plantas`, label: "Plantas", icon: Map },
+    { href: `/dashboard/obras/${obraId}/cronograma`, label: "Cronograma", icon: CalendarDays },
+    { href: `/dashboard/obras/${obraId}/rdo`, label: "Diario de Obra", icon: BookOpen },
+    { href: `/dashboard/obras/${obraId}/orcamento`, label: "Orcamento", icon: DollarSign },
+    { href: `/dashboard/obras/${obraId}/compras`, label: "Compras", icon: ShoppingCart },
+    { href: `/dashboard/obras/${obraId}/estoque`, label: "Estoque", icon: Package },
+    { href: `/dashboard/obras/${obraId}/medicoes`, label: "Medicoes", icon: Ruler },
+  ]
+}
+
 export function DashboardLayout({ children, user }: DashboardLayoutProps) {
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const obraNav = useObraNav()
 
   const displayName = user.name ?? user.email ?? "Usuario"
   const initials = displayName
@@ -61,6 +90,9 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
     .join("")
     .toUpperCase()
     .slice(0, 2)
+
+  const isInsideObra = !!obraNav
+  const obraItems = isInsideObra ? getObraNavItems(obraNav.obraId) : []
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
@@ -100,32 +132,81 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
 
         {/* Navigation */}
         <nav className="flex-1 py-3 px-3 space-y-0.5 overflow-y-auto">
-          <p className="px-3 mb-2 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
-            Menu
-          </p>
-          {NAV_ITEMS.map((item) => {
-            const isActive =
-              item.href === "/dashboard"
-                ? pathname === "/dashboard"
-                : pathname.startsWith(item.href)
-            const Icon = item.icon
-            return (
+          {isInsideObra ? (
+            <>
+              {/* Back to Obras */}
               <Link
-                key={item.href}
-                href={item.href}
+                href="/dashboard/obras"
                 onClick={() => setMobileOpen(false)}
-                className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer",
-                  isActive
-                    ? "bg-sidebar-accent text-white shadow-sm"
-                    : "text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground"
-                )}
+                className="flex items-center gap-2 px-3 py-2 mb-2 rounded-xl text-sm font-medium text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground transition-all duration-200 cursor-pointer"
               >
-                <Icon className="w-[18px] h-[18px]" />
-                {item.label}
+                <ArrowLeft className="w-4 h-4" />
+                Voltar para Obras
               </Link>
-            )
-          })}
+
+              {/* Obra name */}
+              <div className="px-3 mb-3">
+                <p className="text-sm font-semibold text-sidebar-foreground truncate">
+                  {obraNav.obraNome}
+                </p>
+              </div>
+
+              <p className="px-3 mb-2 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
+                Secoes
+              </p>
+              {obraItems.map((item) => {
+                const isActive = item.exact
+                  ? pathname === item.href
+                  : pathname.startsWith(item.href)
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer",
+                      isActive
+                        ? "bg-sidebar-accent text-white shadow-sm"
+                        : "text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground"
+                    )}
+                  >
+                    <Icon className="w-[18px] h-[18px]" />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </>
+          ) : (
+            <>
+              <p className="px-3 mb-2 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
+                Menu
+              </p>
+              {NAV_ITEMS.map((item) => {
+                const isActive =
+                  item.href === "/dashboard"
+                    ? pathname === "/dashboard"
+                    : pathname.startsWith(item.href)
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer",
+                      isActive
+                        ? "bg-sidebar-accent text-white shadow-sm"
+                        : "text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground"
+                    )}
+                  >
+                    <Icon className="w-[18px] h-[18px]" />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </>
+          )}
         </nav>
 
         {/* User section */}

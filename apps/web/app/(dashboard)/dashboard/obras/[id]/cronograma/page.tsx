@@ -4,7 +4,6 @@ import { auth } from "@/lib/auth"
 import { createTenantClient } from "@projetapro/db/rls-client"
 import { listCronograma } from "@/lib/actions/cronograma"
 import { GanttView } from "@/components/cronograma/GanttView"
-import Link from "next/link"
 
 export default async function CronogramaPage({
   params,
@@ -54,32 +53,7 @@ export default async function CronogramaPage({
 
   return (
     <div className="space-y-6 max-w-6xl">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">
-          Obras
-        </Link>
-        <span>/</span>
-        <Link href={`/dashboard/obras/${id}`} className="hover:text-foreground transition-colors">
-          {obra.nome}
-        </Link>
-        <span>/</span>
-        <span className="text-foreground">Cronograma</span>
-      </div>
-
-      {/* Tab navigation — matching ObraDetailClient style */}
-      <div className="flex border-b gap-1">
-        <Link
-          href={`/dashboard/obras/${id}`}
-          className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
-        >
-          Detalhes
-        </Link>
-        <span className="px-4 py-2 text-sm font-medium text-primary border-b-2 border-primary -mb-px">
-          Cronograma
-        </span>
-        {/* RDO tab will be added in Plan 03 */}
-      </div>
+      <h1 className="text-2xl font-bold">Cronograma</h1>
 
       {/* Gantt chart */}
       <GanttView

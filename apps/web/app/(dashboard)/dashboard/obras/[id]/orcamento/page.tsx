@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation"
-import Link from "next/link"
 import { prisma } from "@projetapro/db"
 import { auth } from "@/lib/auth"
 import { createTenantClient } from "@projetapro/db/rls-client"
@@ -47,27 +46,10 @@ export default async function OrcamentoPage({
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">
-          Obras
-        </Link>
-        <span>/</span>
-        <Link
-          href={`/dashboard/obras/${obraId}`}
-          className="hover:text-foreground transition-colors"
-        >
-          {obra.nome}
-        </Link>
-        <span>/</span>
-        <span className="text-foreground">Orcamento</span>
-      </div>
-
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold">Orcamento</h1>
-          <p className="text-sm text-muted-foreground mt-1">{obra.nome}</p>
         </div>
         {orcamento && (
           <PropostaExport

@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation"
 import { prisma } from "@projetapro/db"
 import { auth } from "@/lib/auth"
-import { listStatuses } from "@/lib/actions/status"
 import { createTenantClient } from "@projetapro/db/rls-client"
-import { ObraDetailClient } from "./ObraDetailClient"
+import { ObraDashboardClient } from "./ObraDashboardClient"
 
 export default async function ObraDetailPage({
   params,
@@ -29,36 +28,38 @@ export default async function ObraDetailPage({
     where: { id },
     include: {
       status: true,
-      members: {
-        include: {
-          // ObraMember doesn't have a direct user relation in schema — we'll fetch users separately
-        },
-      },
+      members: true,
     },
   })
 
   if (!obra) notFound()
 
-  // Fetch member user data separately
-  const memberUserIds = obra.members.map((m: { userId: string }) => m.userId)
-  const memberUsers = await prisma.user.findMany({
-    where: { id: { in: memberUserIds } },
-    select: { id: true, name: true, email: true, image: true },
-  })
-
-  const membersWithUsers = obra.members.map((member: { userId: string; role: string; id: string }) => ({
-    ...member,
-    user: memberUsers.find((u) => u.id === member.userId),
-  }))
-
-  const statuses = await listStatuses()
+  // Count related data for dashboard metrics
+  const [plantaCount, etapaCount, rdoCount, orcamento, requisicaoCount, medicaoCount] = await Promise.all([
+    tenantClient.planta.count({ where: { obraId: id } }),
+    tenantClient.etapa.count({ where: { obraId: id } }),
+    tenantClient.rdoEntrada.count({ where: { obraId: id } }),
+    tenantClient.orcamento.findUnique({
+      where: { obraId: id },
+      select: { id: true },
+    }),
+    tenantClient.compraRequisicao.count({ where: { obraId: id } }),
+    tenantClient.medicaoFisica.count({ where: { obraId: id } }),
+  ])
 
   return (
-    <ObraDetailClient
-      obra={{ ...obra, members: membersWithUsers }}
-      statuses={statuses}
-      currentUserRole={session.user.role}
-      empresaId={empresa.id}
+    <ObraDashboardClient
+      obraId={obra.id}
+      obraNome={obra.nome}
+      status={obra.status}
+      archived={obra.archived}
+      memberCount={obra.members.length}
+      plantaCount={plantaCount}
+      etapaCount={etapaCount}
+      rdoCount={rdoCount}
+      hasOrcamento={!!orcamento}
+      requisicaoCount={requisicaoCount}
+      medicaoCount={medicaoCount}
     />
   )
 }

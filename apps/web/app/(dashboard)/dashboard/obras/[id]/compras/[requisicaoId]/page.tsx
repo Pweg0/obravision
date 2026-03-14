@@ -2,7 +2,6 @@ import { listRequisicoes, listCotacoes } from "@/lib/actions/compras"
 import { listFornecedores } from "@/lib/actions/fornecedor"
 import { auth } from "@/lib/auth"
 import { redirect, notFound } from "next/navigation"
-import Link from "next/link"
 import { RequisicaoDetailClient } from "./RequisicaoDetailClient"
 
 interface RequisicaoDetailPageProps {
@@ -27,22 +26,6 @@ export default async function RequisicaoDetailPage({ params }: RequisicaoDetailP
 
   return (
     <div className="space-y-6 max-w-4xl">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">
-          Obras
-        </Link>
-        <span>/</span>
-        <Link
-          href={`/dashboard/obras/${obraId}/compras`}
-          className="hover:text-foreground transition-colors"
-        >
-          Compras
-        </Link>
-        <span>/</span>
-        <span className="text-foreground truncate max-w-[200px]">{requisicao.descricao}</span>
-      </div>
-
       <RequisicaoDetailClient
         obraId={obraId}
         requisicao={requisicao}

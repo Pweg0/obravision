@@ -1,7 +1,6 @@
 import { getMedicaoContrato } from "@/lib/actions/medicoes"
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import Link from "next/link"
 import { MedicaoContratoDetailClient } from "./MedicaoContratoDetailClient"
 
 interface MedicaoContratoPageProps {
@@ -19,14 +18,7 @@ export default async function MedicaoContratoPage({ params }: MedicaoContratoPag
 
   return (
     <div className="space-y-6 max-w-5xl">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-        <Link href={`/dashboard/obras/${obraId}/medicoes`} className="hover:text-foreground transition-colors">
-          Medicoes
-        </Link>
-        <span>/</span>
-        <span>Medicao Contrato — {medicao.empreiteiroId} ({medicao.periodo})</span>
-      </div>
+      <h1 className="text-2xl font-bold">Medicao Contrato — {medicao.periodo}</h1>
 
       <MedicaoContratoDetailClient
         obraId={obraId}

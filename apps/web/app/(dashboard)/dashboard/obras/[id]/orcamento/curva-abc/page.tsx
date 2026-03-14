@@ -41,15 +41,6 @@ export default async function CurvaABCPage({
   if (!orcamento) {
     return (
       <div className="space-y-6">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">Obras</Link>
-          <span>/</span>
-          <Link href={`/dashboard/obras/${obraId}`} className="hover:text-foreground transition-colors">{obra.nome}</Link>
-          <span>/</span>
-          <Link href={`/dashboard/obras/${obraId}/orcamento`} className="hover:text-foreground transition-colors">Orcamento</Link>
-          <span>/</span>
-          <span className="text-foreground">Curva ABC</span>
-        </div>
         <div className="rounded-lg border p-8 text-center text-muted-foreground">
           Nenhum orcamento criado para esta obra ainda.{" "}
           <Link href={`/dashboard/obras/${obraId}/orcamento`} className="underline hover:text-foreground">
@@ -75,17 +66,6 @@ export default async function CurvaABCPage({
 
   return (
     <div className="space-y-6">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Link href="/dashboard/obras" className="hover:text-foreground transition-colors">Obras</Link>
-        <span>/</span>
-        <Link href={`/dashboard/obras/${obraId}`} className="hover:text-foreground transition-colors">{obra.nome}</Link>
-        <span>/</span>
-        <Link href={`/dashboard/obras/${obraId}/orcamento`} className="hover:text-foreground transition-colors">Orcamento</Link>
-        <span>/</span>
-        <span className="text-foreground">Curva ABC</span>
-      </div>
-
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>

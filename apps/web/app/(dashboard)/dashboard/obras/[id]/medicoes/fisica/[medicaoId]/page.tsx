@@ -1,7 +1,6 @@
 import { getMedicaoFisica } from "@/lib/actions/medicoes"
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import Link from "next/link"
 import { MedicaoFisicaDetailClient } from "./MedicaoFisicaDetailClient"
 
 interface MedicaoFisicaPageProps {
@@ -19,14 +18,7 @@ export default async function MedicaoFisicaPage({ params }: MedicaoFisicaPagePro
 
   return (
     <div className="space-y-6 max-w-5xl">
-      {/* Breadcrumb */}
-      <div className="flex items-center gap-1 text-sm text-muted-foreground">
-        <Link href={`/dashboard/obras/${obraId}/medicoes`} className="hover:text-foreground transition-colors">
-          Medicoes
-        </Link>
-        <span>/</span>
-        <span>Medicao Fisica — {medicao.periodo}</span>
-      </div>
+      <h1 className="text-2xl font-bold">Medicao Fisica — {medicao.periodo}</h1>
 
       <MedicaoFisicaDetailClient
         obraId={obraId}
