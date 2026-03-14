@@ -8,7 +8,6 @@ import { cn } from "@/lib/utils"
 import { useObraNav } from "@/providers/ObraNavProvider"
 import { NotificationBell } from "@/components/notifications/NotificationBell"
 import { ThemeToggle } from "@/components/ThemeToggle"
-import { ProjetaProLogo } from "@/components/ProjetaProLogo"
 import {
   LayoutDashboard,
   Building2,
@@ -27,6 +26,7 @@ import {
   ShoppingCart,
   Package,
   Ruler,
+  Home,
 } from "lucide-react"
 
 interface DashboardLayoutProps {
@@ -40,21 +40,9 @@ interface DashboardLayoutProps {
 }
 
 const NAV_ITEMS = [
-  {
-    href: "/dashboard",
-    label: "Dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    href: "/dashboard/obras",
-    label: "Obras",
-    icon: Building2,
-  },
-  {
-    href: "/dashboard/notificacoes",
-    label: "Notificacoes",
-    icon: Bell,
-  },
+  { href: "/dashboard", label: "Inicio", icon: Home },
+  { href: "/dashboard/obras", label: "Obras", icon: Building2 },
+  { href: "/dashboard/notificacoes", label: "Notificacoes", icon: Bell },
 ]
 
 const ROLE_LABELS: Record<string, string> = {
@@ -65,18 +53,50 @@ const ROLE_LABELS: Record<string, string> = {
 
 function getObraNavItems(obraId: string) {
   return [
-    { href: `/dashboard/obras/${obraId}`, label: "Dashboard", icon: LayoutDashboard, exact: true },
+    { href: `/dashboard/obras/${obraId}`, label: "Inicio", icon: Home, exact: true },
     { href: `/dashboard/obras/${obraId}/detalhes`, label: "Detalhes", icon: Info },
     { href: `/dashboard/obras/${obraId}/equipe`, label: "Equipe", icon: Users },
     { href: `/dashboard/obras/${obraId}/status`, label: "Status", icon: Tags },
     { href: `/dashboard/obras/${obraId}/plantas`, label: "Plantas", icon: Map },
     { href: `/dashboard/obras/${obraId}/cronograma`, label: "Cronograma", icon: CalendarDays },
-    { href: `/dashboard/obras/${obraId}/rdo`, label: "Diario de Obra", icon: BookOpen },
-    { href: `/dashboard/obras/${obraId}/orcamento`, label: "Orcamento", icon: DollarSign },
+    { href: `/dashboard/obras/${obraId}/rdo`, label: "Diario", icon: BookOpen },
+    { href: `/dashboard/obras/${obraId}/orcamento`, label: "Orcamentos", icon: DollarSign },
     { href: `/dashboard/obras/${obraId}/compras`, label: "Compras", icon: ShoppingCart },
     { href: `/dashboard/obras/${obraId}/estoque`, label: "Estoque", icon: Package },
     { href: `/dashboard/obras/${obraId}/medicoes`, label: "Medicoes", icon: Ruler },
   ]
+}
+
+function SidebarItem({
+  href,
+  label,
+  icon: Icon,
+  isActive,
+  onClick,
+}: {
+  href: string
+  label: string
+  icon: React.ComponentType<{ className?: string }>
+  isActive: boolean
+  onClick?: () => void
+}) {
+  return (
+    <Link
+      href={href}
+      onClick={onClick}
+      className={cn(
+        "flex flex-col items-center gap-1 py-2.5 px-1 rounded-lg transition-all duration-200 cursor-pointer group",
+        isActive
+          ? "bg-white/15 text-white"
+          : "text-white/50 hover:bg-white/10 hover:text-white/80"
+      )}
+    >
+      <Icon className="w-5 h-5" />
+      <span className="text-[9px] font-medium uppercase tracking-wide leading-tight text-center">
+        {label}
+      </span>
+    </Link>
+  )
 }
 
 export function DashboardLayout({ children, user }: DashboardLayoutProps) {
@@ -105,103 +125,77 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - narrow icon style */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-[260px] bg-sidebar flex flex-col transition-transform duration-300 ease-out lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-[82px] flex flex-col transition-transform duration-300 ease-out lg:static lg:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
+        style={{ background: "linear-gradient(180deg, #1a2332 0%, #0f1724 100%)" }}
       >
         {/* Logo */}
-        <div className="flex items-center justify-between h-16 px-5 flex-shrink-0">
-          <Link href="/dashboard" className="flex items-center gap-2.5">
-            <ProjetaProLogo />
-            <span className="font-bold text-base text-sidebar-foreground">
-              Projeta <span className="text-sidebar-accent">Pro</span>
+        <div className="flex items-center justify-center h-16 flex-shrink-0">
+          <Link href="/dashboard" className="flex items-center justify-center">
+            <span className="text-white font-bold text-sm">
+              P<span className="text-emerald-400">P</span>
             </span>
           </Link>
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden text-sidebar-foreground/60 hover:text-sidebar-foreground cursor-pointer"
+            className="lg:hidden absolute top-4 right-2 text-white/50 hover:text-white cursor-pointer"
             aria-label="Fechar menu"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-3 px-3 space-y-0.5 overflow-y-auto">
+        <nav className="flex-1 px-2 pb-2 space-y-1 overflow-y-auto scrollbar-thin">
           {isInsideObra ? (
             <>
               {/* Back to Obras */}
               <Link
                 href="/dashboard/obras"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-3 py-2 mb-2 rounded-xl text-sm font-medium text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground transition-all duration-200 cursor-pointer"
+                className="flex flex-col items-center gap-1 py-2 px-1 rounded-lg text-white/40 hover:bg-white/10 hover:text-white/70 transition-all duration-200 cursor-pointer mb-2"
               >
                 <ArrowLeft className="w-4 h-4" />
-                Voltar para Obras
+                <span className="text-[8px] uppercase tracking-wide">Voltar</span>
               </Link>
 
-              {/* Obra name */}
-              <div className="px-3 mb-3">
-                <p className="text-sm font-semibold text-sidebar-foreground truncate">
-                  {obraNav.obraNome}
-                </p>
-              </div>
-
-              <p className="px-3 mb-2 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
-                Secoes
-              </p>
+              {/* Obra nav items */}
               {obraItems.map((item) => {
                 const isActive = item.exact
                   ? pathname === item.href
                   : pathname.startsWith(item.href)
-                const Icon = item.icon
                 return (
-                  <Link
+                  <SidebarItem
                     key={item.href}
                     href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    isActive={isActive}
                     onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer",
-                      isActive
-                        ? "bg-sidebar-accent text-white shadow-sm"
-                        : "text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground"
-                    )}
-                  >
-                    <Icon className="w-[18px] h-[18px]" />
-                    {item.label}
-                  </Link>
+                  />
                 )
               })}
             </>
           ) : (
             <>
-              <p className="px-3 mb-2 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
-                Menu
-              </p>
               {NAV_ITEMS.map((item) => {
                 const isActive =
                   item.href === "/dashboard"
                     ? pathname === "/dashboard"
                     : pathname.startsWith(item.href)
-                const Icon = item.icon
                 return (
-                  <Link
+                  <SidebarItem
                     key={item.href}
                     href={item.href}
+                    label={item.label}
+                    icon={item.icon}
+                    isActive={isActive}
                     onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer",
-                      isActive
-                        ? "bg-sidebar-accent text-white shadow-sm"
-                        : "text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground"
-                    )}
-                  >
-                    <Icon className="w-[18px] h-[18px]" />
-                    {item.label}
-                  </Link>
+                  />
                 )
               })}
             </>
@@ -209,27 +203,26 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
         </nav>
 
         {/* User section */}
-        <div className="border-t border-white/[0.08] p-4 flex-shrink-0">
-          <div className="flex items-center gap-3">
+        <div className="border-t border-white/10 p-2 flex-shrink-0">
+          <div className="flex flex-col items-center gap-2 py-2">
             {user.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={user.image}
                 alt={displayName}
-                className="w-9 h-9 rounded-xl object-cover flex-shrink-0 ring-2 ring-white/10"
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10"
               />
             ) : (
-              <div className="w-9 h-9 rounded-xl bg-sidebar-accent/30 text-sidebar-accent flex items-center justify-center text-sm font-semibold flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-emerald-500/30 text-emerald-400 flex items-center justify-center text-[10px] font-semibold">
                 {initials}
               </div>
             )}
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium truncate text-sidebar-foreground">{displayName}</p>
-              <p className="text-xs text-sidebar-foreground/40">{ROLE_LABELS[user.role] ?? user.role}</p>
-            </div>
+            <span className="text-[8px] text-white/40 uppercase tracking-wide text-center truncate w-full px-1">
+              {ROLE_LABELS[user.role] ?? user.role}
+            </span>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="text-sidebar-foreground/40 hover:text-sidebar-foreground transition-colors flex-shrink-0 cursor-pointer"
+              className="text-white/30 hover:text-white transition-colors cursor-pointer"
               title="Sair"
             >
               <LogOut className="w-4 h-4" />
