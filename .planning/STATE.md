@@ -82,7 +82,7 @@ Recent decisions affecting current work:
 - [Phase 01-foundation Plan 02]: localStorage for view toggle persistence — no Zustand needed for single key
 - [Phase 01-foundation Plan 02]: Cookie deletion for session refresh on empresa-level invite — unstable_update() not available in Auth.js beta.25
 - [Phase 01-foundation Plan 02]: Derived activity feed from timestamps — no audit log table in Phase 1
-- [Phase 02-pdf-viewer-anchored-comments]: Vitest alias for @obravision/db/rls-client must be listed BEFORE @obravision/db in alias map to prevent resolution overlap
+- [Phase 02-pdf-viewer-anchored-comments]: Vitest alias for @projetapro/db/rls-client must be listed BEFORE @projetapro/db in alias map to prevent resolution overlap
 - [Phase 02-pdf-viewer-anchored-comments]: listPlantasByObra returns Record<string, PlantaWithRevisoes[]> not array — direct group-by-disciplina without re-grouping on client
 - [Phase 02-pdf-viewer-anchored-comments]: Enqueue-conversion failure is non-fatal — logged but createRevisao succeeds; tiles ready eventually via retry
 - [Phase 02-pdf-viewer-anchored-comments]: R2 key format: plantas/{tenantId}/{timestamp}-{filename} — tenantId embedded for auditing without DB lookup

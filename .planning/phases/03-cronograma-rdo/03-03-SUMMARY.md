@@ -122,7 +122,7 @@ Each task was committed atomically:
 
 - `ProgressWidget` uses pure SVG path rendering instead of recharts — recharts is not installed and a lightweight SVG chart avoids adding a dependency for a relatively simple visualization.
 - `getTenantContextSafe` helper pattern introduced (returns null instead of redirect) — needed for server actions called from client components via server action invocation, where a redirect would break the UX.
-- `db push` skipped — no DATABASE_URL in dev env. RLS migration SQL created manually. Developer applies with `pnpm --filter @obravision/db db:push`.
+- `db push` skipped — no DATABASE_URL in dev env. RLS migration SQL created manually. Developer applies with `pnpm --filter @projetapro/db db:push`.
 - nanoid substitute (timestamp base-36 + random chars) used for R2 key uniqueness — avoids adding the nanoid package for a simple random prefix.
 
 ## Deviations from Plan
@@ -150,7 +150,7 @@ Each task was committed atomically:
 
 ## User Setup Required
 
-Developer must run `pnpm --filter @obravision/db db:push` with DATABASE_URL set to apply RdoEntrada/RdoFoto schema changes.
+Developer must run `pnpm --filter @projetapro/db db:push` with DATABASE_URL set to apply RdoEntrada/RdoFoto schema changes.
 
 ## Next Phase Readiness
 

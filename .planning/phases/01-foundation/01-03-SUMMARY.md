@@ -84,7 +84,7 @@ completed: 2026-03-13
 - Marketing landing page at `/` with professional construction-industry design (Verde Obra #1A6B5A gradient hero)
 - Lead capture form with react-hook-form + Zod validation, success/error state swap, calls captureLead Server Action
 - captureLead Server Action saves email to Lead table with upsert (re-submissions succeed silently, no duplicate errors)
-- Feature showcase grid with 6 ObraVision capabilities and Lucide icons (responsive 1/2/3 column layout)
+- Feature showcase grid with 6 ProjetaPro capabilities and Lucide icons (responsive 1/2/3 column layout)
 - Zero auth coupling — no auth() calls, no session cookies, no middleware on marketing routes
 
 ## Task Commits
@@ -108,7 +108,7 @@ Each task was committed atomically:
 - `packages/db/src/index.ts` - Prisma client singleton export with dev logging
 - `apps/web/package.json` - Web app dependencies (react-hook-form, zod, lucide-react, etc.)
 - `apps/web/tsconfig.json` - TypeScript config with @/* path alias and Next.js plugin
-- `apps/web/next.config.ts` - Next.js config with transpilePackages for @obravision/db
+- `apps/web/next.config.ts` - Next.js config with transpilePackages for @projetapro/db
 
 ## Decisions Made
 

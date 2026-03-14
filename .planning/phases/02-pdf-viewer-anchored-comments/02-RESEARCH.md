@@ -694,7 +694,7 @@ import { Worker } from 'bullmq';
 import { PDFium } from '@hyzyla/pdfium';
 import sharp from 'sharp';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
-import { prisma } from '@obravision/db';
+import { prisma } from '@projetapro/db';
 import { connection, PdfConversionJobData } from './pdf-conversion.queue';
 import { io } from '../app'; // exported Socket.io instance
 

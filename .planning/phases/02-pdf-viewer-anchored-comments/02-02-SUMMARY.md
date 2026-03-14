@@ -153,7 +153,7 @@ Renders `{R2_PUBLIC_URL}/{tilesPrefix}/page-{pageNumber}.webp` with CSS `transfo
 
 The following pre-existing build issues were found but NOT modified (out of scope):
 
-- `@obravision/db` package build: `tests/**/*` included in tsconfig but outside `rootDir: src`
+- `@projetapro/db` package build: `tests/**/*` included in tsconfig but outside `rootDir: src`
 - `apps/web` next build: `pages-manifest.json` ENOENT after route generation (Next.js 15 intermittent)
 - `apps/web/lib/actions/notification.ts`: Type error `Record<string, unknown>` not assignable to `InputJsonValue`
 

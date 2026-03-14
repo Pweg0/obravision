@@ -153,7 +153,7 @@ completed: "2026-03-13"
 ## Issues Encountered
 
 - Next.js build with stale `.next` cache produced flaky "ENOENT pages-manifest.json" errors. Fixed by deleting `.next` directory and rebuilding from clean. Pre-existing issue unrelated to this plan's changes.
-- `pnpm turbo build` fails on `@obravision/db` (test file outside rootDir) — pre-existing, not introduced by this plan. Web-only build (`pnpm --filter web build`) passes cleanly.
+- `pnpm turbo build` fails on `@projetapro/db` (test file outside rootDir) — pre-existing, not introduced by this plan. Web-only build (`pnpm --filter web build`) passes cleanly.
 
 ## User Setup Required
 
@@ -165,6 +165,10 @@ completed: "2026-03-13"
 - Socket.io infrastructure is complete — Plan 02 (pin/thread actions) can call `emitNotification` directly (TODOs added in planta.ts)
 - `getObraMemberIds` utility is ready for pin/thread notification recipients
 - All notification UI components are functional and integrated into the dashboard layout
+
+## Self-Check: PASSED
+
+All 10 created files confirmed on disk. Both task commits verified in git log (42b2eb0, 43826f1).
 
 ---
 *Phase: 02-pdf-viewer-anchored-comments*

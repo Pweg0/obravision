@@ -7,8 +7,8 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { differenceInDays, eachDayOfInterval, format } from "date-fns"
 import { auth } from "@/lib/auth"
-import { prisma } from "@obravision/db"
-import { createTenantClient } from "@obravision/db/rls-client"
+import { prisma } from "@projetapro/db"
+import { createTenantClient } from "@projetapro/db/rls-client"
 
 // ---- Tenant context helper ----
 

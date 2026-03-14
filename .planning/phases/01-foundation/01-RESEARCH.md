@@ -173,7 +173,7 @@ pnpm add -D vitest @vitest/coverage-v8
 ### Recommended Project Structure
 
 ```
-obravision/
+projetapro/
 ├── apps/
 │   ├── web/                        # Next.js 15 App Router
 │   │   ├── app/
@@ -255,7 +255,7 @@ import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import Credentials from "next-auth/providers/credentials"
 import Google from "next-auth/providers/google"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import bcrypt from "bcryptjs"
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -374,7 +374,7 @@ async function inviteByEmail(email: string, role: Role, obraId: string) {
     }
   })
   await resend.emails.send({
-    from: "ObraVision <noreply@obravision.com.br>",
+    from: "ProjetaPro <noreply@projetapro.com.br>",
     to: email,
     subject: "Voce foi convidado para uma obra",
     react: InviteEmail({ token, role }),
@@ -783,15 +783,15 @@ export const config = { matcher: ["/dashboard/:path*", "/onboarding/:path*"] }
 ```typescript
 // Source: resend.com/docs/send-with-nextjs
 import { Resend } from "resend"
-import { InviteEmail } from "@obravision/emails"
+import { InviteEmail } from "@projetapro/emails"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 await resend.emails.send({
-  from: "ObraVision <noreply@obravision.com.br>",
+  from: "ProjetaPro <noreply@projetapro.com.br>",
   to: targetEmail,
   subject: `Voce foi convidado para ${obraName}`,
-  react: InviteEmail({ inviterName, obraName, acceptUrl: `https://obravision.com.br/invite/${token}` }),
+  react: InviteEmail({ inviterName, obraName, acceptUrl: `https://projetapro.com.br/invite/${token}` }),
 })
 ```
 

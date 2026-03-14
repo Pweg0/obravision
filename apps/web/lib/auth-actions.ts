@@ -1,6 +1,6 @@
 "use server"
 
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import bcrypt from "bcryptjs"
 import { nanoid } from "nanoid"
 import { signIn } from "./auth"
@@ -148,20 +148,20 @@ export async function forgotPassword(
     const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`
 
     await resend?.emails.send({
-      from: "ObraVision <noreply@obravision.com.br>",
+      from: "ProjetaPro <noreply@projetapro.com.br>",
       to: email,
-      subject: "Redefinir sua senha — ObraVision",
+      subject: "Redefinir sua senha — ProjetaPro",
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #1A6B5A;">Redefinir Senha</h2>
-          <p>Recebemos uma solicitacao para redefinir a senha da sua conta ObraVision.</p>
+          <p>Recebemos uma solicitacao para redefinir a senha da sua conta ProjetaPro.</p>
           <p>Clique no link abaixo para criar uma nova senha. Este link e valido por 1 hora.</p>
           <a href="${resetUrl}" style="display: inline-block; background-color: #1A6B5A; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; margin: 16px 0;">
             Redefinir Senha
           </a>
           <p>Se voce nao solicitou a redefinicao de senha, ignore este email.</p>
           <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;" />
-          <p style="color: #6b7280; font-size: 14px;">ObraVision — Gestao de Obras Visual</p>
+          <p style="color: #6b7280; font-size: 14px;">ProjetaPro — Gestao de Obras Visual</p>
         </div>
       `,
     })

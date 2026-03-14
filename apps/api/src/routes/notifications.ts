@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 
 interface EmitBody {
   event: string

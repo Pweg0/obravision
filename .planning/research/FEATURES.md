@@ -14,7 +14,7 @@ Features users assume exist. Missing these = product feels incomplete. These are
 
 | Feature | Why Expected | Complexity | Notes |
 |---------|--------------|------------|-------|
-| Cadastro de obras com membros e roles | Entire category assumes project-scoped access control. Engineers expect to invite field teams and clients with different permissions. | MEDIUM | Role granularity matters: admin, engenheiro, mestre, cliente. Billing per obra (not per user) is an ObraVision differentiator, but RBAC within obra is still expected. |
+| Cadastro de obras com membros e roles | Entire category assumes project-scoped access control. Engineers expect to invite field teams and clients with different permissions. | MEDIUM | Role granularity matters: admin, engenheiro, mestre, cliente. Billing per obra (not per user) is an ProjetaPro differentiator, but RBAC within obra is still expected. |
 | Upload e visualizacao de plantas PDF | The primary artifact of construction work is the plant PDF. Every competing product (PlanGrid, Fieldwire, Procore, Autodesk Build) is built around this. Brazilian engineers receive plants as PDFs from AutoCAD/Revit export. | HIGH | Large files (>50MB) are common. Server-side rendering/conversion is required. pdf.js is viable for viewer; server conversion for performance. |
 | Diario de obra (RDO) | Relatório Diário de Obra is a formal industry requirement in Brazil. Entire dedicated SaaS products exist just for RDO (RDOWeb, Kartado, diariodeobras.net). Any obra management product without RDO is non-starter. | MEDIUM | Must include: date, weather record, workers present, activities, materials received, incidents. Photo attachment is expected. |
 | Cronograma de tarefas (lista com status) | Most basic planning primitive. Even simple tools (Mais Controle) include task lists with status and responsible party. | LOW | Table view + status (Nao iniciado / Em andamento / Concluido) is baseline. Gantt is a step up but not required for MVP. |
@@ -30,11 +30,11 @@ Features users assume exist. Missing these = product feels incomplete. These are
 
 ### Differentiators (Competitive Advantage)
 
-Features that set ObraVision apart. Not expected by users, but create switching costs and word-of-mouth. These align directly with the core value proposition.
+Features that set ProjetaPro apart. Not expected by users, but create switching costs and word-of-mouth. These align directly with the core value proposition.
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Comentarios ancorados na planta (pins + threads) | **No Brazilian competitor offers this.** Current workflow: engineer screenshots plant, circles area in WhatsApp, sends message. ObraVision replaces this with a traceable, searchable, contextual thread pinned to the exact element. Bluebeam Revu exists globally but is desktop-only and expensive. | HIGH | Requires PDF viewer with coordinate mapping, pin persistence against plant versions, thread UI. The core technical moat of the product. PDF.js + canvas overlay + pin-to-coordinate storage. Pins must survive plant revisions (coordinate normalization required). |
+| Comentarios ancorados na planta (pins + threads) | **No Brazilian competitor offers this.** Current workflow: engineer screenshots plant, circles area in WhatsApp, sends message. ProjetaPro replaces this with a traceable, searchable, contextual thread pinned to the exact element. Bluebeam Revu exists globally but is desktop-only and expensive. | HIGH | Requires PDF viewer with coordinate mapping, pin persistence against plant versions, thread UI. The core technical moat of the product. PDF.js + canvas overlay + pin-to-coordinate storage. Pins must survive plant revisions (coordinate normalization required). |
 | Versionamento de plantas (R0, R1, R2) com historico | Revision tracking is a known pain point. Engineers receive updated plants and lose track of which version field teams are using. Fieldwire does this in the US market but no Brazilian product does it well. | HIGH | "Superseded" tagging of old revisions. Automatic notification to team when new revision uploaded. Old pins from previous revision must be either carried forward (with migration prompt) or archived. This is a strong complement to anchored comments. |
 | Cronograma Gantt com alerta de clima integrado | Weather is the leading cause of construction schedule delays (rain floods sites, prevents concrete pouring, makes crane operation unsafe). No Brazilian software integrates weather into scheduling. The closest is manual RDO weather logging. | HIGH | Requires weather API integration (Open-Meteo is free, INMET for Brazil-specific data). Alert logic: "Chuva prevista para amanha — tarefas 12, 13, 15 podem ser afetadas." Integrate with Gantt critical path to flag at-risk tasks. |
 | Checagem NBR assistida por IA | No competitor in Brazil offers AI-powered NBR compliance checking. Sienge and TOTVS address compliance procedurally, not with AI assistance. The 881 NBR standards for civil construction create real cognitive load for engineers on mid-size projects. | HIGH | Uses Claude API. Scope: checklist-based (not reproducing ABNT text — copyright). User describes element/situation, AI maps to applicable NBR checklist items. Permanent legal disclaimer: "analise assistiva, nao substitui laudo tecnico." Cost risk: Claude API per-call — must be gated behind Pro/Business plan with rate limits. |
@@ -50,12 +50,12 @@ Features that set ObraVision apart. Not expected by users, but create switching 
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Chat em tempo real entre usuarios | Engineers want to "replace WhatsApp" with one tool. Seems like a natural extension of comments and notifications. | Chat requires presence indicators, read receipts, message history, thread management, push notification infra, and moderation concerns. It's a product unto itself. And WhatsApp already works. Zero chance of winning on chat UX against WhatsApp. | Anchored comment threads + @mention notifications. For urgent comms, engineers will use WhatsApp — and that's fine. ObraVision handles the structured, traceable communication layer. |
+| Chat em tempo real entre usuarios | Engineers want to "replace WhatsApp" with one tool. Seems like a natural extension of comments and notifications. | Chat requires presence indicators, read receipts, message history, thread management, push notification infra, and moderation concerns. It's a product unto itself. And WhatsApp already works. Zero chance of winning on chat UX against WhatsApp. | Anchored comment threads + @mention notifications. For urgent comms, engineers will use WhatsApp — and that's fine. ProjetaPro handles the structured, traceable communication layer. |
 | Video streaming / timelapse de obra | Timelapse cameras are a real product category (Foco Avanco uses them). "Ver a obra ao vivo" is a client-pleasing feature request. | Storage and bandwidth costs are disproportionate to value. A 30-day timelapse at 1 frame/minute = gigabytes of storage per obra. Video transcoding requires dedicated infra. | Daily photo uploads in RDO + photo gallery per obra give 90% of the value at 1% of the cost. Timelapse integrations can be a v3 partnership, not a built feature. |
 | App desktop nativo (Electron, Tauri) | Some engineers have corporate laptops and want a "proper app." | Desktop native app doubles platform maintenance burden for a solo dev. Web app with PWA install covers the use case. Existing tools (Sienge, TOTVS) are heavy desktop apps — being web-first is an advantage, not a limitation. | PWA (Progressive Web App) installable from browser. Offline-capable. No app store friction. |
 | Reproducao de texto das normas NBR | Building an "NBR library" in the product seems like added value. | ABNT holds copyright on NBR text. Reproducing normative content creates legal exposure. Confirmed in PROJECT.md constraints. | AI checklist approach: describe the requirement in natural language ("paredes corta-fogo devem ter..."), surface it as a checklist item with reference code ("NBR 11711"), without reproducing the normative text. |
 | Gestao de RH e folha de pagamento | Construtoras ask for "tudo em um lugar" including employee management, timesheet, payroll. | Full HR/payroll is a regulated domain (eSocial integration, CLT rules, FGTS calculations). It's a separate product category. Adding it creates legal and compliance burden for the dev team. | Integrate with existing payroll tools (Gupy, Totvs RH) via API. Track "workers present" in RDO (headcount) without becoming a payroll system. |
-| ERP completo (NF-e, compras, estoque profundo) | Mid-size construtoras want everything integrated. Sienge is the benchmark for full ERP. | Competing with Sienge on ERP completeness is a trap. Sienge has 30+ years of development and is used by 74 of the 100 largest Brazilian construtoras. Winning on ERP features is impossible for a solo dev. | Win on collaboration UX (comments on plants, versioning, client portal). API publica para integracao com ERPs lets power users connect ObraVision to Sienge/TOTVS for financial data. |
+| ERP completo (NF-e, compras, estoque profundo) | Mid-size construtoras want everything integrated. Sienge is the benchmark for full ERP. | Competing with Sienge on ERP completeness is a trap. Sienge has 30+ years of development and is used by 74 of the 100 largest Brazilian construtoras. Winning on ERP features is impossible for a solo dev. | Win on collaboration UX (comments on plants, versioning, client portal). API publica para integracao com ERPs lets power users connect ProjetaPro to Sienge/TOTVS for financial data. |
 | BIM 3D viewer integrado | Engineers working with BIM models (Revit, Archicad) want 3D visualization. | BIM viewing requires specialized renderers (IFC.js, Autodesk Viewer). The target market (engenheiros autonomos, construtoras medias) works primarily with 2D PDFs, not BIM models. BIM adoption in this segment is low. | Stay in 2D PDF space. If BIM becomes a requirement, it's a v3+ feature or partnership with Autodesk/BIM 360. |
 
 ---
@@ -190,7 +190,7 @@ Defer until clear evidence these are activation/retention drivers.
 
 ## Competitor Feature Analysis
 
-| Feature | Sienge | Obra Prima | Mais Controle | Fieldwire (global) | ObraVision Approach |
+| Feature | Sienge | Obra Prima | Mais Controle | Fieldwire (global) | ProjetaPro Approach |
 |---------|--------|------------|---------------|-------------------|---------------------|
 | Upload e viewer de plantas | Partial (document storage) | No viewer | No viewer | YES (core feature) | YES + pins ancorados |
 | Comentarios ancorados na planta | NO | NO | NO | Basic markup | YES — core differentiator |
@@ -206,7 +206,7 @@ Defer until clear evidence these are activation/retention drivers.
 | Preco por obra (nao por usuario) | NO — por usuario | NO — por usuario | NO — por usuario | NO — por usuario | YES — diferencial de modelo |
 | Onboarding simples (<5 min) | NO — implementacao complexa | MEDIO | MEDIO | NO | YES — constraint critica |
 
-**Key insight:** No Brazilian competitor offers visual collaboration on blueprints (anchored comments + versioning). Fieldwire does this in the US/global market but is expensive ($54+/user/month) and not localized for Brazil (no Portuguese, no NBR, no SINAPI, no Real-based pricing). ObraVision's moat is the combination of visual collaboration + Brazilian localization.
+**Key insight:** No Brazilian competitor offers visual collaboration on blueprints (anchored comments + versioning). Fieldwire does this in the US/global market but is expensive ($54+/user/month) and not localized for Brazil (no Portuguese, no NBR, no SINAPI, no Real-based pricing). ProjetaPro's moat is the combination of visual collaboration + Brazilian localization.
 
 ---
 
@@ -232,5 +232,5 @@ Defer until clear evidence these are activation/retention drivers.
 
 ---
 
-*Feature research for: Construction management SaaS — Brazilian market (ObraVision)*
+*Feature research for: Construction management SaaS — Brazilian market (ProjetaPro)*
 *Researched: 2026-03-13*

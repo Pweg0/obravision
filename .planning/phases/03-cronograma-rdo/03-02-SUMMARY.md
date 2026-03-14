@@ -86,7 +86,7 @@ completed: 2026-03-13
 - Extracted `detectWeatherAlerts` pure function into `weather-detection.ts` — accepts tarefas + forecast days + reference date; returns `WeatherAlert[]` with `alertType: "weather_preliminary" | "weather_confirmed"`
 - Created `weather-alert.worker.ts` — BullMQ worker that queries obras with lat/lon, skips obras without coordinates, fetches Open-Meteo per obra, runs detection logic, creates `prisma.notification.createMany` records for ADMIN+ENGENHEIRO members, emits `weather-alert` socket event (non-fatal)
 - Updated `app.ts` to call `registerWeatherAlertScheduler()` and inject `fastify.io` into the weather worker at startup
-- Added `geocodeAddress()` to `obra.ts` — Nominatim call with `User-Agent: ObraVision/1.0`, returns `{ lat, lon } | null`, all errors caught non-fatally
+- Added `geocodeAddress()` to `obra.ts` — Nominatim call with `User-Agent: ProjetaPro/1.0`, returns `{ lat, lon } | null`, all errors caught non-fatally
 - Wired geocoding into `createObra` (post-create update) and `updateObra` (re-geocode when address fields present)
 - Updated `listCronograma` to query `prisma.notification` for active weather alerts and attach `temAlertaChuva: "weather_preliminary" | "weather_confirmed" | null` to each tarefa
 - Updated `GanttView.tsx` to render a weather alert panel (orange/red CloudRain icons) above the Gantt for tarefas with active alerts
@@ -150,7 +150,7 @@ Each task was committed atomically:
 **4. [Rule 2 - Missing] cronograma.test.ts missing `prisma.notification` mock**
 - **Found during:** Task 2 (all web tests)
 - **Issue:** After updating `listCronograma` to call `prisma.notification.findMany`, the existing cronograma test mock only had `prisma.empresa`. The test threw `Cannot read properties of undefined (reading 'findMany')`.
-- **Fix:** Added `notification: { findMany: vi.fn().mockResolvedValue([]) }` to the `@obravision/db` mock in `cronograma.test.ts`. Also updated the `listCronograma` result assertion to use `objectContaining` to accommodate the new `temAlertaChuva` field on tarefas.
+- **Fix:** Added `notification: { findMany: vi.fn().mockResolvedValue([]) }` to the `@projetapro/db` mock in `cronograma.test.ts`. Also updated the `listCronograma` result assertion to use `objectContaining` to accommodate the new `temAlertaChuva` field on tarefas.
 - **Files modified:** `apps/web/tests/actions/cronograma.test.ts`
 - **Commit:** `2e9f9f2`
 
@@ -162,7 +162,7 @@ Each task was committed atomically:
 ## User Setup Required
 
 No new setup required beyond what Plan 01 already documented:
-- `pnpm --filter @obravision/db exec prisma db push` (when DATABASE_URL is available) — applies the Obra lat/lon columns from Plan 01's schema change.
+- `pnpm --filter @projetapro/db exec prisma db push` (when DATABASE_URL is available) — applies the Obra lat/lon columns from Plan 01's schema change.
 - Redis must be running for the weather-alert BullMQ worker to process jobs.
 - Open-Meteo API is free, no key required.
 

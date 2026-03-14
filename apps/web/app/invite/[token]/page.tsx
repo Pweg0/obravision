@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import { AcceptInviteClient } from "./AcceptInviteClient"
 
 interface InvitePageProps {
@@ -100,7 +100,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
     <div className="min-h-screen flex items-center justify-center p-4 bg-background">
       <div className="max-w-sm w-full space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-primary">ObraVision</h1>
+          <h1 className="text-3xl font-bold text-primary">ProjetaPro</h1>
         </div>
 
         <div className="rounded-xl border bg-card p-6 shadow-sm space-y-4">

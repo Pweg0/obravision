@@ -1,5 +1,5 @@
 -- Phase 3: Cronograma models — Etapa and Tarefa
--- Run after applying schema changes via: pnpm --filter @obravision/db exec prisma db push
+-- Run after applying schema changes via: pnpm --filter @projetapro/db exec prisma db push
 
 -- etapas table
 ALTER TABLE "etapas" ENABLE ROW LEVEL SECURITY;

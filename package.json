@@ -1,5 +1,5 @@
 {
-  "name": "obravision",
+  "name": "projetapro",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",

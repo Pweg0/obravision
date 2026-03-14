@@ -9,7 +9,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         <Link
           href="/"
           className="flex items-center gap-2 text-slate-900 font-bold text-xl tracking-tight hover:opacity-80 transition-opacity"
-          aria-label="ObraVision — pagina inicial"
+          aria-label="ProjetaPro — pagina inicial"
         >
           <span
             className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-base"
@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           >
             O
           </span>
-          ObraVision
+          ProjetaPro
         </Link>
       </div>
 
@@ -27,7 +27,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
       {/* Footer */}
       <p className="mt-8 text-xs text-slate-400">
-        &copy; {new Date().getFullYear()} ObraVision. Todos os direitos reservados.
+        &copy; {new Date().getFullYear()} ProjetaPro. Todos os direitos reservados.
       </p>
     </div>
   )

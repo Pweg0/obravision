@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
-import { prisma } from "@obravision/db"
-import { createTenantClient } from "@obravision/db/rls-client"
+import { prisma } from "@projetapro/db"
+import { createTenantClient } from "@projetapro/db/rls-client"
 import { obraSchema, obraUpdateSchema } from "@/lib/validations/obra"
 
 async function getTenantContext() {
@@ -61,7 +61,7 @@ export async function geocodeAddress(
 
     const res = await fetch(url, {
       headers: {
-        "User-Agent": "ObraVision/1.0",
+        "User-Agent": "ProjetaPro/1.0",
       },
     })
 

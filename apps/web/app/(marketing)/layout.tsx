@@ -11,7 +11,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           <Link
             href="/"
             className="flex items-center gap-2 text-slate-900 font-bold text-xl tracking-tight hover:text-emerald-700 transition-colors"
-            aria-label="ObraVision — pagina inicial"
+            aria-label="ProjetaPro — pagina inicial"
           >
             <span
               className="w-7 h-7 rounded flex items-center justify-center text-white text-sm font-bold"
@@ -20,7 +20,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             >
               O
             </span>
-            ObraVision
+            ProjetaPro
           </Link>
 
           {/* Navigation */}

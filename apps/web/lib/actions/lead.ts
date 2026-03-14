@@ -1,6 +1,6 @@
 "use server"
 
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import { leadSchema } from "@/lib/validations/lead"
 
 export async function captureLead(formData: FormData) {

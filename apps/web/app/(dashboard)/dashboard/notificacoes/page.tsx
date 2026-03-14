@@ -2,7 +2,7 @@ import { listNotifications } from "@/lib/actions/notification"
 import { NotificacoesClient } from "./NotificacoesClient"
 
 export const metadata = {
-  title: "Notificacoes — ObraVision",
+  title: "Notificacoes — ProjetaPro",
   description: "Seu historico de notificacoes",
 }
 

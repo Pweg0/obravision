@@ -31,11 +31,11 @@ const mockTenantClient = {
   },
 }
 
-vi.mock("@obravision/db/rls-client", () => ({
+vi.mock("@projetapro/db/rls-client", () => ({
   createTenantClient: vi.fn(() => mockTenantClient),
 }))
 
-vi.mock("@obravision/db", () => ({
+vi.mock("@projetapro/db", () => ({
   prisma: {
     empresa: {
       findUnique: vi.fn().mockResolvedValue({
@@ -143,7 +143,7 @@ describe("geocodeAddress", () => {
     expect(url).toContain("nominatim.openstreetmap.org/search")
     expect(url).toContain("format=json")
     expect(url).toContain("limit=1")
-    expect((options?.headers as Record<string, string>)?.["User-Agent"]).toBe("ObraVision/1.0")
+    expect((options?.headers as Record<string, string>)?.["User-Agent"]).toBe("ProjetaPro/1.0")
   })
 })
 
@@ -181,7 +181,7 @@ describe("createObra with geocoding", () => {
 
     const result = await createObra(formData)
 
-    expect(result.success).toBe(true)
+    expect("success" in result && result.success).toBe(true)
     // geocodeAddress triggers an obra update with lat/lon
     expect(mockTenantClient.obra.update).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -210,7 +210,7 @@ describe("createObra with geocoding", () => {
     const result = await createObra(formData)
 
     // obra was still created
-    expect(result.success).toBe(true)
+    expect("success" in result && result.success).toBe(true)
     // update NOT called since geocoding returned null
     expect(mockTenantClient.obra.update).not.toHaveBeenCalled()
   })

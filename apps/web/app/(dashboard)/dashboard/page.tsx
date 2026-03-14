@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
-import { prisma } from "@obravision/db"
-import { createTenantClient } from "@obravision/db/rls-client"
+import { prisma } from "@projetapro/db"
+import { createTenantClient } from "@projetapro/db/rls-client"
 import { ObraListWidget } from "@/components/dashboard/ObraListWidget"
 import { ActivityWidget } from "@/components/dashboard/ActivityWidget"
 import { PlaceholderWidget } from "@/components/dashboard/PlaceholderWidget"

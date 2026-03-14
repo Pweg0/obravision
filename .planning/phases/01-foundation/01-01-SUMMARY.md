@@ -194,7 +194,7 @@ Each task was committed atomically:
 To enable full auth functionality, the following environment variables must be configured in `.env.local`:
 
 ```
-DATABASE_URL=postgresql://user:password@localhost:5432/obravision
+DATABASE_URL=postgresql://user:password@localhost:5432/projetapro
 NEXTAUTH_SECRET=<generate with: openssl rand -base64 32>
 NEXTAUTH_URL=http://localhost:3000
 GOOGLE_CLIENT_ID=<from Google Cloud Console>

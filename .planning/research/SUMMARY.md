@@ -1,13 +1,13 @@
 # Project Research Summary
 
-**Project:** ObraVision — Construction Management SaaS (Brazil)
+**Project:** ProjetaPro — Construction Management SaaS (Brazil)
 **Domain:** Visual collaboration on construction blueprints, Brazilian civil engineering market
 **Researched:** 2026-03-13
 **Confidence:** HIGH (stack, architecture, pitfalls) / MEDIUM-HIGH (features, market positioning)
 
 ## Executive Summary
 
-ObraVision is a construction management SaaS targeting Brazilian mid-size construtoras, incorporadoras regionais, and engenheiros autonomos. Research confirms that no Brazilian competitor offers anchored visual commenting on PDF blueprints — the closest global analog is Fieldwire, which is expensive, unlocalized, and has no NBR or SINAPI integration. The product's technical moat is the combination of visual PDF collaboration (pins + threads on plant revisions) with Brazilian market localization (RDO, SINAPI, NBR compliance, Pix billing, LGPD compliance, Portuguese UX). The recommended architecture is a pnpm/Turborepo monorepo hosting a Next.js 15 web app on Vercel, a Fastify 5 API on Railway with Socket.io and BullMQ, PostgreSQL 16 with row-level security for multi-tenancy, Cloudflare R2 for PDF/photo storage, and Expo SDK 53 for the React Native mobile app.
+ProjetaPro is a construction management SaaS targeting Brazilian mid-size construtoras, incorporadoras regionais, and engenheiros autonomos. Research confirms that no Brazilian competitor offers anchored visual commenting on PDF blueprints — the closest global analog is Fieldwire, which is expensive, unlocalized, and has no NBR or SINAPI integration. The product's technical moat is the combination of visual PDF collaboration (pins + threads on plant revisions) with Brazilian market localization (RDO, SINAPI, NBR compliance, Pix billing, LGPD compliance, Portuguese UX). The recommended architecture is a pnpm/Turborepo monorepo hosting a Next.js 15 web app on Vercel, a Fastify 5 API on Railway with Socket.io and BullMQ, PostgreSQL 16 with row-level security for multi-tenancy, Cloudflare R2 for PDF/photo storage, and Expo SDK 53 for the React Native mobile app.
 
 The development sequence is strictly constrained by dependencies: multi-tenant foundation and auth must come before everything, the PDF pipeline must work before annotations can exist, REST routes must stabilize before WebSocket collaboration is layered on, and billing must be implemented before AI features (Claude API cost control depends on plan-gating). The core value prop — pins on blueprints — must be shippable and demoable with real beta users within 8 weeks; any later and conservative-adopter engineers will return to WhatsApp.
 
@@ -56,7 +56,7 @@ The stack is a Node.js-native monorepo with clear separation between the web fro
 - Versionamento de plantas (R0/R1/R2 with pin migration) — complements anchored comments; also unique in Brazil
 - Cronograma Gantt with weather alert integration — no Brazilian product integrates weather into scheduling
 - Portal do cliente (read-only shared link) — reduces "como ta minha obra?" WhatsApp interruptions
-- Modo offline no app mobile with sync — Brazilian construction sites have poor connectivity; Fieldwire's offline mode is a US market differentiator ObraVision can own in Brazil
+- Modo offline no app mobile with sync — Brazilian construction sites have poor connectivity; Fieldwire's offline mode is a US market differentiator ProjetaPro can own in Brazil
 - Checagem NBR assistida por IA — Claude API; no competitor offers this; high willingness-to-pay from engineers
 
 **Defer to v2+:**
@@ -68,7 +68,7 @@ The stack is a Node.js-native monorepo with clear separation between the web fro
 - Alerta de clima integrado ao Gantt (depends on Gantt dependency logic being mature)
 
 **Deliberate anti-features:**
-- No real-time chat (WhatsApp already works; ObraVision handles structured/traceable communication)
+- No real-time chat (WhatsApp already works; ProjetaPro handles structured/traceable communication)
 - No video/timelapse (storage costs disproportionate; daily RDO photos cover 90% of value)
 - No desktop native app (web PWA covers the use case; web-first is the competitive advantage)
 - No NBR text reproduction (ABNT copyright; AI checklist approach avoids legal exposure)
@@ -76,7 +76,7 @@ The stack is a Node.js-native monorepo with clear separation between the web fro
 
 ### Architecture Approach
 
-ObraVision uses a layered monorepo architecture: Next.js web app (client layer) communicates via tRPC over HTTPS and WebSocket to a Fastify API server (API layer), which coordinates background workers via BullMQ (background layer) and persists data to PostgreSQL + Redis + Cloudflare R2 (data layer). The React Native mobile app communicates only via REST to the same Fastify API, with WatermelonDB providing offline SQLite storage. All tenants share a single PostgreSQL schema with row-level security enforcing data isolation — database-per-tenant is explicitly rejected as operationally unmanageable for a solo dev. Annotation pins are stored as normalized 0.0–1.0 coordinates (not canvas pixels) in PostgreSQL, rendered as an SVG overlay layer on top of the PDF.js canvas. The WebSocket hub uses a room-per-obra model; Socket.io Redis adapter enables broadcasting across multiple API instances when scaling.
+ProjetaPro uses a layered monorepo architecture: Next.js web app (client layer) communicates via tRPC over HTTPS and WebSocket to a Fastify API server (API layer), which coordinates background workers via BullMQ (background layer) and persists data to PostgreSQL + Redis + Cloudflare R2 (data layer). The React Native mobile app communicates only via REST to the same Fastify API, with WatermelonDB providing offline SQLite storage. All tenants share a single PostgreSQL schema with row-level security enforcing data isolation — database-per-tenant is explicitly rejected as operationally unmanageable for a solo dev. Annotation pins are stored as normalized 0.0–1.0 coordinates (not canvas pixels) in PostgreSQL, rendered as an SVG overlay layer on top of the PDF.js canvas. The WebSocket hub uses a room-per-obra model; Socket.io Redis adapter enables broadcasting across multiple API instances when scaling.
 
 **Major components:**
 1. **Web App (Next.js 15)** — PDF viewer with annotation overlay, project management UI, real-time presence

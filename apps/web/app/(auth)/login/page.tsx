@@ -57,7 +57,7 @@ export default function LoginPage() {
     <Card>
       <CardHeader className="text-center">
         <CardTitle>Bem-vindo de volta</CardTitle>
-        <CardDescription>Entre na sua conta ObraVision</CardDescription>
+        <CardDescription>Entre na sua conta ProjetaPro</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Google OAuth */}

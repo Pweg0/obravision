@@ -36,7 +36,7 @@ Auth (email/senha + Google OAuth), obra CRUD with roles and invites, 3-step onbo
 - Secoes: Hero com CTA + secao de features do produto
 - Sem pricing, sem social proof no v1 — produto e para beta testers
 - Formulario de captura: apenas campo de email + botao "Quero testar"
-- Mesmo dominio: obravision.com.br/ e landing, /app e area logada
+- Mesmo dominio: projetapro.com.br/ e landing, /app e area logada
 
 ### Roles & Permissions
 - 3 roles: Admin, Engenheiro, Cliente

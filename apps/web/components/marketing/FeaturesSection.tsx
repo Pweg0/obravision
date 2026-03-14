@@ -62,7 +62,7 @@ export function FeaturesSection() {
             Tudo que sua obra precisa em um lugar so
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            Do projeto ao canteiro, do orcamento ao relatorio — ObraVision integra cada etapa da
+            Do projeto ao canteiro, do orcamento ao relatorio — ProjetaPro integra cada etapa da
             gestao de obras em uma plataforma visual colaborativa.
           </p>
         </div>

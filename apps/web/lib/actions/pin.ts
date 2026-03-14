@@ -3,8 +3,8 @@
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { auth } from "@/lib/auth"
-import { prisma } from "@obravision/db"
-import { createTenantClient } from "@obravision/db/rls-client"
+import { prisma } from "@projetapro/db"
+import { createTenantClient } from "@projetapro/db/rls-client"
 import { createPinSchema } from "@/lib/validations/pin"
 import { emitNotification, getObraMemberIds } from "./notification"
 

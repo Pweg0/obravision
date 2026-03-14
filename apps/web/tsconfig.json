@@ -25,10 +25,10 @@
       "@/*": [
         "./*"
       ],
-      "@obravision/db": [
+      "@projetapro/db": [
         "../../packages/db/src/index.ts"
       ],
-      "@obravision/types": [
+      "@projetapro/types": [
         "../../packages/types/src/index.ts"
       ]
     },

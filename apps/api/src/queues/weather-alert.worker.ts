@@ -1,5 +1,5 @@
 import { Worker } from "bullmq"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import { connection } from "./pdf-conversion.queue"
 import { type WeatherAlertJobData } from "./weather-alert.queue"
 import { detectWeatherAlerts, type ForecastDay } from "./weather-detection"

@@ -1,5 +1,5 @@
 /**
- * Obra-related TypeScript types for ObraVision.
+ * Obra-related TypeScript types for ProjetaPro.
  */
 
 // ObraTipo enum matching Prisma schema

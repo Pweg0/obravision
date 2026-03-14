@@ -47,7 +47,7 @@ key_files:
     - apps/api/src/app.ts (Socket.io + route registration)
     - apps/web/next.config.ts (canvas: false webpack alias)
 decisions:
-  - "Vitest aliases: @obravision/db/rls-client must be listed BEFORE @obravision/db in alias map to prevent resolution overlap"
+  - "Vitest aliases: @projetapro/db/rls-client must be listed BEFORE @projetapro/db in alias map to prevent resolution overlap"
   - "listPlantasByObra returns Record<string, PlantaWithRevisoes[]> (not array) for direct group-by-disciplina iteration"
   - "Enqueue-conversion failure is non-fatal — logged but does not fail createRevisao (tiles will be ready eventually)"
   - "R2 key format: plantas/{tenantId}/{timestamp}-{filename} — tenantId embedded for auditing without DB lookup"
@@ -106,7 +106,7 @@ RLS migration `00000000000002_planta_models/migration.sql` applies `ENABLE ROW L
 
 ### Vitest Infrastructure
 
-Both `apps/web/vitest.config.ts` (jsdom environment, react plugin, path aliases) and `apps/api/vitest.config.ts` (node environment) configured. The web alias map places `@obravision/db/rls-client` before `@obravision/db` to prevent overlap.
+Both `apps/web/vitest.config.ts` (jsdom environment, react plugin, path aliases) and `apps/api/vitest.config.ts` (node environment) configured. The web alias map places `@projetapro/db/rls-client` before `@projetapro/db` to prevent overlap.
 
 ## Test Results
 
@@ -121,10 +121,10 @@ Both `apps/web/vitest.config.ts` (jsdom environment, react plugin, path aliases)
 
 ### Auto-fixed Issues
 
-**1. [Rule 3 - Blocking] Vitest alias for @obravision/db/rls-client missing**
+**1. [Rule 3 - Blocking] Vitest alias for @projetapro/db/rls-client missing**
 - **Found during:** Task 2 — first test run
-- **Issue:** Vitest config had `@obravision/db` alias but not `@obravision/db/rls-client`, causing resolution failure
-- **Fix:** Added `@obravision/db/rls-client` as explicit alias entry BEFORE `@obravision/db` in vitest.config.ts
+- **Issue:** Vitest config had `@projetapro/db` alias but not `@projetapro/db/rls-client`, causing resolution failure
+- **Fix:** Added `@projetapro/db/rls-client` as explicit alias entry BEFORE `@projetapro/db` in vitest.config.ts
 - **Files modified:** `apps/web/vitest.config.ts`
 
 **2. [Rule 1 - Bug] listPlantasByObra returned `[]` (inferred never[]) on early return**
@@ -135,8 +135,8 @@ Both `apps/web/vitest.config.ts` (jsdom environment, react plugin, path aliases)
 
 **3. [Rule 3 - Blocking] vi.mock factory referenced const before initialization (vitest hoisting)**
 - **Found during:** Task 2 — revisoes.test.ts initial run
-- **Issue:** `vi.mock("@obravision/db", factory)` is hoisted to the top of the file; the factory referenced `mockTenantClient` which was a `const` declared later
-- **Fix:** Used `vi.hoisted()` to create mutable mock variables accessible in factory scope. Also split the mock into separate `@obravision/db` and `@obravision/db/rls-client` mocks to prevent the Prisma singleton from instantiating (which caused DATABASE_URL errors)
+- **Issue:** `vi.mock("@projetapro/db", factory)` is hoisted to the top of the file; the factory referenced `mockTenantClient` which was a `const` declared later
+- **Fix:** Used `vi.hoisted()` to create mutable mock variables accessible in factory scope. Also split the mock into separate `@projetapro/db` and `@projetapro/db/rls-client` mocks to prevent the Prisma singleton from instantiating (which caused DATABASE_URL errors)
 - **Files modified:** `apps/web/tests/actions/revisoes.test.ts`
 
 **4. [Rule 2 - Missing] @vitejs/plugin-react@6 requires vite@^8 (incompatible)**
@@ -152,7 +152,7 @@ Before this feature is functional, the user must:
 1. **R2 bucket configured** — Set `CF_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET_NAME`, `R2_PUBLIC_URL` env vars
 2. **R2 CORS policy** — Configure bucket CORS to allow PUT from localhost:3000 and production domain
 3. **Redis** — Set `REDIS_URL` pointing to Railway/Render Redis (NOT Upstash — BullMQ requires persistent TCP connection)
-4. **Prisma migration** — Run `pnpm --filter @obravision/db exec prisma db push` or `prisma migrate deploy` to create the new tables
+4. **Prisma migration** — Run `pnpm --filter @projetapro/db exec prisma db push` or `prisma migrate deploy` to create the new tables
 5. **API_URL** — Set `API_URL` in web app env to point to Fastify API
 
 ## Self-Check: PASSED

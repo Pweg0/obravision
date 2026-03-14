@@ -10,8 +10,8 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "paths": {
-      "@obravision/db": ["./packages/db/src/index.ts"],
-      "@obravision/types": ["./packages/types/src/index.ts"]
+      "@projetapro/db": ["./packages/db/src/index.ts"],
+      "@projetapro/types": ["./packages/types/src/index.ts"]
     }
   },
   "exclude": ["node_modules"]

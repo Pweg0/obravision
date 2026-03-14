@@ -23,8 +23,8 @@ vi.mock("@/lib/auth", () => ({
   }),
 }))
 
-// Mock @obravision/db (prisma singleton)
-vi.mock("@obravision/db", () => ({
+// Mock @projetapro/db (prisma singleton)
+vi.mock("@projetapro/db", () => ({
   prisma: {
     empresa: {
       findUnique: vi.fn().mockResolvedValue({
@@ -35,8 +35,8 @@ vi.mock("@obravision/db", () => ({
   },
 }))
 
-// Mock @obravision/db/rls-client
-vi.mock("@obravision/db/rls-client", () => ({
+// Mock @projetapro/db/rls-client
+vi.mock("@projetapro/db/rls-client", () => ({
   createTenantClient: vi.fn(() => ({
     planta: {
       create: vi.fn().mockResolvedValue({ id: "planta-1", nome: "Planta A" }),

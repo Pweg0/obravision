@@ -103,14 +103,14 @@ pnpm add -D vitest eslint prettier
 
 | Recommended | Alternative | When to Use Alternative |
 |-------------|-------------|-------------------------|
-| Next.js 15 | Remix | Remix has better nested loader patterns, but smaller ecosystem and Next.js 15 Turbopack erases the dev speed gap. Choose Remix if you hate Server Actions — ObraVision uses them heavily. |
+| Next.js 15 | Remix | Remix has better nested loader patterns, but smaller ecosystem and Next.js 15 Turbopack erases the dev speed gap. Choose Remix if you hate Server Actions — ProjetaPro uses them heavily. |
 | Fastify | Hono | Use Hono if deploying to Cloudflare Workers or Deno Deploy. On Railway (Node.js), Fastify's deeper plugin ecosystem wins. |
 | Fastify (separate) | Next.js API Routes only | API Routes are fine for simple CRUD, but Socket.io and BullMQ need a persistent Node.js process — not serverless functions. The hybrid (Next.js for web, Fastify for API) is the right call. |
 | Prisma | Drizzle ORM | Use Drizzle if deploying to Cloudflare Workers (Prisma's bundle is too large for edge). On Railway Node.js, Drizzle's SQL-proximity is overkill complexity for a solo dev. Drizzle also lacks Prisma Studio. |
 | Socket.io | Liveblocks | Use Liveblocks if you have budget ($99+/month) and want presence, cursors, and CRDTs out of the box. At MVP, Socket.io + custom presence logic is sufficient and free. |
 | Socket.io | Ably | Use Ably if you need guaranteed message delivery to offline clients without building your own retry logic. At MVP scale, Socket.io is sufficient. |
 | Cloudflare R2 | AWS S3 | Use S3 if you are already deeply in the AWS ecosystem. R2's zero-egress cost is decisive for a PDF-heavy app on a bootstrapper budget. |
-| WatermelonDB | Expo SQLite (direct) | Use Expo SQLite directly only if your offline data model is simple (< 3 tables, no sync). For ObraVision's diary + sync requirements, WatermelonDB's built-in sync protocol saves weeks of custom work. |
+| WatermelonDB | Expo SQLite (direct) | Use Expo SQLite directly only if your offline data model is simple (< 3 tables, no sync). For ProjetaPro's diary + sync requirements, WatermelonDB's built-in sync protocol saves weeks of custom work. |
 | Resend | SendGrid | Use SendGrid at > 100K emails/month or if you need marketing campaigns. Resend's React Email integration is superior DX for a solo dev. |
 | BullMQ | pg-boss | Use pg-boss only if you cannot add Redis. Since Redis is already required for Socket.io scaling, BullMQ costs nothing extra and has a better UI. |
 | tRPC | REST (Next.js API routes) | Use REST for the public API endpoints (Phase 4 — ERP integrations). tRPC is internal only. Do not expose tRPC publicly — callers cannot use it without your TypeScript types. |
@@ -125,7 +125,7 @@ pnpm add -D vitest eslint prettier
 | Express | No TypeScript-first design, 6x slower than Fastify, no schema validation built-in, effectively in maintenance mode for new SaaS | Fastify 5 |
 | Mongoose / TypeORM | No first-class PostgreSQL support (Mongoose is MongoDB-only), TypeORM's decorator magic breaks with strict TypeScript 5.x | Prisma 5 |
 | Redux / Redux Toolkit | 40% larger bundle than Zustand + TanStack Query combo. For a SaaS reading mostly server data, Redux's global client store is the wrong primitive. | Zustand + TanStack Query |
-| PSPDFKit / Apryse | Commercial PDF SDK. Excellent features, but $300-$1000/month minimum. The react-pdf + react-pdf-highlighter open-source combination covers ObraVision's MVP annotation needs for free. | react-pdf + react-pdf-highlighter |
+| PSPDFKit / Apryse | Commercial PDF SDK. Excellent features, but $300-$1000/month minimum. The react-pdf + react-pdf-highlighter open-source combination covers ProjetaPro's MVP annotation needs for free. | react-pdf + react-pdf-highlighter |
 | GraphQL (Hasura, Apollo) | Significant operational complexity for a solo dev. tRPC gives equivalent type safety with 90% less setup. GraphQL shines when multiple external teams consume the same API — not relevant at MVP. | tRPC (internal) + REST (public API) |
 | Next.js Pages Router | End of active development. App Router is the standard for all new Next.js 15 projects. Pages Router still works but receives no new features. | App Router |
 | Firebase / Supabase (as full backend) | Lock-in risk and limited customization for domain-specific logic (NBR checklists, Gantt critical path calculation, PDF processing pipelines). Use PostgreSQL + Prisma directly. | PostgreSQL + Prisma + Fastify |
@@ -231,5 +231,5 @@ Next.js 15     ──tRPC──▶  Fastify API        ──────▶  R2
 
 ---
 
-*Stack research for: ObraVision — Construction Management SaaS (Brazil)*
+*Stack research for: ProjetaPro — Construction Management SaaS (Brazil)*
 *Researched: 2026-03-13*

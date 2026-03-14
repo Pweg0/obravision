@@ -126,7 +126,7 @@ completed: 2026-03-13
 - Shareable link invitations: nanoid(21) tokens, 30-day expiry, copy-to-clipboard, regenerate with old token invalidation
 - Invite accept page: Server Component validates token state (invalid, used, expired, wrong email) with Portuguese error messages
 - Empresa-level invite accept: updates User.empresaId + role, deletes session cookies to force JWT re-issue via Auth.js
-- Dashboard layout: responsive sidebar with ObraVision logo, nav items (Dashboard, Obras), user avatar with initials fallback, logout via signOut
+- Dashboard layout: responsive sidebar with ProjetaPro logo, nav items (Dashboard, Obras), user avatar with initials fallback, logout via signOut
 - Dashboard page: ObraListWidget (5 most recent with status badge), ActivityWidget (derived from obra/member timestamps), 2 PlaceholderWidgets (Alertas de Clima, Comentarios Pendentes)
 - Middleware updated: /invite added to PUBLIC_PATHS so invite accept page works without empresa check
 - InviteByEmail component: email + role selector form, success/error states, pending indicator

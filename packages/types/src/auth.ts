@@ -1,5 +1,5 @@
 /**
- * Auth-related TypeScript types for ObraVision.
+ * Auth-related TypeScript types for ProjetaPro.
  * These extend Auth.js session types with application-specific fields.
  */
 

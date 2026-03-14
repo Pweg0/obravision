@@ -116,7 +116,7 @@ Each task was committed atomically:
 
 ## Decisions Made
 
-- `db push` skipped in automation because no DATABASE_URL is configured in the dev environment. RLS migration SQL file created manually — developer runs `pnpm --filter @obravision/db exec prisma db push` when DB is available.
+- `db push` skipped in automation because no DATABASE_URL is configured in the dev environment. RLS migration SQL file created manually — developer runs `pnpm --filter @projetapro/db exec prisma db push` when DB is available.
 - `@svar-ui/react-gantt` loaded with `dynamic(..., { ssr: false })` per RESEARCH.md Pitfall 2 — avoids SSR crash.
 - ATRASADA delay badge embedded in task text string rather than requiring custom cell renderer — simpler and works with the standard Gantt bar.
 - GanttView renders an etapa list section above the Gantt for inline edit/add-tarefa affordances — Gantt alone doesn't provide right-click/context menu in the standard config.
@@ -128,7 +128,7 @@ Each task was committed atomically:
 **1. [Rule 3 - Blocking] DATABASE_URL not configured — db push skipped**
 - **Found during:** Task 1 (Prisma schema)
 - **Issue:** No .env file exists; `prisma db push` requires DATABASE_URL
-- **Fix:** Created RLS migration SQL manually following existing pattern (migration 00000000000003). Schema changes are ready; developer applies them with `pnpm --filter @obravision/db exec prisma db push` in their local environment.
+- **Fix:** Created RLS migration SQL manually following existing pattern (migration 00000000000003). Schema changes are ready; developer applies them with `pnpm --filter @projetapro/db exec prisma db push` in their local environment.
 - **Files modified:** packages/db/prisma/migrations/00000000000003_cronograma_models/migration.sql
 - **Verification:** `pnpm --filter db prisma validate` confirms schema is structurally valid (run when DB available)
 
@@ -143,7 +143,7 @@ Each task was committed atomically:
 
 ## User Setup Required
 
-Developer must run `pnpm --filter @obravision/db exec prisma db push` with DATABASE_URL set to apply schema changes (Etapa, Tarefa models, lat/lon on Obra).
+Developer must run `pnpm --filter @projetapro/db exec prisma db push` with DATABASE_URL set to apply schema changes (Etapa, Tarefa models, lat/lon on Obra).
 
 ## Next Phase Readiness
 

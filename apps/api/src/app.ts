@@ -22,7 +22,7 @@ await fastify.register(socketioPlugin)
 
 // Health check
 fastify.get("/health", async () => {
-  return { status: "ok", service: "obravision-api", timestamp: new Date().toISOString() }
+  return { status: "ok", service: "projetapro-api", timestamp: new Date().toISOString() }
 })
 
 // Register routes

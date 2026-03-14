@@ -1,4 +1,4 @@
-# Requirements: ObraVision
+# Requirements: ProjetaPro
 
 **Defined:** 2026-03-13
 **Core Value:** Colaboracao visual sobre projetos de obra com comentarios ancorados, versionamento de plantas e integracao campo-escritorio

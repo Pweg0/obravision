@@ -1,8 +1,8 @@
-# Roadmap: ObraVision
+# Roadmap: ProjetaPro
 
 ## Overview
 
-ObraVision is built in five phases that follow strict dependency order. The foundation (auth, multi-tenancy, obra CRUD) unlocks everything. The PDF viewer with anchored comments is the core differentiator and must be validated with real beta users as early as possible — no Brazilian competitor offers it. Once that moat is validated, the field-workflow modules (Cronograma + RDO) make the product table stakes for conservative engenheiro adopters. The financial operations layer (Orcamento + Compras + Medicoes) justifies paid plans. Reporting closes the loop for managers and clients. Every phase delivers a coherent, demoable capability.
+ProjetaPro is built in five phases that follow strict dependency order. The foundation (auth, multi-tenancy, obra CRUD) unlocks everything. The PDF viewer with anchored comments is the core differentiator and must be validated with real beta users as early as possible — no Brazilian competitor offers it. Once that moat is validated, the field-workflow modules (Cronograma + RDO) make the product table stakes for conservative engenheiro adopters. The financial operations layer (Orcamento + Compras + Medicoes) justifies paid plans. Reporting closes the loop for managers and clients. Every phase delivers a coherent, demoable capability.
 
 ## Phases
 
@@ -72,7 +72,7 @@ Plans:
 - [ ] 03-03-PLAN.md — RDO diary model with R2 photo upload, auto-detect active task, progress calculation, S-curve dashboard widget
 
 ### Phase 4: Orcamento + Compras + Medicoes
-**Goal**: Engineers can build a complete obra budget with SINAPI codes and BDI, manage procurement from purchase request to purchase order, track inventory across storage locations, and record physical and contract measurements — turning ObraVision into the operational hub for a construction project
+**Goal**: Engineers can build a complete obra budget with SINAPI codes and BDI, manage procurement from purchase request to purchase order, track inventory across storage locations, and record physical and contract measurements — turning ProjetaPro into the operational hub for a construction project
 **Depends on**: Phase 3
 **Requirements**: ORC-01, ORC-02, ORC-03, ORC-04, ORC-05, ORC-06, COMP-01, COMP-02, COMP-03, COMP-04, COMP-05, COMP-06, MED-01, MED-02
 **Success Criteria** (what must be TRUE):

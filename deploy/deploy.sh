@@ -1,19 +1,19 @@
 #!/bin/bash
 # ============================================
-# ObraVision Deploy Script
-# Run as obravision user from /home/obravision/app/
+# ProjetaPro Deploy Script
+# Run as projetapro user from /home/projetapro/app/
 # ============================================
 # Usage: bash deploy/deploy.sh YOUR_DOMAIN
-# Example: bash deploy/deploy.sh obravision.com.br
+# Example: bash deploy/deploy.sh projetapro.com.br
 # ============================================
 
 set -e
 
 DOMAIN=${1:?"Usage: bash deploy/deploy.sh YOUR_DOMAIN"}
-APP_DIR="/home/obravision/app"
+APP_DIR="/home/projetapro/app"
 
 echo "============================================"
-echo " Deploying ObraVision to ${DOMAIN}"
+echo " Deploying ProjetaPro to ${DOMAIN}"
 echo "============================================"
 
 # --- 1. Check .env exists ---
@@ -49,9 +49,9 @@ pnpm --filter api build
 
 # --- 5. Setup Nginx ---
 echo "[5/7] Configuring Nginx..."
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/obravision
-sudo sed -i "s/YOUR_DOMAIN/${DOMAIN}/g" /etc/nginx/sites-available/obravision
-sudo ln -sf /etc/nginx/sites-available/obravision /etc/nginx/sites-enabled/
+sudo cp deploy/nginx.conf /etc/nginx/sites-available/projetapro
+sudo sed -i "s/YOUR_DOMAIN/${DOMAIN}/g" /etc/nginx/sites-available/projetapro
+sudo ln -sf /etc/nginx/sites-available/projetapro /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
 
 # Test nginx config before SSL (temporarily disable SSL blocks)
@@ -62,14 +62,14 @@ sudo nginx -t || {
 # --- 6. SSL Certificate ---
 echo "[6/7] Getting SSL certificate..."
 # Temporarily use HTTP-only config for certbot
-sudo tee /etc/nginx/sites-available/obravision-temp > /dev/null <<EOF
+sudo tee /etc/nginx/sites-available/projetapro-temp > /dev/null <<EOF
 server {
     listen 80;
     server_name ${DOMAIN} api.${DOMAIN};
     location / { proxy_pass http://127.0.0.1:3000; }
 }
 EOF
-sudo ln -sf /etc/nginx/sites-available/obravision-temp /etc/nginx/sites-enabled/obravision
+sudo ln -sf /etc/nginx/sites-available/projetapro-temp /etc/nginx/sites-enabled/projetapro
 sudo nginx -t && sudo systemctl reload nginx
 
 sudo certbot --nginx -d "${DOMAIN}" -d "api.${DOMAIN}" --non-interactive --agree-tos --email "admin@${DOMAIN}" || {
@@ -78,10 +78,10 @@ sudo certbot --nginx -d "${DOMAIN}" -d "api.${DOMAIN}" --non-interactive --agree
 }
 
 # Restore full config
-sudo cp deploy/nginx.conf /etc/nginx/sites-available/obravision
-sudo sed -i "s/YOUR_DOMAIN/${DOMAIN}/g" /etc/nginx/sites-available/obravision
-sudo ln -sf /etc/nginx/sites-available/obravision /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-available/obravision-temp
+sudo cp deploy/nginx.conf /etc/nginx/sites-available/projetapro
+sudo sed -i "s/YOUR_DOMAIN/${DOMAIN}/g" /etc/nginx/sites-available/projetapro
+sudo ln -sf /etc/nginx/sites-available/projetapro /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-available/projetapro-temp
 sudo nginx -t && sudo systemctl reload nginx
 
 # --- 7. Start/Restart PM2 ---
@@ -90,7 +90,7 @@ cd "${APP_DIR}"
 pm2 delete all 2>/dev/null || true
 pm2 start deploy/ecosystem.config.cjs
 pm2 save
-pm2 startup systemd -u obravision --hp /home/obravision 2>/dev/null || true
+pm2 startup systemd -u projetapro --hp /home/projetapro 2>/dev/null || true
 
 echo ""
 echo "============================================"

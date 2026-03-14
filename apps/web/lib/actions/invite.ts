@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import { auth } from "@/lib/auth"
-import { prisma } from "@obravision/db"
-import { createTenantClient } from "@obravision/db/rls-client"
+import { prisma } from "@projetapro/db"
+import { createTenantClient } from "@projetapro/db/rls-client"
 import { emailInviteSchema, shareableLinkSchema } from "@/lib/validations/invite"
 import { nanoid } from "nanoid"
 import { Resend } from "resend"
@@ -76,13 +76,13 @@ export async function inviteByEmail(formData: FormData) {
 
   try {
     await resend.emails.send({
-      from: "ObraVision <noreply@obravision.com.br>",
+      from: "ProjetaPro <noreply@projetapro.com.br>",
       to: email,
-      subject: `Voce foi convidado para ${ctx.empresa.nome} no ObraVision`,
+      subject: `Voce foi convidado para ${ctx.empresa.nome} no ProjetaPro`,
       html: `
         <div style="font-family: Inter, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px;">
           <div style="margin-bottom: 24px;">
-            <h1 style="color: #1A6B5A; font-size: 28px; margin: 0;">ObraVision</h1>
+            <h1 style="color: #1A6B5A; font-size: 28px; margin: 0;">ProjetaPro</h1>
           </div>
           <h2 style="font-size: 22px; color: #111827;">Voce foi convidado!</h2>
           <p style="color: #4B5563; font-size: 16px;">

@@ -6,7 +6,7 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Logo / brand */}
         <div className="flex items-center gap-2">
-          <span className="text-white font-bold text-lg tracking-tight">ObraVision</span>
+          <span className="text-white font-bold text-lg tracking-tight">ProjetaPro</span>
           <span className="text-slate-500 text-sm">&copy; {year}</span>
         </div>
 

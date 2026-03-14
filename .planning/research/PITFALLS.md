@@ -396,5 +396,5 @@ Full-stack + mobile + AI + real-time + billing is genuinely too large for a sing
 - [plangrid/pdf-annotate — GitHub (PlanGrid, construction industry PDF annotations)](https://github.com/plangrid/pdf-annotate)
 
 ---
-*Pitfalls research for: Construction Management SaaS (ObraVision) — Brazilian market, solo dev*
+*Pitfalls research for: Construction Management SaaS (ProjetaPro) — Brazilian market, solo dev*
 *Researched: 2026-03-13*

@@ -3,7 +3,7 @@ import path from "path"
 import fs from "fs"
 
 const nextConfig: NextConfig = {
-  transpilePackages: ["@obravision/db", "@obravision/types"],
+  transpilePackages: ["@projetapro/db", "@projetapro/types"],
   webpack: (config) => {
     config.resolve.alias.canvas = false
 

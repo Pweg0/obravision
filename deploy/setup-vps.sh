@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================
-# ObraVision VPS Setup Script
+# ProjetaPro VPS Setup Script
 # Ubuntu 22.04/24.04 - Contabo 4GB RAM
 # ============================================
 # Run as root: bash setup-vps.sh
@@ -9,7 +9,7 @@
 set -e
 
 echo "============================================"
-echo " ObraVision VPS Setup"
+echo " ProjetaPro VPS Setup"
 echo "============================================"
 
 # --- 1. System update ---
@@ -34,13 +34,13 @@ apt install -y postgresql-16
 # Create database and user
 DB_PASSWORD=$(openssl rand -base64 24)
 sudo -u postgres psql <<SQL
-CREATE USER obravision WITH PASSWORD '${DB_PASSWORD}';
-CREATE DATABASE obravision OWNER obravision;
-GRANT ALL PRIVILEGES ON DATABASE obravision TO obravision;
+CREATE USER projetapro WITH PASSWORD '${DB_PASSWORD}';
+CREATE DATABASE projetapro OWNER projetapro;
+GRANT ALL PRIVILEGES ON DATABASE projetapro TO projetapro;
 SQL
 
 echo "PostgreSQL user created. Password: ${DB_PASSWORD}"
-echo "DATABASE_URL=postgresql://obravision:${DB_PASSWORD}@localhost:5432/obravision" > /tmp/obravision-db-url.txt
+echo "DATABASE_URL=postgresql://projetapro:${DB_PASSWORD}@localhost:5432/projetapro" > /tmp/projetapro-db-url.txt
 
 # --- 4. Install Redis ---
 echo "[4/8] Installing Redis..."
@@ -62,9 +62,9 @@ apt install -y certbot python3-certbot-nginx
 
 # --- 7. Create app user ---
 echo "[7/8] Creating app user..."
-useradd -m -s /bin/bash obravision || echo "User already exists"
-mkdir -p /home/obravision/app
-chown -R obravision:obravision /home/obravision
+useradd -m -s /bin/bash projetapro || echo "User already exists"
+mkdir -p /home/projetapro/app
+chown -R projetapro:projetapro /home/projetapro
 
 # --- 8. Firewall ---
 echo "[8/8] Configuring firewall..."
@@ -80,11 +80,11 @@ echo "============================================"
 echo ""
 echo "Save these credentials:"
 echo ""
-cat /tmp/obravision-db-url.txt
+cat /tmp/projetapro-db-url.txt
 echo "REDIS_URL=redis://localhost:6379"
 echo ""
 echo "Next steps:"
 echo "1. Configure your domain DNS (A record -> $(curl -s ifconfig.me))"
-echo "2. Copy your code to /home/obravision/app/"
+echo "2. Copy your code to /home/projetapro/app/"
 echo "3. Run: bash deploy/deploy.sh"
 echo "============================================"

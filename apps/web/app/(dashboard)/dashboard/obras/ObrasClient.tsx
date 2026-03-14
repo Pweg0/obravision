@@ -33,7 +33,7 @@ interface ObrasClientProps {
   statuses: ObraStatus[]
 }
 
-const VIEW_KEY = "obravision_obras_view"
+const VIEW_KEY = "projetapro_obras_view"
 
 export function ObrasClient({ obras, statuses }: ObrasClientProps) {
   const [view, setView] = useState<ViewMode>("cards")

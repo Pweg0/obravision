@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import { auth } from "@/lib/auth"
 import { listStatuses } from "@/lib/actions/status"
-import { createTenantClient } from "@obravision/db/rls-client"
+import { createTenantClient } from "@projetapro/db/rls-client"
 import { ObraDetailClient } from "./ObraDetailClient"
 
 export default async function ObraDetailPage({

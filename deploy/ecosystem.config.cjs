@@ -1,8 +1,8 @@
 module.exports = {
   apps: [
     {
-      name: "obravision-web",
-      cwd: "/home/obravision/app/apps/web",
+      name: "projetapro-web",
+      cwd: "/home/projetapro/app/apps/web",
       script: "node_modules/.bin/next",
       args: "start -p 3000",
       env: {
@@ -15,8 +15,8 @@ module.exports = {
       max_memory_restart: "512M",
     },
     {
-      name: "obravision-api",
-      cwd: "/home/obravision/app",
+      name: "projetapro-api",
+      cwd: "/home/projetapro/app",
       script: "node",
       args: "--import tsx apps/api/src/app.ts",
       env: {

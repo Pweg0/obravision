@@ -41,7 +41,7 @@ export function LeadCaptureForm() {
           Participe do beta
         </h2>
         <p className="text-lg text-slate-500 mb-10">
-          Seja um dos primeiros engenheiros a testar o ObraVision. Acesso antecipado,
+          Seja um dos primeiros engenheiros a testar o ProjetaPro. Acesso antecipado,
           gratuito, com suporte direto do time.
         </p>
 

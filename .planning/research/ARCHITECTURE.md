@@ -70,7 +70,7 @@
 ## Recommended Project Structure
 
 ```
-obravision/                          # monorepo root
+projetapro/                          # monorepo root
 ├── apps/
 │   ├── web/                         # Next.js web app
 │   │   ├── app/                     # App Router pages
@@ -410,5 +410,5 @@ Based on component dependencies, phases should be built in this order:
 - [2025 Monorepo — Turborepo + pnpm + Next.js + Expo](https://medium.com/@TheblogStacker/2025-monorepo-that-actually-scales-turborepo-pnpm-for-next-js-ab4492fbde2a) — monorepo structure (MEDIUM confidence)
 
 ---
-*Architecture research for: Construction Management SaaS (ObraVision)*
+*Architecture research for: Construction Management SaaS (ProjetaPro)*
 *Researched: 2026-03-13*

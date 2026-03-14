@@ -41,10 +41,10 @@ importers:
       '@hyzyla/pdfium':
         specifier: ^2.1.12
         version: 2.1.12
-      '@obravision/db':
+      '@projetapro/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@obravision/types':
+      '@projetapro/types':
         specifier: workspace:*
         version: link:../../packages/types
       bullmq:
@@ -105,10 +105,10 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.9.0
         version: 3.10.0(react-hook-form@7.71.2(react@19.2.4))
-      '@obravision/db':
+      '@projetapro/db':
         specifier: workspace:*
         version: link:../../packages/db
-      '@obravision/types':
+      '@projetapro/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@svar-ui/react-gantt':

@@ -2,7 +2,7 @@ import { Worker } from "bullmq"
 import { PDFiumLibrary } from "@hyzyla/pdfium"
 import sharp from "sharp"
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import { connection, type PdfConversionJobData } from "./pdf-conversion.queue"
 import type { Server as SocketIOServer } from "socket.io"
 

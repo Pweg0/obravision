@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth"
 import { redirect } from "next/navigation"
-import { prisma } from "@obravision/db"
+import { prisma } from "@projetapro/db"
 import { DashboardLayout } from "@/components/dashboard/DashboardLayout"
 import { SocketProvider } from "@/providers/SocketProvider"
 import { NotificationToast } from "@/components/notifications/NotificationToast"
