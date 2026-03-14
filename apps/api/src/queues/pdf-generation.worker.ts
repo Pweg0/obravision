@@ -8,6 +8,8 @@ import { PropostaComercial } from "../pdf-templates/PropostaComercial"
 import type { PropostaComercialData } from "../pdf-templates/PropostaComercial"
 import { PedidoCompra } from "../pdf-templates/PedidoCompra"
 import type { PedidoCompraData } from "../pdf-templates/PedidoCompra"
+import { BoletimMedicao } from "../pdf-templates/BoletimMedicao"
+import type { BoletimMedicaoData } from "../pdf-templates/BoletimMedicao"
 import type { Server as SocketIOServer } from "socket.io"
 import { format } from "date-fns"
 import type { ReactElement, JSXElementConstructor } from "react"
@@ -188,6 +190,173 @@ async function generatePedidoCompra(entityId: string, obraId: string, tenantId: 
   return { r2Key, obraId }
 }
 
+// ---- Boletim Medicao handler ----
+
+async function generateBoletimMedicao(entityId: string, obraId: string, tenantId: string) {
+  // Try to find as MedicaoContrato first (it has pdfR2Key and empreiteiroId)
+  const medicaoContrato = await prisma.medicaoContrato.findUnique({
+    where: { id: entityId },
+    include: {
+      obra: { include: { empresa: true } },
+      itens: { orderBy: { createdAt: "asc" } },
+    },
+  })
+
+  if (medicaoContrato) {
+    const obra = medicaoContrato.obra
+    const empresa = obra.empresa
+
+    // Fetch prior periods for acumulado
+    const priorMedicoes = await prisma.medicaoContrato.findMany({
+      where: {
+        obraId: medicaoContrato.obraId,
+        empreiteiroId: medicaoContrato.empreiteiroId,
+        periodo: { lt: medicaoContrato.periodo },
+      },
+      include: { itens: true },
+      orderBy: { periodo: "asc" },
+    })
+
+    let totalAcumuladoAnterior = 0
+    for (const prior of priorMedicoes) {
+      for (const item of prior.itens) {
+        totalAcumuladoAnterior += parseFloat(String(item.quantidade)) * parseFloat(String(item.valorUnitario))
+      }
+    }
+
+    const itensContrato = medicaoContrato.itens.map((item) => {
+      const qtd = parseFloat(String(item.quantidade))
+      const val = parseFloat(String(item.valorUnitario))
+      const valorExecutado = qtd * val
+      return {
+        id: item.id,
+        descricao: item.descricao,
+        unidade: item.unidade,
+        quantidade: qtd,
+        valorUnitario: val,
+        valorExecutado,
+        acumulado: parseFloat(String(item.acumulado)) + valorExecutado,
+      }
+    })
+
+    const totalPeriodo = itensContrato.reduce((s, i) => s + i.valorExecutado, 0)
+
+    const data: BoletimMedicaoData = {
+      empresaNome: empresa.nome,
+      obraNome: obra.nome,
+      periodo: medicaoContrato.periodo,
+      tipo: "Contrato",
+      dataGeracao: format(new Date(), "dd/MM/yyyy"),
+      empreiteiroNome: medicaoContrato.empreiteiroId,
+      empreiteiroCnpj: medicaoContrato.contrato,
+      itensContrato,
+      totalPeriodo,
+      totalAcumuladoAnterior,
+      totalAcumulado: totalAcumuladoAnterior + totalPeriodo,
+      status: medicaoContrato.status,
+      aprovadoPor: medicaoContrato.aprovadoPor,
+      aprovadoEm: medicaoContrato.aprovadoEm
+        ? format(medicaoContrato.aprovadoEm, "dd/MM/yyyy HH:mm")
+        : null,
+    }
+
+    const element = React.createElement(BoletimMedicao, { data }) as unknown as ReactElement<DocumentProps, string | JSXElementConstructor<unknown>>
+    const pdfBuffer = await renderToBuffer(element)
+
+    const r2Key = `pdfs/${tenantId}/boletim-contrato/${entityId}-${Date.now()}.pdf`
+    await r2.send(
+      new PutObjectCommand({
+        Bucket: process.env.R2_BUCKET_NAME!,
+        Key: r2Key,
+        Body: pdfBuffer,
+        ContentType: "application/pdf",
+      })
+    )
+
+    await prisma.medicaoContrato.update({
+      where: { id: entityId },
+      data: { pdfR2Key: r2Key },
+    })
+
+    return { r2Key, obraId }
+  }
+
+  // Otherwise try as MedicaoFisica
+  const medicaoFisica = await prisma.medicaoFisica.findUnique({
+    where: { id: entityId },
+    include: {
+      obra: { include: { empresa: true } },
+      itens: {
+        include: {
+          orcamentoItem: {
+            select: { descricao: true, unidade: true, quantidade: true, custoUnitario: true },
+          },
+        },
+        orderBy: { createdAt: "asc" },
+      },
+    },
+  })
+
+  if (!medicaoFisica) throw new Error(`Medicao ${entityId} not found as fisica or contrato`)
+
+  const obra = medicaoFisica.obra
+  const empresa = obra.empresa
+
+  let sumValor = 0
+  let sumExecutado = 0
+  const itensFisica = medicaoFisica.itens.map((item) => {
+    const qtd = parseFloat(String(item.orcamentoItem.quantidade))
+    const custo = parseFloat(String(item.orcamentoItem.custoUnitario))
+    const pct = parseFloat(String(item.percentualMedido))
+    const valorTotal = qtd * custo
+    const valorExecutado = valorTotal * (pct / 100)
+    sumValor += valorTotal
+    sumExecutado += valorExecutado
+    return {
+      id: item.id,
+      descricao: item.orcamentoItem.descricao,
+      unidade: item.orcamentoItem.unidade,
+      quantidadeOrcada: qtd,
+      custoUnitario: custo,
+      percentualExecutado: pct,
+      valorExecutado,
+    }
+  })
+
+  const progressoGeral = sumValor > 0 ? parseFloat(((sumExecutado / sumValor) * 100).toFixed(1)) : 0
+
+  const data: BoletimMedicaoData = {
+    empresaNome: empresa.nome,
+    obraNome: obra.nome,
+    periodo: medicaoFisica.periodo,
+    tipo: "Fisica",
+    dataGeracao: format(new Date(), "dd/MM/yyyy"),
+    progressoGeral,
+    itensFisica,
+    status: medicaoFisica.status,
+    aprovadoPor: medicaoFisica.aprovadoPor,
+    aprovadoEm: medicaoFisica.aprovadoEm
+      ? format(medicaoFisica.aprovadoEm, "dd/MM/yyyy HH:mm")
+      : null,
+  }
+
+  const element = React.createElement(BoletimMedicao, { data }) as unknown as ReactElement<DocumentProps, string | JSXElementConstructor<unknown>>
+  const pdfBuffer = await renderToBuffer(element)
+
+  // MedicaoFisica has no pdfR2Key field — upload to R2 but return key for socket notification only
+  const r2Key = `pdfs/${tenantId}/boletim-fisica/${entityId}-${Date.now()}.pdf`
+  await r2.send(
+    new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME!,
+      Key: r2Key,
+      Body: pdfBuffer,
+      ContentType: "application/pdf",
+    })
+  )
+
+  return { r2Key, obraId }
+}
+
 // ---- Worker ----
 
 export const pdfGenerationWorker = new Worker<PdfGenerationJobData>(
@@ -210,9 +379,11 @@ export const pdfGenerationWorker = new Worker<PdfGenerationJobData>(
         r2Key = result.r2Key
         break
       }
-      case "boletim-medicao":
-        // TODO: implement in Plan 04-05
-        throw new Error("boletim-medicao PDF not yet implemented")
+      case "boletim-medicao": {
+        const result = await generateBoletimMedicao(entityId, obraId, tenantId)
+        r2Key = result.r2Key
+        break
+      }
       default:
         throw new Error(`Unknown PDF type: ${type}`)
     }
