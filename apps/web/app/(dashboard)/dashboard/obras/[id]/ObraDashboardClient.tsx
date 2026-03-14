@@ -350,71 +350,55 @@ export function ObraDashboardClient({
 
       {/* ── Row 1: Stats cards ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
-        {[
-          {
-            label: "Membros",
-            value: memberCount,
-            icon: Users,
-            color: "blue",
-            href: `${basePath}/equipe`,
-          },
-          {
-            label: "Plantas",
-            value: plantaCount,
-            icon: Map,
-            color: "emerald",
-            href: `${basePath}/plantas`,
-          },
-          {
-            label: "Etapas",
-            value: etapaCount,
-            icon: CalendarDays,
-            color: "orange",
-            href: `${basePath}/cronograma`,
-          },
-          {
-            label: "Diarios",
-            value: rdoCount,
-            icon: BookOpen,
-            color: "purple",
-            href: `${basePath}/rdo`,
-          },
-          {
-            label: "Compras",
-            value: requisicaoTotal,
-            icon: ShoppingCart,
-            color: "pink",
-            href: `${basePath}/compras`,
-          },
-          {
-            label: "Medicoes",
-            value: medicaoCount,
-            icon: Ruler,
-            color: "teal",
-            href: `${basePath}/medicoes`,
-          },
-          {
-            label: "Estoque",
-            value: "—",
-            icon: FileText,
-            color: "indigo",
-            href: `${basePath}/estoque`,
-          },
-        ].map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors group"
-          >
-            <div
-              className={`w-8 h-8 rounded-lg bg-${item.color}-500/10 flex items-center justify-center mb-2`}
-            >
-              <item.icon className={`w-4 h-4 text-${item.color}-500`} />
-            </div>
-            <p className="text-xl font-bold">{item.value}</p>
-            <p className="text-[11px] text-muted-foreground">{item.label}</p>
-          </Link>
-        ))}
+        <Link href={`${basePath}/equipe`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center mb-2">
+            <Users className="w-4 h-4 text-blue-500" />
+          </div>
+          <p className="text-xl font-bold">{memberCount}</p>
+          <p className="text-[11px] text-muted-foreground">Membros</p>
+        </Link>
+        <Link href={`${basePath}/plantas`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center mb-2">
+            <Map className="w-4 h-4 text-emerald-500" />
+          </div>
+          <p className="text-xl font-bold">{plantaCount}</p>
+          <p className="text-[11px] text-muted-foreground">Plantas</p>
+        </Link>
+        <Link href={`${basePath}/cronograma`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-orange-500/10 flex items-center justify-center mb-2">
+            <CalendarDays className="w-4 h-4 text-orange-500" />
+          </div>
+          <p className="text-xl font-bold">{etapaCount}</p>
+          <p className="text-[11px] text-muted-foreground">Etapas</p>
+        </Link>
+        <Link href={`${basePath}/rdo`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center mb-2">
+            <BookOpen className="w-4 h-4 text-purple-500" />
+          </div>
+          <p className="text-xl font-bold">{rdoCount}</p>
+          <p className="text-[11px] text-muted-foreground">Diarios</p>
+        </Link>
+        <Link href={`${basePath}/compras`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center mb-2">
+            <ShoppingCart className="w-4 h-4 text-pink-500" />
+          </div>
+          <p className="text-xl font-bold">{requisicaoTotal}</p>
+          <p className="text-[11px] text-muted-foreground">Compras</p>
+        </Link>
+        <Link href={`${basePath}/medicoes`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-teal-500/10 flex items-center justify-center mb-2">
+            <Ruler className="w-4 h-4 text-teal-500" />
+          </div>
+          <p className="text-xl font-bold">{medicaoCount}</p>
+          <p className="text-[11px] text-muted-foreground">Medicoes</p>
+        </Link>
+        <Link href={`${basePath}/estoque`} className="rounded-xl border bg-card p-4 hover:bg-muted/50 transition-colors">
+          <div className="w-8 h-8 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-2">
+            <FileText className="w-4 h-4 text-indigo-500" />
+          </div>
+          <p className="text-xl font-bold">—</p>
+          <p className="text-[11px] text-muted-foreground">Estoque</p>
+        </Link>
       </div>
 
       {/* ── Row 2: ORCAMENTO section ── */}
