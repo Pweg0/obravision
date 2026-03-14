@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { StatusBadge } from "@/components/obra/StatusBadge"
+import { ChevronRight } from "lucide-react"
 
 interface Obra {
   id: string
@@ -24,37 +25,40 @@ function formatRelativeDate(date: Date) {
 
 export function ObraListWidget({ obras }: ObraListWidgetProps) {
   return (
-    <div className="rounded-xl border bg-card shadow-sm">
-      <div className="flex items-center justify-between p-4 border-b">
-        <h3 className="font-semibold text-sm">Obras recentes</h3>
-        <Link href="/dashboard/obras" className="text-xs text-primary hover:underline">
+    <div className="rounded-2xl border border-border bg-card shadow-premium overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+        <h3 className="font-semibold text-sm text-foreground">Obras recentes</h3>
+        <Link href="/dashboard/obras" className="text-xs text-primary hover:text-primary/80 font-medium transition-colors cursor-pointer">
           Ver todas
         </Link>
       </div>
       {obras.length === 0 ? (
-        <div className="p-6 text-center">
+        <div className="p-8 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma obra ainda.</p>
-          <Link href="/dashboard/obras" className="text-sm text-primary hover:underline mt-1 inline-block">
+          <Link href="/dashboard/obras" className="text-sm text-primary hover:text-primary/80 font-medium mt-2 inline-block cursor-pointer">
             Criar primeira obra
           </Link>
         </div>
       ) : (
-        <ul className="divide-y">
-          {obras.slice(0, 5).map((obra) => (
-            <li key={obra.id}>
+        <ul>
+          {obras.slice(0, 5).map((obra, i) => (
+            <li key={obra.id} className={i < obras.length - 1 ? "border-b border-border/50" : ""}>
               <Link
                 href={`/dashboard/obras/${obra.id}`}
-                className="flex items-center justify-between px-4 py-3 hover:bg-muted/30 transition-colors"
+                className="flex items-center justify-between px-5 py-3.5 hover:bg-muted/30 transition-colors duration-200 group cursor-pointer"
               >
-                <div className="min-w-0">
-                  <p className="text-sm font-medium truncate">{obra.nome}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-medium text-foreground truncate group-hover:text-primary transition-colors">{obra.nome}</p>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {formatRelativeDate(obra.updatedAt)}
                   </p>
                 </div>
-                {obra.status && (
-                  <StatusBadge name={obra.status.name} color={obra.status.color} />
-                )}
+                <div className="flex items-center gap-2 ml-3">
+                  {obra.status && (
+                    <StatusBadge name={obra.status.name} color={obra.status.color} />
+                  )}
+                  <ChevronRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
+                </div>
               </Link>
             </li>
           ))}

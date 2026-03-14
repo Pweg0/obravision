@@ -128,8 +128,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full"
-            style={{ backgroundColor: "#1A6B5A" }}
+            className="w-full cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Entrando..." : "Entrar"}

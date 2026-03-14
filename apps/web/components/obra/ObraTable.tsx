@@ -53,7 +53,7 @@ export function ObraTable({ obras }: ObraTableProps) {
   }
 
   return (
-    <div className="rounded-lg border overflow-hidden">
+    <div className="rounded-2xl border border-border overflow-hidden shadow-premium">
       <table className="w-full text-sm">
         <thead>
           <tr className="bg-muted/50 border-b">
@@ -106,7 +106,7 @@ export function ObraTable({ obras }: ObraTableProps) {
                     <button
                       onClick={() => handleArchive(obra.id)}
                       disabled={archivingId === obra.id}
-                      className="text-xs text-muted-foreground hover:text-destructive transition-colors disabled:opacity-50"
+                      className="text-xs text-muted-foreground hover:text-destructive transition-colors duration-200 disabled:opacity-50 cursor-pointer"
                     >
                       {archivingId === obra.id ? "Arquivando..." : "Arquivar"}
                     </button>

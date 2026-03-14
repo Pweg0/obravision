@@ -154,8 +154,7 @@ export default function RegisterPage() {
 
           <Button
             type="submit"
-            className="w-full"
-            style={{ backgroundColor: "#1A6B5A" }}
+            className="w-full cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Criando conta..." : "Criar conta"}

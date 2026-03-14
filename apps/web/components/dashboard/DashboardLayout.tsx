@@ -6,6 +6,15 @@ import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { NotificationBell } from "@/components/notifications/NotificationBell"
+import { ThemeToggle } from "@/components/ThemeToggle"
+import {
+  LayoutDashboard,
+  Building2,
+  Bell,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react"
 
 interface DashboardLayoutProps {
   children: React.ReactNode
@@ -21,32 +30,17 @@ const NAV_ITEMS = [
   {
     href: "/dashboard",
     label: "Dashboard",
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-      </svg>
-    ),
+    icon: LayoutDashboard,
   },
   {
     href: "/dashboard/obras",
     label: "Obras",
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-      </svg>
-    ),
+    icon: Building2,
   },
   {
     href: "/dashboard/notificacoes",
     label: "Notificacoes",
-    icon: (
-      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-          d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-      </svg>
-    ),
+    icon: Bell,
   },
 ]
 
@@ -73,7 +67,7 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/40 backdrop-blur-sm lg:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -81,41 +75,53 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-64 bg-card border-r flex flex-col transition-transform duration-200 lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-[260px] bg-sidebar flex flex-col transition-transform duration-300 ease-out lg:static lg:translate-x-0",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
         {/* Logo */}
-        <div className="flex items-center gap-2 h-16 px-4 border-b flex-shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-            <svg className="w-5 h-5 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-            </svg>
-          </div>
-          <span className="font-bold text-lg text-primary">ProjetaPro</span>
+        <div className="flex items-center justify-between h-16 px-5 flex-shrink-0">
+          <Link href="/dashboard" className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center">
+              <span className="text-white font-bold text-sm">P</span>
+            </div>
+            <span className="font-bold text-base text-sidebar-foreground">
+              Projeta<span className="text-sidebar-accent">Pro</span>
+            </span>
+          </Link>
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="lg:hidden text-sidebar-foreground/60 hover:text-sidebar-foreground cursor-pointer"
+            aria-label="Fechar menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+        <nav className="flex-1 py-3 px-3 space-y-0.5 overflow-y-auto">
+          <p className="px-3 mb-2 text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest">
+            Menu
+          </p>
           {NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/dashboard"
                 ? pathname === "/dashboard"
                 : pathname.startsWith(item.href)
+            const Icon = item.icon
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileOpen(false)}
                 className={cn(
-                  "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
+                  "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer",
                   isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    ? "bg-sidebar-accent text-white shadow-sm"
+                    : "text-sidebar-foreground/60 hover:bg-sidebar-muted hover:text-sidebar-foreground"
                 )}
               >
-                {item.icon}
+                <Icon className="w-[18px] h-[18px]" />
                 {item.label}
               </Link>
             )
@@ -123,33 +129,30 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
         </nav>
 
         {/* User section */}
-        <div className="border-t p-4 flex-shrink-0">
+        <div className="border-t border-white/[0.08] p-4 flex-shrink-0">
           <div className="flex items-center gap-3">
             {user.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={user.image}
                 alt={displayName}
-                className="w-9 h-9 rounded-full object-cover flex-shrink-0"
+                className="w-9 h-9 rounded-xl object-cover flex-shrink-0 ring-2 ring-white/10"
               />
             ) : (
-              <div className="w-9 h-9 rounded-full bg-primary/20 text-primary flex items-center justify-center text-sm font-semibold flex-shrink-0">
+              <div className="w-9 h-9 rounded-xl bg-sidebar-accent/30 text-sidebar-accent flex items-center justify-center text-sm font-semibold flex-shrink-0">
                 {initials}
               </div>
             )}
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium truncate">{displayName}</p>
-              <p className="text-xs text-muted-foreground">{ROLE_LABELS[user.role] ?? user.role}</p>
+              <p className="text-sm font-medium truncate text-sidebar-foreground">{displayName}</p>
+              <p className="text-xs text-sidebar-foreground/40">{ROLE_LABELS[user.role] ?? user.role}</p>
             </div>
             <button
               onClick={() => signOut({ callbackUrl: "/login" })}
-              className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
+              className="text-sidebar-foreground/40 hover:text-sidebar-foreground transition-colors flex-shrink-0 cursor-pointer"
               title="Sair"
             >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-              </svg>
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -157,30 +160,26 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Mobile header */}
-        <header className="h-16 border-b flex items-center justify-between px-4 lg:hidden flex-shrink-0">
+        {/* Top bar */}
+        <header className="h-16 border-b border-border flex items-center justify-between px-4 lg:px-6 flex-shrink-0 bg-background/80 backdrop-blur-sm">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setMobileOpen(true)}
-              className="text-muted-foreground hover:text-foreground"
+              className="lg:hidden text-muted-foreground hover:text-foreground cursor-pointer"
               aria-label="Abrir menu"
             >
-              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <Menu className="w-5 h-5" />
             </button>
-            <span className="font-bold text-primary">ProjetaPro</span>
+            <span className="font-bold text-primary lg:hidden">ProjetaPro</span>
           </div>
-          <NotificationBell />
-        </header>
-
-        {/* Desktop top bar (hidden on mobile) */}
-        <header className="h-16 border-b hidden lg:flex items-center justify-end px-6 flex-shrink-0">
-          <NotificationBell />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <NotificationBell />
+          </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
           {children}
         </main>
       </div>

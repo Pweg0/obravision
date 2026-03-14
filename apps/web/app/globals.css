@@ -2,53 +2,65 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
 :root {
   --color-verde-obra: #1a6b5a;
   --color-verde-obra-light: #2d8a75;
   --color-verde-obra-dark: #0f4a3e;
 
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --background: 40 20% 98%;
+  --foreground: 24 10% 10%;
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 24 10% 10%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
+  --popover-foreground: 24 10% 10%;
   --primary: 160 61% 25%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 47.4% 11.2%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 10% 94%;
+  --secondary-foreground: 24 10% 10%;
+  --muted: 40 10% 94%;
+  --muted-foreground: 24 5% 45%;
+  --accent: 45 93% 47%;
+  --accent-foreground: 24 10% 10%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 30 15% 90%;
+  --input: 30 15% 90%;
   --ring: 160 61% 25%;
-  --radius: 0.5rem;
+  --radius: 0.75rem;
+
+  --sidebar: 24 10% 10%;
+  --sidebar-foreground: 40 20% 90%;
+  --sidebar-muted: 24 10% 16%;
+  --sidebar-accent: 160 61% 25%;
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 160 61% 40%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 160 61% 40%;
+  --background: 24 10% 6%;
+  --foreground: 40 20% 92%;
+  --card: 24 10% 9%;
+  --card-foreground: 40 20% 92%;
+  --popover: 24 10% 9%;
+  --popover-foreground: 40 20% 92%;
+  --primary: 160 50% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 24 10% 14%;
+  --secondary-foreground: 40 20% 92%;
+  --muted: 24 10% 14%;
+  --muted-foreground: 40 10% 55%;
+  --accent: 45 93% 47%;
+  --accent-foreground: 24 10% 10%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 24 10% 16%;
+  --input: 24 10% 16%;
+  --ring: 160 50% 42%;
+
+  --sidebar: 24 10% 6%;
+  --sidebar-foreground: 40 20% 90%;
+  --sidebar-muted: 24 10% 12%;
+  --sidebar-accent: 160 50% 42%;
 }
 
 * {
@@ -58,4 +70,60 @@
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glassmorphism utility */
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .dark .glass {
+    background: rgba(30, 25, 20, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-subtle {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .dark .glass-subtle {
+    background: rgba(30, 25, 20, 0.6);
+  }
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted-foreground) / 0.2);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,62 +1,80 @@
-import Link from "next/link"
+import { ArrowRight, Building2, MessageSquareText, FileStack } from "lucide-react"
 
 export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[600px] flex items-center justify-center overflow-hidden"
-      style={{
-        background: "linear-gradient(135deg, #1A6B5A 0%, #0f4a3e 50%, #0a3229 100%)",
-      }}
+      className="relative min-h-[calc(100vh-80px)] flex items-center justify-center overflow-hidden"
     >
-      {/* Subtle geometric background pattern */}
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background dark:from-primary/10 dark:via-background" />
+
+      {/* Subtle grid pattern */}
       <div
-        className="absolute inset-0 opacity-5"
+        className="absolute inset-0 opacity-[0.03] dark:opacity-[0.05]"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+          backgroundImage: `linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)`,
+          backgroundSize: "80px 80px",
         }}
       />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center">
+      {/* Floating accent orbs */}
+      <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-[120px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 py-24 text-center">
         {/* Product badge */}
-        <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-8">
-          <span className="w-2 h-2 rounded-full bg-emerald-300 animate-pulse" />
-          <span className="text-white/90 text-sm font-medium">Beta em breve — cadastre-se agora</span>
+        <div className="inline-flex items-center gap-2 bg-primary/[0.08] dark:bg-primary/[0.15] border border-primary/20 rounded-full px-4 py-1.5 mb-8 animate-fade-in">
+          <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+          <span className="text-primary text-sm font-medium">Beta aberto — cadastre-se agora</span>
         </div>
 
         {/* Main headline */}
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-          Gerencie suas obras com{" "}
-          <span className="text-emerald-300">precisao</span> e{" "}
-          <span className="text-emerald-300">colaboracao visual</span>
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-foreground leading-[1.1] mb-6 tracking-tight animate-fade-in">
+          Gerencie suas obras{" "}
+          <br className="hidden sm:block" />
+          com{" "}
+          <span className="text-primary">precisao</span> visual
         </h1>
 
         {/* Subheadline */}
-        <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto mb-10 leading-relaxed">
-          Comentarios ancorados diretamente nas plantas, versionamento de projetos e integracao
-          campo-escritorio — tudo em uma unica plataforma para engenheiros e construtoras.
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in">
+          Comentarios ancorados em plantas, versionamento de projetos e integracao
+          campo-escritorio em uma unica plataforma para engenheiros e construtoras.
         </p>
 
         {/* CTAs */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-16 animate-fade-in">
           <a
             href="#lead-capture"
-            className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-semibold text-base transition-colors duration-200 min-w-[180px]"
+            className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-base transition-all duration-200 min-w-[200px] shadow-premium hover:shadow-premium-lg cursor-pointer"
           >
-            Quero testar
+            Comecar gratis
+            <ArrowRight className="w-4 h-4" />
           </a>
           <a
             href="#features"
-            className="inline-flex items-center justify-center px-8 py-3.5 rounded-lg border border-white/30 hover:border-white/60 text-white font-medium text-base transition-colors duration-200 min-w-[180px]"
+            className="inline-flex items-center justify-center px-8 py-3.5 rounded-xl border border-border hover:border-foreground/20 text-foreground font-medium text-base transition-all duration-200 min-w-[200px] hover:bg-secondary/50 cursor-pointer"
           >
             Conhecer recursos
           </a>
         </div>
 
-        {/* Trust indicators */}
-        <p className="mt-8 text-white/50 text-sm">
-          Desenvolvido para a construcao civil brasileira — sem complicacao
-        </p>
+        {/* Feature pills */}
+        <div className="flex flex-wrap justify-center gap-3 animate-fade-in">
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border shadow-sm">
+            <MessageSquareText className="w-4 h-4 text-primary" />
+            <span className="text-sm text-foreground font-medium">Comentarios em plantas</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border shadow-sm">
+            <FileStack className="w-4 h-4 text-primary" />
+            <span className="text-sm text-foreground font-medium">Versionamento</span>
+          </div>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-border shadow-sm">
+            <Building2 className="w-4 h-4 text-primary" />
+            <span className="text-sm text-foreground font-medium">Gestao de obras</span>
+          </div>
+        </div>
       </div>
     </section>
   )

@@ -11,12 +11,12 @@ interface ViewToggleProps {
 
 export function ViewToggle({ value, onChange }: ViewToggleProps) {
   return (
-    <div className="flex items-center rounded-md border p-0.5 gap-0.5 bg-muted">
+    <div className="flex items-center rounded-xl border p-0.5 gap-0.5 bg-muted">
       <button
         type="button"
         onClick={() => onChange("cards")}
         className={cn(
-          "flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-sm font-medium transition-all",
+          "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
           value === "cards"
             ? "bg-background text-foreground shadow-sm"
             : "text-muted-foreground hover:text-foreground"
@@ -33,7 +33,7 @@ export function ViewToggle({ value, onChange }: ViewToggleProps) {
         type="button"
         onClick={() => onChange("table")}
         className={cn(
-          "flex items-center gap-1.5 px-3 py-1.5 rounded-sm text-sm font-medium transition-all",
+          "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer",
           value === "table"
             ? "bg-background text-foreground shadow-sm"
             : "text-muted-foreground hover:text-foreground"

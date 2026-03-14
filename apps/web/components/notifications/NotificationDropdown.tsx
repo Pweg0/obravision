@@ -134,7 +134,7 @@ export function NotificationDropdown({ onClose }: NotificationDropdownProps) {
   const unreadCount = notifications.filter((n) => !n.readAt).length
 
   return (
-    <div className="absolute right-0 top-full mt-2 w-80 bg-popover border rounded-lg shadow-lg z-50 overflow-hidden">
+    <div className="absolute right-0 top-full mt-2 w-80 bg-popover border border-border rounded-2xl shadow-premium-lg z-50 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b">
         <h3 className="text-sm font-semibold">Notificacoes</h3>

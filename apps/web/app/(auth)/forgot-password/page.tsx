@@ -100,8 +100,7 @@ export default function ForgotPasswordPage() {
 
           <Button
             type="submit"
-            className="w-full"
-            style={{ backgroundColor: "#1A6B5A" }}
+            className="w-full cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Enviando..." : "Enviar instrucoes"}

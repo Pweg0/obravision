@@ -74,8 +74,7 @@ function ResetPasswordForm() {
         <CardContent className="text-center">
           <Button
             onClick={() => router.push("/login")}
-            className="w-full"
-            style={{ backgroundColor: "#1A6B5A" }}
+            className="w-full cursor-pointer"
           >
             Ir para o login
           </Button>
@@ -151,8 +150,7 @@ function ResetPasswordForm() {
 
           <Button
             type="submit"
-            className="w-full"
-            style={{ backgroundColor: "#1A6B5A" }}
+            className="w-full cursor-pointer"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Redefinindo..." : "Redefinir senha"}

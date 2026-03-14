@@ -80,15 +80,18 @@ export default async function DashboardPage() {
   const displayName = session.user.name ?? session.user.email ?? "Usuario"
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
+      {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold">Ola, {displayName.split(" ")[0]}!</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Aqui esta um resumo do que esta acontecendo em {empresa.nome}.
+        <h1 className="text-2xl font-bold text-foreground tracking-tight">
+          Ola, {displayName.split(" ")[0]}
+        </h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Resumo do que esta acontecendo em {empresa.nome}
         </p>
       </div>
 
-      {/* Widget grid: 3 cols on lg, 2 on md, 1 on sm */}
+      {/* Widget grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Obra list widget (spans 2 cols on lg) */}
         <div className="lg:col-span-2">

@@ -64,12 +64,12 @@ export function ObrasClient({ obras, statuses }: ObrasClientProps) {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Obras</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">Obras</h1>
+          <p className="text-sm text-muted-foreground mt-1">
             {obras.length} obra{obras.length !== 1 ? "s" : ""} ativa{obras.length !== 1 ? "s" : ""}
           </p>
         </div>
@@ -93,12 +93,12 @@ export function ObrasClient({ obras, statuses }: ObrasClientProps) {
           placeholder="Buscar por nome..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 flex-1 min-w-0"
+          className="flex h-10 rounded-xl border border-input bg-background px-3.5 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-primary/50 transition-all duration-200 flex-1 min-w-0"
         />
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="flex h-10 rounded-xl border border-input bg-background px-3.5 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-primary/50 transition-all duration-200 cursor-pointer"
         >
           <option value="">Todos os status</option>
           {statuses.map((s) => (
@@ -108,7 +108,7 @@ export function ObrasClient({ obras, statuses }: ObrasClientProps) {
         <select
           value={filterTipo}
           onChange={(e) => setFilterTipo(e.target.value)}
-          className="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          className="flex h-10 rounded-xl border border-input bg-background px-3.5 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-primary/50 transition-all duration-200 cursor-pointer"
         >
           <option value="">Todos os tipos</option>
           <option value="RESIDENCIAL">Residencial</option>
@@ -120,8 +120,8 @@ export function ObrasClient({ obras, statuses }: ObrasClientProps) {
 
       {/* Modal form */}
       {showForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-background rounded-xl border shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-card rounded-2xl border border-border shadow-premium-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold">Nova Obra</h2>
               <button

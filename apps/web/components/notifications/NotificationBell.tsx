@@ -84,7 +84,7 @@ export function NotificationBell() {
     <div ref={bellRef} className="relative">
       <button
         onClick={() => setDropdownOpen((prev) => !prev)}
-        className="relative p-2 text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
+        className="relative p-2 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-lg hover:bg-secondary cursor-pointer"
         aria-label={`Notificacoes${unreadCount > 0 ? ` (${badgeLabel} nao lidas)` : ""}`}
       >
         <Bell className="w-5 h-5" />

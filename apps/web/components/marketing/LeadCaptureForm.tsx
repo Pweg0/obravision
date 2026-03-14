@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { captureLead } from "@/lib/actions/lead"
 import { leadSchema, type LeadFormValues } from "@/lib/validations/lead"
-import { CheckCircle, Loader2 } from "lucide-react"
+import { CheckCircle, Loader2, ArrowRight } from "lucide-react"
 
 export function LeadCaptureForm() {
   const [submitted, setSubmitted] = useState(false)
@@ -34,78 +34,88 @@ export function LeadCaptureForm() {
   }
 
   return (
-    <section id="lead-capture" className="py-20 bg-slate-50">
-      <div className="max-w-2xl mx-auto px-6 text-center">
+    <section id="lead-capture" className="py-24 relative overflow-hidden">
+      {/* Background accent */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/[0.03] to-background dark:via-primary/[0.05]" />
+
+      <div className="relative max-w-2xl mx-auto px-6 text-center">
         {/* Section header */}
-        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+        <p className="text-sm font-semibold text-primary mb-3 tracking-wide uppercase">Acesso antecipado</p>
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-tight">
           Participe do beta
         </h2>
-        <p className="text-lg text-slate-500 mb-10">
+        <p className="text-lg text-muted-foreground mb-10 leading-relaxed">
           Seja um dos primeiros engenheiros a testar o ProjetaPro. Acesso antecipado,
           gratuito, com suporte direto do time.
         </p>
 
         {/* Form or success state */}
         {submitted ? (
-          <div className="flex flex-col items-center gap-4 py-8">
-            <CheckCircle className="w-12 h-12 text-emerald-600" />
-            <p className="text-xl font-semibold text-slate-900">Obrigado!</p>
-            <p className="text-slate-500">
+          <div className="flex flex-col items-center gap-4 py-8 animate-fade-in">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+              <CheckCircle className="w-7 h-7 text-primary" />
+            </div>
+            <p className="text-xl font-semibold text-foreground">Obrigado!</p>
+            <p className="text-muted-foreground">
               Entraremos em contato assim que o beta estiver disponivel.
             </p>
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto"
-            noValidate
-          >
-            <div className="flex-1 flex flex-col">
-              <input
-                type="email"
-                placeholder="seu@email.com"
-                autoComplete="email"
-                aria-label="Seu email"
-                className={`w-full px-4 py-3 rounded-lg border text-slate-900 placeholder:text-slate-400 bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-shadow ${
-                  errors.email
-                    ? "border-red-400 focus:ring-red-400"
-                    : "border-slate-300"
-                }`}
-                {...register("email")}
-              />
-              {errors.email && (
-                <p className="mt-1.5 text-sm text-red-600 text-left" role="alert">
-                  {errors.email.message}
-                </p>
-              )}
-              {serverError && (
-                <p className="mt-1.5 text-sm text-red-600 text-left" role="alert">
-                  {serverError}
-                </p>
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-emerald-700 hover:bg-emerald-600 disabled:bg-emerald-800 disabled:opacity-60 text-white font-semibold text-base transition-colors duration-200 whitespace-nowrap"
-              style={{ backgroundColor: "#1A6B5A" }}
+          <div className="max-w-lg mx-auto">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col sm:flex-row gap-3"
+              noValidate
             >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Enviando...
-                </>
-              ) : (
-                "Quero testar"
-              )}
-            </button>
-          </form>
-        )}
+              <div className="flex-1 flex flex-col">
+                <input
+                  type="email"
+                  placeholder="seu@email.com"
+                  autoComplete="email"
+                  aria-label="Seu email"
+                  className={`w-full px-4 py-3 rounded-xl border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all duration-200 ${
+                    errors.email
+                      ? "border-destructive focus:ring-destructive/50"
+                      : "border-border"
+                  }`}
+                  {...register("email")}
+                />
+                {errors.email && (
+                  <p className="mt-1.5 text-sm text-destructive text-left" role="alert">
+                    {errors.email.message}
+                  </p>
+                )}
+                {serverError && (
+                  <p className="mt-1.5 text-sm text-destructive text-left" role="alert">
+                    {serverError}
+                  </p>
+                )}
+              </div>
 
-        <p className="mt-6 text-xs text-slate-400">
-          Sem spam. Seus dados nao serao compartilhados.
-        </p>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary hover:bg-primary/90 disabled:opacity-60 text-primary-foreground font-semibold text-base transition-all duration-200 whitespace-nowrap shadow-premium hover:shadow-premium-lg cursor-pointer"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Enviando...
+                  </>
+                ) : (
+                  <>
+                    Quero testar
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+
+            <p className="mt-5 text-xs text-muted-foreground">
+              Sem spam. Seus dados nao serao compartilhados.
+            </p>
+          </div>
+        )}
       </div>
     </section>
   )
