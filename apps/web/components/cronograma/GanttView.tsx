@@ -304,8 +304,10 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
             onTaskUpdate={canEdit ? (handleTaskUpdate as (task: unknown) => void) : (() => {})}
             scales={[
               { unit: "month", step: 1, format: "MMM yyyy" },
-              { unit: "week", step: 1, format: "'Sem' w" },
+              { unit: "day", step: 1, format: "d" },
             ]}
+            cellWidth={40}
+            cellHeight={38}
           />
         </div>
       )}
