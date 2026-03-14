@@ -343,7 +343,6 @@ async function generateBoletimMedicao(entityId: string, obraId: string, tenantId
   const element = React.createElement(BoletimMedicao, { data }) as unknown as ReactElement<DocumentProps, string | JSXElementConstructor<unknown>>
   const pdfBuffer = await renderToBuffer(element)
 
-  // MedicaoFisica has no pdfR2Key field — upload to R2 but return key for socket notification only
   const r2Key = `pdfs/${tenantId}/boletim-fisica/${entityId}-${Date.now()}.pdf`
   await r2.send(
     new PutObjectCommand({
@@ -353,6 +352,11 @@ async function generateBoletimMedicao(entityId: string, obraId: string, tenantId
       ContentType: "application/pdf",
     })
   )
+
+  await prisma.medicaoFisica.update({
+    where: { id: entityId },
+    data: { pdfR2Key: r2Key },
+  })
 
   return { r2Key, obraId }
 }

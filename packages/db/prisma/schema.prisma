@@ -630,6 +630,7 @@ model MedicaoFisica {
   status      MedicaoStatus       @default(RASCUNHO)
   aprovadoPor String?             // User.id
   aprovadoEm  DateTime?
+  pdfR2Key    String?
   itens       MedicaoFisicaItem[]
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt

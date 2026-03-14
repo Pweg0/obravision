@@ -540,25 +540,38 @@ export async function exportBoletim(type: "fisica" | "contrato", medicaoId: stri
 
 /**
  * Returns a presigned GET URL for the boletim PDF.
- * Only applicable to MedicaoContrato (has pdfR2Key field).
+ * Supports both fisica and contrato types (both have pdfR2Key field).
  * Returns null if no PDF has been generated yet.
  */
-export async function getBoletimPdfUrl(medicaoId: string): Promise<string | null> {
+export async function getBoletimPdfUrl(
+  type: "fisica" | "contrato",
+  medicaoId: string
+): Promise<string | null> {
   const { tenantClient } = await getTenantContext()
 
-  const medicao = await tenantClient.medicaoContrato.findUnique({
-    where: { id: medicaoId },
-    select: { pdfR2Key: true },
-  })
+  const pdfR2Key =
+    type === "contrato"
+      ? (
+          await tenantClient.medicaoContrato.findUnique({
+            where: { id: medicaoId },
+            select: { pdfR2Key: true },
+          })
+        )?.pdfR2Key
+      : (
+          await tenantClient.medicaoFisica.findUnique({
+            where: { id: medicaoId },
+            select: { pdfR2Key: true },
+          })
+        )?.pdfR2Key
 
-  if (!medicao?.pdfR2Key) return null
+  if (!pdfR2Key) return null
 
   const r2 = getR2Client()
   const url = await getSignedUrl(
     r2,
     new GetObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME!,
-      Key: medicao.pdfR2Key,
+      Key: pdfR2Key,
     }),
     { expiresIn: 3600 }
   )

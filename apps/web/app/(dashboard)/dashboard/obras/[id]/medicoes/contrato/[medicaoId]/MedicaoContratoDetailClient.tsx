@@ -129,7 +129,7 @@ export function MedicaoContratoDetailClient({
   }
 
   async function handleDownloadPdf() {
-    const url = await getBoletimPdfUrl(medicao.id)
+    const url = await getBoletimPdfUrl("contrato", medicao.id)
     if (url) {
       window.open(url, "_blank")
     } else {
