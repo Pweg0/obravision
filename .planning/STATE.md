@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-04-PLAN.md
-last_updated: "2026-03-14T15:39:55.554Z"
+stopped_at: Completed 04-06-PLAN.md
+last_updated: "2026-03-14T15:57:22.090Z"
 progress:
   total_phases: 2
   completed_phases: 1
-  total_plans: 5
-  completed_plans: 5
+  total_plans: 6
+  completed_plans: 6
   percent: 100
 ---
 
@@ -56,6 +56,7 @@ Progress: [██████████] 100%
 | Phase 04-orcamento-compras-medicoes P03 | 17 | 2 tasks | 23 files |
 | Phase 04-orcamento-compras-medicoes PP05 | 12 | 2 tasks | 18 files |
 | Phase 04-orcamento-compras-medicoes P04 | 14 | 2 tasks | 11 files |
+| Phase 04-orcamento-compras-medicoes P06 | 4 | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,7 @@ All v1.0 decisions are now archived — see `.planning/milestones/v1.0-ROADMAP.m
 - [Phase 04-orcamento-compras-medicoes]: approveMedicao restricted to ADMIN only — ENGENHEIRO cannot approve (locked decision)
 - [Phase 04-orcamento-compras-medicoes]: quantidadeMinima stored as etapaDestino metadata min:{value} on ENTRADA records — avoids schema migration
 - [Phase 04-orcamento-compras-medicoes]: deliverPedido sets requisicao to APROVADA not ENTREGUE — RequisicaoStatus enum has no ENTREGUE value
+- [Phase 04-orcamento-compras-medicoes]: getBoletimPdfUrl uses type discriminator (fisica | contrato) — single function for both model types matching approveMedicao/exportBoletim pattern
 
 ### Pending Todos
 
@@ -86,6 +88,6 @@ None for completed milestone. Future concerns tracked in REQUIREMENTS.md when cr
 
 ## Session Continuity
 
-Last session: 2026-03-14T15:39:55.551Z
-Stopped at: Completed 04-04-PLAN.md
+Last session: 2026-03-14T15:57:22.083Z
+Stopped at: Completed 04-06-PLAN.md
 Resume file: None
