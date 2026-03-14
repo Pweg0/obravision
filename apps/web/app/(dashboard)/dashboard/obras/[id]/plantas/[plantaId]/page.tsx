@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth"
 import { prisma } from "@projetapro/db"
 import { createTenantClient } from "@projetapro/db/rls-client"
 import { listPinsByRevisao } from "@/lib/actions/pin"
+import { getPresignedReadUrl } from "@/lib/actions/planta"
 import { PlantaViewerClient } from "./PlantaViewerClient"
 
 export default async function PlantaViewerPage({
@@ -46,7 +47,8 @@ export default async function PlantaViewerPage({
   // Fetch pins for the latest revision
   const pins = currentRevisao ? await listPinsByRevisao(currentRevisao.id) : []
 
-  const r2PublicUrl = process.env.R2_PUBLIC_URL ?? ""
+  // Generate presigned URL for the current revision's PDF
+  const pdfUrl = currentRevisao ? await getPresignedReadUrl(currentRevisao.r2Key) : null
 
   return (
     <PlantaViewerClient
@@ -61,7 +63,7 @@ export default async function PlantaViewerPage({
       currentRevisao={currentRevisao}
       userRole={session.user.role}
       userId={session.user.id}
-      r2PublicUrl={r2PublicUrl}
+      initialPdfUrl={pdfUrl}
     />
   )
 }

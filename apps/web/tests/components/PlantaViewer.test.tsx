@@ -25,6 +25,10 @@ vi.mock("@/lib/actions/pin", () => ({
   listPinsByRevisao: vi.fn().mockResolvedValue([]),
 }))
 
+vi.mock("@/lib/actions/planta", () => ({
+  getPresignedReadUrl: vi.fn().mockResolvedValue("https://r2.example.com/signed-url"),
+}))
+
 vi.mock("@/lib/actions/thread", () => ({
   getThread: vi.fn().mockResolvedValue(null),
   addMessage: vi.fn().mockResolvedValue({ success: true }),
@@ -212,7 +216,7 @@ describe("PlantaViewerClient - CLIENTE role is read-only", () => {
         currentRevisao={mockRevisao}
         userRole="CLIENTE"
         userId="user-2"
-        r2PublicUrl="https://r2.example.com"
+        initialPdfUrl="https://r2.example.com/plantas/tenant/file.pdf"
       />
     )
     // CLIENTE should have default cursor, not crosshair
@@ -231,7 +235,7 @@ describe("PlantaViewerClient - CLIENTE role is read-only", () => {
         currentRevisao={mockRevisao}
         userRole="ADMIN"
         userId="user-1"
-        r2PublicUrl="https://r2.example.com"
+        initialPdfUrl="https://r2.example.com/plantas/tenant/file.pdf"
       />
     )
     expect(screen.getByText("Planta Arquitetonica")).toBeTruthy()
@@ -252,7 +256,7 @@ describe("PlantaViewerClient - ThreadSidebar opens on pin selection", () => {
         currentRevisao={mockRevisao}
         userRole="ADMIN"
         userId="user-1"
-        r2PublicUrl="https://r2.example.com"
+        initialPdfUrl="https://r2.example.com/plantas/tenant/file.pdf"
       />
     )
     expect(screen.queryByTestId("thread-sidebar")).toBeNull()
@@ -267,7 +271,7 @@ describe("PlantaViewerClient - ThreadSidebar opens on pin selection", () => {
         currentRevisao={mockRevisao}
         userRole="ADMIN"
         userId="user-1"
-        r2PublicUrl="https://r2.example.com"
+        initialPdfUrl="https://r2.example.com/plantas/tenant/file.pdf"
       />
     )
 

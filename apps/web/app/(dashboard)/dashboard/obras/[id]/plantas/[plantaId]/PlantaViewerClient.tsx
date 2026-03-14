@@ -10,6 +10,7 @@ import { PinLayer } from "./PinLayer"
 import { PinPopup } from "./PinPopup"
 import { ThreadSidebar } from "./ThreadSidebar"
 import { listPinsByRevisao, type PinWithAuthor } from "@/lib/actions/pin"
+import { getPresignedReadUrl } from "@/lib/actions/planta"
 import { clickToNormalized } from "@/lib/utils/coordinates"
 
 // Configure react-pdf worker. Must use local copy bundled by Next.js webpack.
@@ -41,7 +42,7 @@ interface PlantaViewerClientProps {
   currentRevisao: Revisao | null
   userRole: string
   userId: string
-  r2PublicUrl: string
+  initialPdfUrl: string | null
 }
 
 export function PlantaViewerClient({
@@ -51,7 +52,7 @@ export function PlantaViewerClient({
   currentRevisao: initialRevisao,
   userRole,
   userId,
-  r2PublicUrl,
+  initialPdfUrl,
 }: PlantaViewerClientProps) {
   const [currentRevisaoId, setCurrentRevisaoId] = useState(initialRevisao?.id ?? "")
   const [pageNumber, setPageNumber] = useState(1)
@@ -60,12 +61,13 @@ export function PlantaViewerClient({
   const [selectedPinId, setSelectedPinId] = useState<string | null>(null)
   const [tempPin, setTempPin] = useState<{ x: number; y: number; pageNumber: number } | null>(null)
   const [pins, setPins] = useState<PinWithAuthor[]>(initialPins)
+  const [pdfUrl, setPdfUrl] = useState<string | null>(initialPdfUrl)
 
   const currentRevisao = revisoes.find((r) => r.id === currentRevisaoId) ?? initialRevisao
 
   const canCreatePins = userRole === "ADMIN" || userRole === "ENGENHEIRO"
 
-  // When revision changes: load new pins, reset page + selection
+  // When revision changes: load new pins + presigned URL, reset page + selection
   async function handleRevisaoChange(revisaoId: string) {
     setCurrentRevisaoId(revisaoId)
     setPageNumber(1)
@@ -75,8 +77,12 @@ export function PlantaViewerClient({
     if (newRevisao?.pageCount) {
       setNumPages(newRevisao.pageCount)
     }
-    const newPins = await listPinsByRevisao(revisaoId)
+    const [newPins, newUrl] = await Promise.all([
+      listPinsByRevisao(revisaoId),
+      newRevisao ? getPresignedReadUrl(newRevisao.r2Key) : Promise.resolve(null),
+    ])
     setPins(newPins)
+    setPdfUrl(newUrl)
   }
 
   function handlePageChange(page: number) {
@@ -113,10 +119,6 @@ export function PlantaViewerClient({
       setPins(newPins)
     }
   }, [currentRevisaoId])
-
-  const pdfUrl = currentRevisao
-    ? `${r2PublicUrl}/${currentRevisao.r2Key}`
-    : null
 
   const sidebarOpen = selectedPinId !== null
 
@@ -160,7 +162,7 @@ export function PlantaViewerClient({
                 tilesPrefix={currentRevisao.tilesPrefix}
                 pageNumber={pageNumber}
                 scale={scale}
-                r2PublicUrl={r2PublicUrl}
+                r2PublicUrl=""
               />
               {/* Pin overlay for tile viewer */}
               <div

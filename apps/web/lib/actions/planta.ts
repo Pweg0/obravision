@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { redirect } from "next/navigation"
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
 import { auth } from "@/lib/auth"
 import { prisma } from "@projetapro/db"
@@ -67,6 +67,26 @@ export async function getPresignedUploadUrl(filename: string, contentType: strin
   )
 
   return { url, key }
+}
+
+/**
+ * Generates a presigned GET URL for reading a private R2 object.
+ * Used by the PDF viewer to load PDFs from the private bucket.
+ */
+export async function getPresignedReadUrl(r2Key: string) {
+  await getTenantContext() // auth check
+
+  const r2 = getR2Client()
+  const url = await getSignedUrl(
+    r2,
+    new GetObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME!,
+      Key: r2Key,
+    }),
+    { expiresIn: 3600 }
+  )
+
+  return url
 }
 
 /**
