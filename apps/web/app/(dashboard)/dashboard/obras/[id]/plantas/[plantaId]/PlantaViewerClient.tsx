@@ -13,11 +13,8 @@ import { listPinsByRevisao, type PinWithAuthor } from "@/lib/actions/pin"
 import { getPresignedReadUrl } from "@/lib/actions/planta"
 import { clickToNormalized } from "@/lib/utils/coordinates"
 
-// Configure react-pdf worker. Must use local copy bundled by Next.js webpack.
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-  "pdfjs-dist/build/pdf.worker.min.mjs",
-  import.meta.url
-).toString()
+// Configure react-pdf worker via CDN (local bundling doesn't work reliably with Next.js production builds)
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
 type Revisao = {
   id: string
@@ -185,6 +182,9 @@ export function PlantaViewerClient({
                 file={pdfUrl}
                 onLoadSuccess={({ numPages: total }) => {
                   setNumPages(total)
+                }}
+                onLoadError={(error) => {
+                  console.error("[PlantaViewer] PDF load error:", error)
                 }}
                 loading={
                   <div className="flex h-48 items-center justify-center">
