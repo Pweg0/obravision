@@ -1,15 +1,10 @@
 import { notFound } from "next/navigation"
-import dynamic from "next/dynamic"
 import { auth } from "@/lib/auth"
 import { prisma } from "@projetapro/db"
 import { createTenantClient } from "@projetapro/db/rls-client"
 import { listPinsByRevisao } from "@/lib/actions/pin"
 import { getPresignedReadUrl } from "@/lib/actions/planta"
-
-const PlantaViewerClient = dynamic(() => import("./PlantaViewerClient").then(m => m.PlantaViewerClient), {
-  ssr: false,
-  loading: () => <div className="flex h-full items-center justify-center text-sm text-muted-foreground">Carregando visualizador...</div>,
-})
+import { PlantaViewerClient } from "./PlantaViewerWrapper"
 
 export default async function PlantaViewerPage({
   params,
