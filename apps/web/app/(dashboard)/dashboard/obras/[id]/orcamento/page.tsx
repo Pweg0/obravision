@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth"
 import { createTenantClient } from "@projetapro/db/rls-client"
 import { OrcamentoTable } from "@/components/orcamento/OrcamentoTable"
 import { BdiConfig } from "@/components/orcamento/BdiConfig"
+import { PropostaExport } from "@/components/orcamento/PropostaExport"
 import { createOrcamento } from "@/lib/actions/orcamento"
 import { Button } from "@/components/ui/button"
 
@@ -68,6 +69,13 @@ export default async function OrcamentoPage({
           <h1 className="text-2xl font-bold">Orcamento</h1>
           <p className="text-sm text-muted-foreground mt-1">{obra.nome}</p>
         </div>
+        {orcamento && (
+          <PropostaExport
+            orcamentoId={orcamento.id}
+            obraId={obraId}
+            existingPdfR2Key={orcamento.pdfR2Key}
+          />
+        )}
       </div>
 
       {/* Content */}
