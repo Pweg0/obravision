@@ -1,4 +1,4 @@
-import { StepIndicator } from "@/components/onboarding/StepIndicator"
+import { ProjetaProLogo } from "@/components/ProjetaProLogo"
 
 export default function OnboardingLayout({
   children,
@@ -10,14 +10,9 @@ export default function OnboardingLayout({
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2.5 mb-3">
-            <span
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-base"
-              style={{ backgroundColor: "#1A6B5A" }}
-            >
-              P
-            </span>
+            <ProjetaProLogo size="md" />
             <h2 className="text-2xl font-bold text-foreground">
-              Projeta<span className="text-primary">Pro</span>
+              Projeta <span className="text-primary">Pro</span>
             </h2>
           </div>
           <p className="text-sm text-muted-foreground">Configure sua conta</p>

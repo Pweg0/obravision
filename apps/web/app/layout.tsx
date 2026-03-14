@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
-import { DM_Sans } from "next/font/google"
+import { Plus_Jakarta_Sans } from "next/font/google"
 import { ThemeProvider } from "@/components/ThemeProvider"
 import "./globals.css"
 
-const dmSans = DM_Sans({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
 })
 
 export const metadata: Metadata = {
-  title: "ProjetaPro",
-  description: "Gestao de Obras Visual para a Construcao Civil Brasileira",
+  title: "Projeta Pro",
+  description: "Gestao Inteligente para Engenharia Civil",
 }
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <body className={`${dmSans.className} antialiased`}>
+      <body className={`${plusJakarta.className} antialiased`}>
         <ThemeProvider>
           {children}
         </ThemeProvider>

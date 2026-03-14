@@ -1,100 +1,64 @@
-import {
-  MessageSquare,
-  FileStack,
-  BookOpen,
-  CalendarCheck,
-  ShoppingCart,
-  BarChart3,
-} from "lucide-react"
-
-interface Feature {
-  icon: React.ReactNode
-  title: string
-  description: string
-  accent: string
-}
-
-const features: Feature[] = [
-  {
-    icon: <MessageSquare className="w-5 h-5" />,
-    title: "Comentarios Ancorados",
-    description:
-      "Clique em qualquer elemento do projeto e deixe um comentario diretamente sobre ele. Sem prints, sem confusao sobre qual revisao.",
-    accent: "from-emerald-500/20 to-emerald-600/5",
-  },
-  {
-    icon: <FileStack className="w-5 h-5" />,
-    title: "Versionamento de Plantas",
-    description:
-      "Carregue revisoes (R0, R1, R2...) e compare versoes lado a lado. Historico completo com data e responsavel.",
-    accent: "from-blue-500/20 to-blue-600/5",
-  },
-  {
-    icon: <BookOpen className="w-5 h-5" />,
-    title: "Diario de Obra",
-    description:
-      "Registre o progresso diario com fotos, status das equipes e ocorrencias. Tudo indexado por data e obra.",
-    accent: "from-amber-500/20 to-amber-600/5",
-  },
-  {
-    icon: <CalendarCheck className="w-5 h-5" />,
-    title: "Cronograma Interativo",
-    description:
-      "Planeje tarefas, atribua responsaveis e acompanhe o progresso em tempo real com alertas de atraso.",
-    accent: "from-violet-500/20 to-violet-600/5",
-  },
-  {
-    icon: <ShoppingCart className="w-5 h-5" />,
-    title: "Orcamento e Compras",
-    description:
-      "Controle orcamento previsto vs realizado, gerencie requisicoes de material e historico de compras.",
-    accent: "from-rose-500/20 to-rose-600/5",
-  },
-  {
-    icon: <BarChart3 className="w-5 h-5" />,
-    title: "Relatorios Gerenciais",
-    description:
-      "Exporte relatorios em PDF para clientes. Dashboard executivo com indicadores de progresso e custo.",
-    accent: "from-cyan-500/20 to-cyan-600/5",
-  },
-]
-
 export function FeaturesSection() {
+  const features = [
+    {
+      title: "Gestao da Empresa",
+      description: "Financeiro, equipe, contratos e documentacao centralizados. Dashboards em tempo real para decisoes rapidas.",
+      iconBg: "bg-blue-100 group-hover:bg-[#2563EB]",
+      iconColor: "text-blue-600 group-hover:text-white",
+      icon: (
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      ),
+    },
+    {
+      title: "Controle de Obra",
+      description: "Cronograma, diario de obra, vistorias e acompanhamento de progresso com fotos e checklist digital.",
+      iconBg: "bg-blue-100 group-hover:bg-[#2563EB]",
+      iconColor: "text-blue-600 group-hover:text-white",
+      icon: (
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+      ),
+    },
+    {
+      title: "Gestao de Estoque",
+      description: "Controle de materiais com alertas automaticos, rastreabilidade por obra e integracao com fornecedores.",
+      iconBg: "bg-amber-100 group-hover:bg-[#2563EB]",
+      iconColor: "text-amber-600 group-hover:text-white",
+      icon: (
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      ),
+    },
+    {
+      title: "Plantas e Projetos",
+      description: "Visualize, versione e compartilhe plantas com a equipe. Anotacoes colaborativas e historico completo.",
+      iconBg: "bg-green-100 group-hover:bg-[#2563EB]",
+      iconColor: "text-green-600 group-hover:text-white",
+      icon: (
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+      ),
+    },
+  ]
+
   return (
-    <section id="features" className="py-24 bg-background relative">
-      <div className="max-w-6xl mx-auto px-6">
-        {/* Section header */}
-        <div className="text-center mb-16">
-          <p className="text-sm font-semibold text-primary mb-3 tracking-wide uppercase">Recursos</p>
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 tracking-tight">
-            Tudo que sua obra precisa
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Do projeto ao canteiro, do orcamento ao relatorio — ProjetaPro integra cada etapa
-            em uma plataforma visual colaborativa.
-          </p>
+    <section id="funcionalidades" className="py-16 sm:py-24 bg-[#F8FAFC]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <p className="text-sm font-semibold text-[#2563EB] uppercase tracking-wider mb-3">Funcionalidades</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1E293B] tracking-tight">Tudo que sua empresa precisa em um so lugar</h2>
+          <p className="mt-4 text-lg text-gray-600">Quatro modulos integrados para cobrir toda a operacao da sua engenharia.</p>
         </div>
-
-        {/* Features grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {features.map((feature, index) => (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {features.map((feature) => (
             <div
-              key={index}
-              className="group relative flex flex-col gap-4 p-6 rounded-2xl bg-card border border-border hover:border-primary/30 shadow-sm hover:shadow-premium transition-all duration-300 cursor-pointer"
+              key={feature.title}
+              className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-100/50 transition-all duration-250 group"
             >
-              {/* Icon */}
-              <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br ${feature.accent} text-primary`}>
-                {feature.icon}
+              <div className={`w-12 h-12 ${feature.iconBg} rounded-xl flex items-center justify-center mb-5 transition-colors duration-250`}>
+                <svg className={`w-6 h-6 ${feature.iconColor} transition-colors duration-250`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {feature.icon}
+                </svg>
               </div>
-
-              {/* Content */}
-              <div>
-                <h3 className="text-base font-semibold text-foreground mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
-              </div>
-
-              {/* Hover indicator */}
-              <div className="absolute bottom-0 left-6 right-6 h-0.5 bg-primary/0 group-hover:bg-primary/40 rounded-full transition-colors duration-300" />
+              <h3 className="text-lg font-bold text-[#1E293B] mb-2">{feature.title}</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">{feature.description}</p>
             </div>
           ))}
         </div>

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 import { useObraNav } from "@/providers/ObraNavProvider"
 import { NotificationBell } from "@/components/notifications/NotificationBell"
 import { ThemeToggle } from "@/components/ThemeToggle"
+import { ProjetaProLogo } from "@/components/ProjetaProLogo"
 import {
   LayoutDashboard,
   Building2,
@@ -114,11 +115,9 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
         {/* Logo */}
         <div className="flex items-center justify-between h-16 px-5 flex-shrink-0">
           <Link href="/dashboard" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-sidebar-accent flex items-center justify-center">
-              <span className="text-white font-bold text-sm">P</span>
-            </div>
+            <ProjetaProLogo />
             <span className="font-bold text-base text-sidebar-foreground">
-              Projeta<span className="text-sidebar-accent">Pro</span>
+              Projeta <span className="text-sidebar-accent">Pro</span>
             </span>
           </Link>
           <button
@@ -251,7 +250,7 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
             >
               <Menu className="w-5 h-5" />
             </button>
-            <span className="font-bold text-primary lg:hidden">ProjetaPro</span>
+            <span className="font-bold text-primary lg:hidden">Projeta Pro</span>
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />

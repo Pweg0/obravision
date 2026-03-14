@@ -61,7 +61,7 @@ export default async function RdoPage({ params }: PageProps) {
           </p>
         </div>
         {canCreate && (
-          <Button asChild className="bg-[#1A6B5A] hover:bg-[#155a4a] text-white">
+          <Button asChild className="bg-primary hover:bg-primary/90 text-white">
             <Link href={`/dashboard/obras/${obraId}/rdo/nova`}>Nova Entrada</Link>
           </Button>
         )}
@@ -89,7 +89,7 @@ export default async function RdoPage({ params }: PageProps) {
           {canCreate && (
             <Link
               href={`/dashboard/obras/${obraId}/rdo/nova`}
-              className="inline-block mt-3 text-sm text-[#1A6B5A] hover:underline"
+              className="inline-block mt-3 text-sm text-primary hover:underline"
             >
               Criar primeira entrada
             </Link>

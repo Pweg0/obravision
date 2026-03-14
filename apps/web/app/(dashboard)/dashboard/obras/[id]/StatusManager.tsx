@@ -152,7 +152,7 @@ export function StatusManager({ statuses, currentUserRole }: StatusManagerProps)
                   id="new-status-color"
                   name="color"
                   type="color"
-                  defaultValue="#1A6B5A"
+                  defaultValue="#2563EB"
                   className="h-10 w-14 rounded border border-input cursor-pointer"
                 />
                 <Input
