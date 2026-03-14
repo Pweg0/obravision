@@ -89,7 +89,7 @@ export function PlantaViewerClient({
     setTempPin(null)
   }
 
-  function handleViewerClick(e: React.MouseEvent<HTMLDivElement>) {
+  function handlePageClick(e: React.MouseEvent<HTMLDivElement>) {
     // Don't create a pin if read-only or already showing a popup
     if (!canCreatePins) return
     if (tempPin) return
@@ -98,6 +98,7 @@ export function PlantaViewerClient({
     const target = e.target as HTMLElement
     if (target.closest("[data-pin]")) return
 
+    // Use the page wrapper (currentTarget) not the scroll container
     const rect = e.currentTarget.getBoundingClientRect()
     const normalized = clickToNormalized(e.clientX, e.clientY, rect)
     setTempPin({ ...normalized, pageNumber })
@@ -141,7 +142,6 @@ export function PlantaViewerClient({
           className={`relative flex flex-1 items-start justify-center overflow-auto bg-gray-200 transition-all duration-200 ${
             sidebarOpen ? "mr-0" : ""
           }`}
-          onClick={handleViewerClick}
           style={{ cursor: canCreatePins && !tempPin ? "crosshair" : "default" }}
           data-viewer-container
         >
@@ -197,7 +197,7 @@ export function PlantaViewerClient({
                   </div>
                 }
               >
-                <div className="relative">
+                <div className="relative" onClick={handlePageClick}>
                   <Page
                     pageNumber={pageNumber}
                     scale={scale}
