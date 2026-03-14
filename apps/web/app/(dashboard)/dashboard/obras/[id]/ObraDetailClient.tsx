@@ -168,6 +168,18 @@ export function ObraDetailClient({
         >
           Compras
         </Link>
+        <Link
+          href={`/dashboard/obras/${obraId}/estoque`}
+          className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
+        >
+          Estoque
+        </Link>
+        <Link
+          href={`/dashboard/obras/${obraId}/medicoes`}
+          className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
+        >
+          Medicoes
+        </Link>
       </div>
 
       {/* Details tab */}
