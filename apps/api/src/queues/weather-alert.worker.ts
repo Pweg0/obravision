@@ -158,7 +158,7 @@ export const weatherAlertWorker = new Worker<WeatherAlertJobData>(
 
     job.log("Daily weather alert check complete")
   },
-  { connection, concurrency: 1 }
+  { connection: connection as any, concurrency: 1 }
 )
 
 weatherAlertWorker.on("completed", (job) => {

@@ -27,7 +27,7 @@ export async function plantasRoutes(fastify: FastifyInstance) {
       const { plantaRevisaoId, r2Key, obraId } = request.body
 
       const job = await pdfConversionQueue.add(
-        "convert-pdf",
+        "convert-pdf" as any,
         { plantaRevisaoId, r2Key, obraId },
         { jobId: `convert-${plantaRevisaoId}` } // idempotent — duplicate calls won't re-add
       )

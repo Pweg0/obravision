@@ -14,7 +14,7 @@ export interface PdfConversionJobData {
 }
 
 export const pdfConversionQueue = new Queue<PdfConversionJobData>("pdf-conversion", {
-  connection,
+  connection: connection as any,
   defaultJobOptions: {
     attempts: 3,
     backoff: { type: "exponential", delay: 5000 },

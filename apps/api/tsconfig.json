@@ -5,7 +5,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "outDir": "dist",
-    "rootDir": ".",
+    "rootDir": "src",
     "lib": ["ES2022"],
     "skipLibCheck": true,
     "paths": {

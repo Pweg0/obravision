@@ -6,7 +6,7 @@ import { connection } from "./pdf-conversion.queue"
 export interface WeatherAlertJobData {}
 
 export const weatherAlertQueue = new Queue<WeatherAlertJobData>("weather-alert", {
-  connection,
+  connection: connection as any,
   defaultJobOptions: {
     attempts: 3,
     backoff: { type: "exponential", delay: 5000 },
@@ -24,6 +24,6 @@ export async function registerWeatherAlertScheduler(): Promise<void> {
   await weatherAlertQueue.upsertJobScheduler(
     "daily-weather-check",
     { pattern: "0 7 * * *", tz: "America/Sao_Paulo" },
-    { name: "weather-check", data: {} }
+    { name: "weather-check" as any, data: {} }
   )
 }

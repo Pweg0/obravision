@@ -1,5 +1,5 @@
 import { Worker } from "bullmq"
-import PDFium from "@hyzyla/pdfium"
+import { PDFiumLibrary } from "@hyzyla/pdfium"
 import sharp from "sharp"
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { prisma } from "@obravision/db"
@@ -50,7 +50,7 @@ export const pdfWorker = new Worker<PdfConversionJobData>(
 
     // 2. Render each page to WebP with PDFium
     // scale: 2 = 144 DPI — good quality for construction plans
-    const pdfium = await PDFium()
+    const pdfium = await PDFiumLibrary.init()
     const document = await pdfium.loadDocument(pdfBuffer)
     const pages = [...document.pages()]
     const pageCount = pages.length
@@ -59,10 +59,10 @@ export const pdfWorker = new Worker<PdfConversionJobData>(
 
     await Promise.all(
       pages.map(async (page, i) => {
-        const { bitmap } = await page.render({ scale: 2 })
+        const rendered = await page.render({ scale: 2 })
 
-        const webpBuffer = await sharp(bitmap.data, {
-          raw: { width: bitmap.width, height: bitmap.height, channels: 4 },
+        const webpBuffer = await sharp(Buffer.from(rendered.data), {
+          raw: { width: rendered.width, height: rendered.height, channels: 4 },
         })
           .webp({ quality: 85 })
           .toBuffer()
@@ -99,7 +99,7 @@ export const pdfWorker = new Worker<PdfConversionJobData>(
       ioInstance.to(`obra:${obraId}`).emit("tiles-ready", { plantaRevisaoId })
     }
   },
-  { connection, concurrency: 2 }
+  { connection: connection as any, concurrency: 2 }
 )
 
 pdfWorker.on("completed", (job) => {
