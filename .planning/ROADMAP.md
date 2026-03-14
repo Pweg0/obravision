@@ -24,7 +24,7 @@ Full details archived in `.planning/milestones/v1.0-ROADMAP.md`
 
 ### 📋 v1.1 (Planned)
 
-- [ ] Phase 4: Orcamento + Compras + Medicoes (5 plans)
+- [ ] Phase 4: Orcamento + Compras + Medicoes (6 plans)
 - [ ] Phase 5: Relatorios + Dashboards (2 plans)
 
 ## Phase Details
@@ -33,7 +33,7 @@ Full details archived in `.planning/milestones/v1.0-ROADMAP.md`
 **Goal**: Engineers can build a complete obra budget with SINAPI codes and BDI, manage procurement from purchase request to purchase order, track inventory across storage locations, and record physical and contract measurements
 **Depends on**: Phase 3
 **Requirements**: ORC-01, ORC-02, ORC-03, ORC-04, ORC-05, ORC-06, COMP-01, COMP-02, COMP-03, COMP-04, COMP-05, COMP-06, MED-01, MED-02
-**Plans**: 5 plans
+**Plans**: 6 plans
 
 Plans:
 - [ ] 04-01: SINAPI code search and budget builder (stages, quantities, unit costs), BDI configuration, cost/sales views
@@ -41,6 +41,7 @@ Plans:
 - [ ] 04-03: Purchase request with approval workflow, supplier quote with mapa comparativo, purchase order integrated with budget
 - [ ] 04-04: Inventory tracking per obra and deposito, real material cost view
 - [ ] 04-05: Physical progress measurements (MED-01) and subcontractor contract measurements (MED-02)
+- [ ] 04-06: Gap closure — MedicaoFisica boletim PDF download (pdfR2Key schema + worker + UI)
 
 ### Phase 5: Relatorios + Dashboards
 **Goal**: Engineers and managers can view integrated management reports, a KPI dashboard per obra, and export everything as a PDF
@@ -59,5 +60,5 @@ Plans:
 | 1. Foundation | v1.0 | 3/3 | Complete | 2026-03-13 |
 | 2. PDF Viewer + Anchored Comments | v1.0 | 4/4 | Complete | 2026-03-14 |
 | 3. Cronograma + RDO | v1.0 | 3/3 | Complete | 2026-03-13 |
-| 4. Orcamento + Compras + Medicoes | 3/5 | In Progress|  | - |
+| 4. Orcamento + Compras + Medicoes | v1.1 | 5/6 | In Progress | - |
 | 5. Relatorios + Dashboards | v1.1 | 0/2 | Not started | - |
