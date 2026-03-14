@@ -1,5 +1,5 @@
 import { Worker } from "bullmq"
-import { PDFium } from "@hyzyla/pdfium"
+import PDFium from "@hyzyla/pdfium"
 import sharp from "sharp"
 import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3"
 import { prisma } from "@obravision/db"
