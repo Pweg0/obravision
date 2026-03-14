@@ -10,8 +10,13 @@ import { TarefaForm } from "./TarefaForm"
 import { Button } from "@/components/ui/button"
 
 // Dynamically import Gantt + Willow theme with SSR disabled
+// CSS must be imported for the chart to render (bars, grid, timeline)
 const GanttModule = dynamic(
-  () => import("@svar-ui/react-gantt").then((m) => {
+  () => Promise.all([
+    import("@svar-ui/react-gantt"),
+    // @ts-expect-error - CSS module import has no type declarations
+    import("@svar-ui/react-gantt/all.css"),
+  ]).then(([m]) => {
     const { Gantt, Willow } = m
     // eslint-disable-next-line react/display-name
     return { default: (props: Record<string, unknown>) => (
