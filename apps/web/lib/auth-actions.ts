@@ -12,7 +12,9 @@ import {
 } from "./validations/auth"
 import { Resend } from "resend"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+const resend = process.env.RESEND_API_KEY
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null
 
 type ActionResult = {
   success: boolean
@@ -145,7 +147,7 @@ export async function forgotPassword(
     // Send reset email via Resend
     const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`
 
-    await resend.emails.send({
+    await resend?.emails.send({
       from: "ObraVision <noreply@obravision.com.br>",
       to: email,
       subject: "Redefinir sua senha — ObraVision",
