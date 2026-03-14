@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-02-PLAN.md
-last_updated: "2026-03-14T15:01:46.943Z"
+stopped_at: Completed 04-03-PLAN.md
+last_updated: "2026-03-14T15:22:34.732Z"
 progress:
   total_phases: 2
   completed_phases: 0
   total_plans: 5
-  completed_plans: 2
+  completed_plans: 3
   percent: 100
 ---
 
@@ -53,6 +53,7 @@ Progress: [██████████] 100%
 | 03-cronograma-rdo P03 | 1 | 8 | 12 |
 | Phase 04-orcamento-compras-medicoes P01 | 11 | 2 tasks | 19 files |
 | Phase 04-orcamento-compras-medicoes P02 | 1100 | 2 tasks | 10 files |
+| Phase 04-orcamento-compras-medicoes P03 | 17 | 2 tasks | 23 files |
 
 ## Accumulated Context
 
@@ -66,6 +67,8 @@ All v1.0 decisions are now archived — see `.planning/milestones/v1.0-ROADMAP.m
 - [Phase 04-orcamento-compras-medicoes]: Curva ABC thresholds A<=50%/B<=80%/C>80% standard for Brazilian construction
 - [Phase 04-orcamento-compras-medicoes]: PDF generation always async via BullMQ + R2, never synchronous in server actions
 - [Phase 04-orcamento-compras-medicoes]: PropostaExport polls 3s fallback when Socket.io unavailable for resilient PDF download
+- [Phase 04-orcamento-compras-medicoes]: pdf-queue-client.ts wraps BullMQ enqueue via HTTP to API — consistent with orcamento-pdf.ts pattern, mockable in tests
+- [Phase 04-orcamento-compras-medicoes]: MapaComparativo directly calls createPedido when supplier selected — avoids separate PedidoForm step for the common workflow
 
 ### Pending Todos
 
@@ -77,6 +80,6 @@ None for completed milestone. Future concerns tracked in REQUIREMENTS.md when cr
 
 ## Session Continuity
 
-Last session: 2026-03-14T15:01:46.939Z
-Stopped at: Completed 04-02-PLAN.md
+Last session: 2026-03-14T15:22:34.727Z
+Stopped at: Completed 04-03-PLAN.md
 Resume file: None
