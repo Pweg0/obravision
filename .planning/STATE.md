@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-orcamento-compras-medicoes 04-01-PLAN.md
-last_updated: "2026-03-14T14:54:26.259Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-03-14T15:01:46.943Z"
 progress:
   total_phases: 2
   completed_phases: 0
   total_plans: 5
-  completed_plans: 1
+  completed_plans: 2
   percent: 100
 ---
 
@@ -52,6 +52,7 @@ Progress: [██████████] 100%
 | 03-cronograma-rdo P02 | 1 | 13 | 11 |
 | 03-cronograma-rdo P03 | 1 | 8 | 12 |
 | Phase 04-orcamento-compras-medicoes P01 | 11 | 2 tasks | 19 files |
+| Phase 04-orcamento-compras-medicoes P02 | 1100 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -62,6 +63,9 @@ All v1.0 decisions are now archived — see `.planning/milestones/v1.0-ROADMAP.m
 - [Phase 04-orcamento-compras-medicoes]: SheetJS installed from CDN not npm registry to avoid CVE risk
 - [Phase 04-orcamento-compras-medicoes]: precoVenda never stored in DB - derived as custoTotal * (1 + bdi/100) at render time
 - [Phase 04-orcamento-compras-medicoes]: BDI applied globally at Orcamento level, not per item
+- [Phase 04-orcamento-compras-medicoes]: Curva ABC thresholds A<=50%/B<=80%/C>80% standard for Brazilian construction
+- [Phase 04-orcamento-compras-medicoes]: PDF generation always async via BullMQ + R2, never synchronous in server actions
+- [Phase 04-orcamento-compras-medicoes]: PropostaExport polls 3s fallback when Socket.io unavailable for resilient PDF download
 
 ### Pending Todos
 
@@ -73,6 +77,6 @@ None for completed milestone. Future concerns tracked in REQUIREMENTS.md when cr
 
 ## Session Continuity
 
-Last session: 2026-03-14T14:54:26.256Z
-Stopped at: Completed 04-orcamento-compras-medicoes 04-01-PLAN.md
+Last session: 2026-03-14T15:01:46.939Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None

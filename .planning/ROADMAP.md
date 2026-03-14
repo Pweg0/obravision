@@ -59,5 +59,5 @@ Plans:
 | 1. Foundation | v1.0 | 3/3 | Complete | 2026-03-13 |
 | 2. PDF Viewer + Anchored Comments | v1.0 | 4/4 | Complete | 2026-03-14 |
 | 3. Cronograma + RDO | v1.0 | 3/3 | Complete | 2026-03-13 |
-| 4. Orcamento + Compras + Medicoes | 1/5 | In Progress|  | - |
+| 4. Orcamento + Compras + Medicoes | 2/5 | In Progress|  | - |
 | 5. Relatorios + Dashboards | v1.1 | 0/2 | Not started | - |
