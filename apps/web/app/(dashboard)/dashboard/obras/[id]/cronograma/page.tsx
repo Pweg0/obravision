@@ -83,9 +83,9 @@ export default async function CronogramaPage({
 
       {/* Gantt chart */}
       <GanttView
-        etapas={etapas.map((e) => ({
+        etapas={etapas.map((e: any) => ({
           ...e,
-          tarefas: e.tarefas.map((t) => ({
+          tarefas: e.tarefas.map((t: any) => ({
             ...t,
             startDate: new Date(t.startDate),
             endDate: new Date(t.endDate),
