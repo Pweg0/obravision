@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 04-05-PLAN.md
-last_updated: "2026-03-14T15:38:33.850Z"
+stopped_at: Completed 04-04-PLAN.md
+last_updated: "2026-03-14T15:39:55.554Z"
 progress:
   total_phases: 2
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 100
 ---
 
@@ -55,6 +55,7 @@ Progress: [██████████] 100%
 | Phase 04-orcamento-compras-medicoes P02 | 1100 | 2 tasks | 10 files |
 | Phase 04-orcamento-compras-medicoes P03 | 17 | 2 tasks | 23 files |
 | Phase 04-orcamento-compras-medicoes PP05 | 12 | 2 tasks | 18 files |
+| Phase 04-orcamento-compras-medicoes P04 | 14 | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,8 @@ All v1.0 decisions are now archived — see `.planning/milestones/v1.0-ROADMAP.m
 - [Phase 04-orcamento-compras-medicoes]: MapaComparativo directly calls createPedido when supplier selected — avoids separate PedidoForm step for the common workflow
 - [Phase 04-orcamento-compras-medicoes]: progressoGeral computed on demand via calcularProgressoPonderado — not stored (MedicaoFisica schema has no progressoGeral column)
 - [Phase 04-orcamento-compras-medicoes]: approveMedicao restricted to ADMIN only — ENGENHEIRO cannot approve (locked decision)
+- [Phase 04-orcamento-compras-medicoes]: quantidadeMinima stored as etapaDestino metadata min:{value} on ENTRADA records — avoids schema migration
+- [Phase 04-orcamento-compras-medicoes]: deliverPedido sets requisicao to APROVADA not ENTREGUE — RequisicaoStatus enum has no ENTREGUE value
 
 ### Pending Todos
 
@@ -83,6 +86,6 @@ None for completed milestone. Future concerns tracked in REQUIREMENTS.md when cr
 
 ## Session Continuity
 
-Last session: 2026-03-14T15:38:33.846Z
-Stopped at: Completed 04-05-PLAN.md
+Last session: 2026-03-14T15:39:55.551Z
+Stopped at: Completed 04-04-PLAN.md
 Resume file: None
