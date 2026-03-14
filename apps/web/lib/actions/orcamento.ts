@@ -40,14 +40,20 @@ function requireAdminOrEngenheiro(role: string) {
 // ---- searchSinapi ----
 
 /**
- * Full-text search for SINAPI composicoes using tsvector.
+ * Full-text search for SINAPI composicoes.
+ * Tries tsvector first (most relevant), falls back to ILIKE if no results.
  * Returns empty array for empty query.
- * Ordered by ts_rank descending — most relevant first.
  */
 export async function searchSinapi(query: string, estado: string, referencia?: string) {
   if (!query.trim()) return []
 
-  const results = await prisma.$queryRawUnsafe<
+  const trimmed = query.trim()
+  const refFilter = referencia ? `AND referencia = $3` : ""
+  const params: unknown[] = [estado, trimmed]
+  if (referencia) params.push(referencia)
+
+  // Try tsvector full-text search first
+  let results = await prisma.$queryRawUnsafe<
     Array<{
       id: string
       codigo: string
@@ -61,12 +67,40 @@ export async function searchSinapi(query: string, estado: string, referencia?: s
      FROM "SinapiComposicao"
      WHERE estado = $1
        AND "searchVec" @@ plainto_tsquery('portuguese', $2)
-       ${referencia ? `AND referencia = '${referencia.replace(/'/g, "''")}'` : ""}
+       ${refFilter}
      ORDER BY ts_rank("searchVec", plainto_tsquery('portuguese', $2)) DESC
      LIMIT 20`,
-    estado,
-    query.trim()
+    ...params
   )
+
+  // Fallback: ILIKE search if tsvector returns nothing
+  if (results.length === 0) {
+    const words = trimmed.split(/\s+/).filter(Boolean)
+    const ilikeConditions = words.map((_, i) => `(descricao ILIKE $${i + 2} OR codigo ILIKE $${i + 2})`).join(" AND ")
+    const ilikeParams: unknown[] = [estado, ...words.map((w) => `%${w}%`)]
+    if (referencia) ilikeParams.push(referencia)
+    const refFilterIlike = referencia ? `AND referencia = $${ilikeParams.length}` : ""
+
+    results = await prisma.$queryRawUnsafe<
+      Array<{
+        id: string
+        codigo: string
+        descricao: string
+        unidade: string
+        custoUnitario: string
+        estado: string
+      }>
+    >(
+      `SELECT id, codigo, descricao, unidade, "custoUnitario"::text, estado
+       FROM "SinapiComposicao"
+       WHERE estado = $1
+         AND ${ilikeConditions}
+         ${refFilterIlike}
+       ORDER BY descricao ASC
+       LIMIT 20`,
+      ...ilikeParams
+    )
+  }
 
   return results.map((r) => ({
     ...r,

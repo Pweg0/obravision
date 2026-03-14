@@ -44,6 +44,7 @@ export const createRevisaoSchema = z.object({
   r2Key: z.string().min(1, "Chave R2 e obrigatoria"),
   fileSize: z.coerce.number().positive("Tamanho do arquivo deve ser positivo"),
   migrarPins: z.coerce.boolean().optional().default(false),
+  revisao: z.string().regex(/^R\d+$/, "Revisao deve ser no formato R0, R1, R2...").optional(),
 })
 
 export type CreateRevisaoInput = z.infer<typeof createRevisaoSchema>

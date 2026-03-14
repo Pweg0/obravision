@@ -31,6 +31,7 @@ export function PlantaUploadForm({ obraId, plantaId, onSuccess, onCancel }: Plan
   const [disciplina, setDisciplina] = useState("ARQUITETURA")
   const [disciplinaCustom, setDisciplinaCustom] = useState("")
   const [changelog, setChangelog] = useState("")
+  const [revisao, setRevisao] = useState("R0")
   const [migrarPins, setMigrarPins] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [uploadProgress, setUploadProgress] = useState(0)
@@ -124,6 +125,7 @@ export function PlantaUploadForm({ obraId, plantaId, onSuccess, onCancel }: Plan
         revisaoFormData.set("r2Key", key)
         revisaoFormData.set("fileSize", String(file.size))
         revisaoFormData.set("migrarPins", "false")
+        revisaoFormData.set("revisao", revisao)
 
         const revisaoResult = await createRevisao(newPlantaId, revisaoFormData)
         if (revisaoResult && "error" in revisaoResult) {
@@ -137,6 +139,7 @@ export function PlantaUploadForm({ obraId, plantaId, onSuccess, onCancel }: Plan
         revisaoFormData.set("r2Key", key)
         revisaoFormData.set("fileSize", String(file.size))
         revisaoFormData.set("migrarPins", String(migrarPins))
+        revisaoFormData.set("revisao", revisao)
 
         const result = await createRevisao(plantaId, revisaoFormData)
         if (result && "error" in result) {
@@ -233,6 +236,23 @@ export function PlantaUploadForm({ obraId, plantaId, onSuccess, onCancel }: Plan
             )}
           </p>
         )}
+      </div>
+
+      {/* Revisao selector */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">
+          Revisao
+        </label>
+        <select
+          value={revisao}
+          onChange={(e) => setRevisao(e.target.value)}
+          className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+        >
+          {Array.from({ length: 21 }, (_, i) => `R${i}`).map((r) => (
+            <option key={r} value={r}>{r}</option>
+          ))}
+        </select>
+        <p className="text-xs text-gray-400 mt-1">Selecione a revisao desta planta (R0 = original)</p>
       </div>
 
       {/* Changelog */}

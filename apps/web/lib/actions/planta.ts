@@ -143,6 +143,7 @@ export async function createRevisao(plantaId: string, formData: FormData) {
     r2Key: formData.get("r2Key") as string,
     fileSize: formData.get("fileSize") as string,
     migrarPins: formData.get("migrarPins") as string,
+    revisao: (formData.get("revisao") as string) || undefined,
   }
 
   const result = createRevisaoSchema.safeParse(rawData)
@@ -161,12 +162,16 @@ export async function createRevisao(plantaId: string, formData: FormData) {
     return { error: "Planta nao encontrada" }
   }
 
-  // Count existing revisions to compute the next revision label
-  const existingCount = await tenantClient.plantaRevisao.count({
-    where: { plantaId, deletedAt: null },
-  })
-
-  const revisaoLabel = `R${existingCount}`
+  // Use user-selected revision label, or auto-compute from count
+  let revisaoLabel: string
+  if (data.revisao) {
+    revisaoLabel = data.revisao
+  } else {
+    const existingCount = await tenantClient.plantaRevisao.count({
+      where: { plantaId, deletedAt: null },
+    })
+    revisaoLabel = `R${existingCount}`
+  }
 
   // Get the latest revision for pin migration (if requested)
   let pinsToMigrate: Array<{
@@ -178,7 +183,7 @@ export async function createRevisao(plantaId: string, formData: FormData) {
     pageNumber: number
   }> = []
 
-  if (data.migrarPins && existingCount > 0) {
+  if (data.migrarPins) {
     const latestRevisao = await tenantClient.plantaRevisao.findFirst({
       where: { plantaId, deletedAt: null },
       orderBy: { createdAt: "desc" },
