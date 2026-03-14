@@ -28,5 +28,5 @@ export const addMovimentacaoSchema = z.object({
     }
   )
 
-export type CreateDepositoInput = z.infer<typeof createDepositoSchema>
+export type CreateDepositoInput = z.input<typeof createDepositoSchema>
 export type AddMovimentacaoInput = z.infer<typeof addMovimentacaoSchema>

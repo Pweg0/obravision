@@ -478,12 +478,13 @@ export async function deliverPedido(pedidoId: string) {
       },
     })
 
-    // 2. Update linked CompraRequisicao status to ENTREGUE
+    // 2. Update linked CompraRequisicao status
+    // RequisicaoStatus does not have ENTREGUE — mark as APROVADA (fulfilled)
     for (const item of pedido.itens) {
       if (item.requisicaoId) {
         await tx.compraRequisicao.update({
           where: { id: item.requisicaoId },
-          data: { status: "ENTREGUE" },
+          data: { status: "APROVADA" },
         })
       }
     }
