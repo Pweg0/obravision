@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useTransition } from "react"
-import { updateMedicaoFisicaItem, approveMedicao, rejectMedicao, exportBoletim } from "@/lib/actions/medicoes"
+import { updateMedicaoFisicaItem, approveMedicao, rejectMedicao, exportBoletim, getBoletimPdfUrl } from "@/lib/actions/medicoes"
 import { ProgressoGeral } from "@/components/medicoes/ProgressoGeral"
 
 interface MedicaoFisicaItem {
@@ -96,11 +96,20 @@ export function MedicaoFisicaDetailClient({
       setExportStatus("Gerando PDF...")
       const result = await exportBoletim("fisica", medicao.id)
       if ("status" in result && result.status === "queued") {
-        setExportStatus("PDF sendo gerado. Aguarde a notificacao.")
+        setExportStatus("PDF sendo gerado. Aguarde a notificacao e clique em 'Baixar PDF'.")
       } else {
         setExportStatus("Erro ao gerar PDF")
       }
     })
+  }
+
+  async function handleDownloadPdf() {
+    const url = await getBoletimPdfUrl("fisica", medicao.id)
+    if (url) {
+      window.open(url, "_blank")
+    } else {
+      setExportStatus("PDF ainda nao disponivel. Exporte primeiro.")
+    }
   }
 
   return (
@@ -138,6 +147,13 @@ export function MedicaoFisicaDetailClient({
             className="text-sm px-3 py-1.5 rounded-md border hover:bg-muted transition-colors disabled:opacity-50 cursor-pointer"
           >
             Exportar Boletim
+          </button>
+          <button
+            onClick={handleDownloadPdf}
+            disabled={isPending}
+            className="text-sm px-3 py-1.5 rounded-md border hover:bg-muted transition-colors disabled:opacity-50 cursor-pointer"
+          >
+            Baixar PDF
           </button>
         </div>
       </div>
