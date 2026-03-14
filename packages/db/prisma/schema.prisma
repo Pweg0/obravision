@@ -83,13 +83,14 @@ model Empresa {
   nome      String
   cnpj      String?
   logoUrl   String? // R2 key — null in Phase 1, prepared for Phase 2
-  members   User[]
-  obras     Obra[]
-  statuses  ObraStatus[]
-  invites   Invitation[]
-  leads     Lead[]
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  members     User[]
+  obras       Obra[]
+  statuses    ObraStatus[]
+  invites     Invitation[]
+  leads       Lead[]
+  fornecedores Fornecedor[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 }
 
 model Obra {
@@ -113,11 +114,17 @@ model Obra {
   empresa     Empresa     @relation(fields: [empresaId], references: [id])
   members     ObraMember[]
   invitations Invitation[]
-  plantas     Planta[]
-  etapas      Etapa[]
-  rdoEntradas RdoEntrada[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  plantas       Planta[]
+  etapas        Etapa[]
+  rdoEntradas   RdoEntrada[]
+  orcamento     Orcamento?
+  requisicoes   CompraRequisicao[]
+  pedidos       CompraPedido[]
+  depositos     Deposito[]
+  medicoesFisicas MedicaoFisica[]
+  medicoesContrato MedicaoContrato[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
   @@index([empresaId])
   @@index([tenantId])
@@ -376,5 +383,307 @@ model RdoFoto {
   createdAt    DateTime   @default(now())
 
   @@index([rdoEntradaId])
+  @@index([tenantId])
+}
+
+// ---- Phase 4: Orcamento + Compras + Medicoes ----
+
+enum RequisicaoStatus {
+  RASCUNHO
+  PENDENTE
+  APROVADA
+  REJEITADA
+  CANCELADA
+}
+
+enum PedidoStatus {
+  RASCUNHO
+  ENVIADO
+  CONFIRMADO
+  ENTREGUE_PARCIAL
+  ENTREGUE
+  CANCELADO
+}
+
+enum MovimentacaoTipo {
+  ENTRADA
+  SAIDA
+  TRANSFERENCIA
+}
+
+enum MedicaoStatus {
+  RASCUNHO
+  SUBMETIDA
+  APROVADA
+  REJEITADA
+}
+
+model SinapiComposicao {
+  id            String   @id @default(cuid())
+  codigo        String   @unique
+  descricao     String
+  unidade       String
+  custoUnitario Decimal  @db.Decimal(12, 4)
+  estado        String   @db.Char(2) // UF da tabela SINAPI
+  referencia    String?  // mes/ano de referencia, ex: "2024-11"
+  searchVec     Unsupported("tsvector")?
+
+  @@index([codigo])
+  @@index([estado])
+}
+
+model Orcamento {
+  id        String           @id @default(cuid())
+  tenantId  String
+  obraId    String           @unique
+  obra      Obra             @relation(fields: [obraId], references: [id])
+  bdi       Decimal          @db.Decimal(5, 2) @default(0)
+  etapas    OrcamentoEtapa[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+
+  @@index([tenantId])
+}
+
+model OrcamentoEtapa {
+  id          String          @id @default(cuid())
+  tenantId    String
+  orcamentoId String
+  orcamento   Orcamento       @relation(fields: [orcamentoId], references: [id])
+  nome        String
+  ordem       Int
+  itens       OrcamentoItem[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@index([orcamentoId])
+  @@index([tenantId])
+}
+
+model OrcamentoItem {
+  id            String         @id @default(cuid())
+  tenantId      String
+  etapaId       String
+  etapa         OrcamentoEtapa @relation(fields: [etapaId], references: [id])
+  descricao     String
+  unidade       String
+  quantidade    Decimal        @db.Decimal(12, 4)
+  custoUnitario Decimal        @db.Decimal(12, 4)
+  sinapiCodigo  String?
+  requisicoes   CompraRequisicao[]
+  medicaoItens  MedicaoFisicaItem[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([etapaId])
+  @@index([tenantId])
+}
+
+model Fornecedor {
+  id         String         @id @default(cuid())
+  tenantId   String
+  empresaId  String
+  empresa    Empresa        @relation(fields: [empresaId], references: [id])
+  nome       String
+  cnpj       String?
+  contato    String?
+  email      String?
+  telefone   String?
+  categorias String[]
+  cotacoes   CompraCotacao[]
+  pedidos    CompraPedido[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([empresaId])
+  @@index([tenantId])
+}
+
+model CompraRequisicao {
+  id             String           @id @default(cuid())
+  tenantId       String
+  obraId         String
+  obra           Obra             @relation(fields: [obraId], references: [id])
+  orcamentoItemId String?
+  orcamentoItem  OrcamentoItem?   @relation(fields: [orcamentoItemId], references: [id])
+  descricao      String
+  unidade        String
+  quantidade     Decimal          @db.Decimal(12, 4)
+  status         RequisicaoStatus @default(RASCUNHO)
+  solicitanteId  String           // User.id
+  aprovadorId    String?          // User.id
+  aprovadoEm     DateTime?
+  cotacoes       CompraCotacao[]
+  pedidoItens    CompraPedidoItem[]
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@index([obraId])
+  @@index([tenantId])
+}
+
+model CompraCotacao {
+  id            String           @id @default(cuid())
+  tenantId      String
+  requisicaoId  String
+  requisicao    CompraRequisicao @relation(fields: [requisicaoId], references: [id])
+  fornecedorId  String
+  fornecedor    Fornecedor       @relation(fields: [fornecedorId], references: [id])
+  precoUnitario Decimal          @db.Decimal(12, 4)
+  prazoEntrega  Int?             // dias
+  observacoes   String?
+  selecionada   Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@index([requisicaoId])
+  @@index([fornecedorId])
+  @@index([tenantId])
+}
+
+model CompraPedido {
+  id           String             @id @default(cuid())
+  tenantId     String
+  obraId       String
+  obra         Obra               @relation(fields: [obraId], references: [id])
+  fornecedorId String
+  fornecedor   Fornecedor         @relation(fields: [fornecedorId], references: [id])
+  status       PedidoStatus       @default(RASCUNHO)
+  totalEstimado Decimal           @db.Decimal(12, 4) @default(0)
+  observacoes  String?
+  pdfR2Key     String?
+  itens        CompraPedidoItem[]
+  movimentacoes MovimentacaoEstoque[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([obraId])
+  @@index([fornecedorId])
+  @@index([tenantId])
+}
+
+model CompraPedidoItem {
+  id           String           @id @default(cuid())
+  tenantId     String
+  pedidoId     String
+  pedido       CompraPedido     @relation(fields: [pedidoId], references: [id])
+  requisicaoId String?
+  requisicao   CompraRequisicao? @relation(fields: [requisicaoId], references: [id])
+  descricao    String
+  unidade      String
+  quantidade   Decimal          @db.Decimal(12, 4)
+  precoUnitario Decimal         @db.Decimal(12, 4)
+  createdAt    DateTime         @default(now())
+
+  @@index([pedidoId])
+  @@index([tenantId])
+}
+
+model Deposito {
+  id            String                @id @default(cuid())
+  tenantId      String
+  obraId        String
+  obra          Obra                  @relation(fields: [obraId], references: [id])
+  nome          String
+  tipo          String                @default("almoxarifado")
+  movimentacoes MovimentacaoEstoque[]
+  transferenciasOrigem  MovimentacaoEstoque[] @relation("TransferenciaOrigem")
+  transferenciasDestino MovimentacaoEstoque[] @relation("TransferenciaDestino")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  @@index([obraId])
+  @@index([tenantId])
+}
+
+model MovimentacaoEstoque {
+  id              String           @id @default(cuid())
+  tenantId        String
+  depositoId      String
+  deposito        Deposito         @relation(fields: [depositoId], references: [id])
+  pedidoId        String?
+  pedido          CompraPedido?    @relation(fields: [pedidoId], references: [id])
+  origemId        String?
+  origem          Deposito?        @relation("TransferenciaOrigem", fields: [origemId], references: [id])
+  destinoId       String?
+  destino         Deposito?        @relation("TransferenciaDestino", fields: [destinoId], references: [id])
+  tipo            MovimentacaoTipo
+  descricao       String
+  unidade         String
+  quantidade      Decimal          @db.Decimal(12, 4)
+  custoUnitario   Decimal?         @db.Decimal(12, 4)
+  etapaDestino    String?          // tag de custo por atividade
+  registradoPor   String           // User.id
+  createdAt       DateTime         @default(now())
+
+  @@index([depositoId])
+  @@index([tenantId])
+}
+
+model MedicaoFisica {
+  id          String              @id @default(cuid())
+  tenantId    String
+  obraId      String
+  obra        Obra                @relation(fields: [obraId], references: [id])
+  periodo     String              // ex: "2024-11" (mes/ano)
+  status      MedicaoStatus       @default(RASCUNHO)
+  aprovadoPor String?             // User.id
+  aprovadoEm  DateTime?
+  itens       MedicaoFisicaItem[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([obraId])
+  @@index([tenantId])
+}
+
+model MedicaoFisicaItem {
+  id              String        @id @default(cuid())
+  tenantId        String
+  medicaoId       String
+  medicao         MedicaoFisica @relation(fields: [medicaoId], references: [id])
+  orcamentoItemId String
+  orcamentoItem   OrcamentoItem @relation(fields: [orcamentoItemId], references: [id])
+  percentualMedido Decimal      @db.Decimal(5, 2) // 0-100
+  acumulado       Decimal       @db.Decimal(5, 2) // total acumulado até este boletim
+  createdAt       DateTime      @default(now())
+
+  @@index([medicaoId])
+  @@index([tenantId])
+}
+
+model MedicaoContrato {
+  id           String               @id @default(cuid())
+  tenantId     String
+  obraId       String
+  obra         Obra                 @relation(fields: [obraId], references: [id])
+  empreiteiroId String              // User.id ou nome livre
+  contrato     String?              // numero ou descricao do contrato
+  periodo      String               // ex: "2024-11"
+  status       MedicaoStatus        @default(RASCUNHO)
+  aprovadoPor  String?              // User.id
+  aprovadoEm   DateTime?
+  pdfR2Key     String?
+  itens        MedicaoContratoItem[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@index([obraId])
+  @@index([tenantId])
+}
+
+model MedicaoContratoItem {
+  id              String          @id @default(cuid())
+  tenantId        String
+  medicaoId       String
+  medicao         MedicaoContrato @relation(fields: [medicaoId], references: [id])
+  descricao       String
+  unidade         String
+  quantidade      Decimal         @db.Decimal(12, 4)
+  valorUnitario   Decimal         @db.Decimal(12, 4)
+  acumulado       Decimal         @db.Decimal(12, 4) @default(0)
+  createdAt       DateTime        @default(now())
+
+  @@index([medicaoId])
   @@index([tenantId])
 }
