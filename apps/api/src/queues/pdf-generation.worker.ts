@@ -6,6 +6,8 @@ import { prisma } from "@projetapro/db"
 import { connection, type PdfGenerationJobData } from "./pdf-generation.queue"
 import { PropostaComercial } from "../pdf-templates/PropostaComercial"
 import type { PropostaComercialData } from "../pdf-templates/PropostaComercial"
+import { PedidoCompra } from "../pdf-templates/PedidoCompra"
+import type { PedidoCompraData } from "../pdf-templates/PedidoCompra"
 import type { Server as SocketIOServer } from "socket.io"
 import { format } from "date-fns"
 import type { ReactElement, JSXElementConstructor } from "react"
@@ -114,6 +116,78 @@ async function generateProposta(entityId: string, obraId: string, tenantId: stri
   return { r2Key, obraId }
 }
 
+// ---- Pedido Compra handler ----
+
+async function generatePedidoCompra(entityId: string, obraId: string, tenantId: string) {
+  // Fetch pedido with items, fornecedor, and obra
+  const pedido = await prisma.compraPedido.findUnique({
+    where: { id: entityId },
+    include: {
+      obra: {
+        include: { empresa: true },
+      },
+      fornecedor: true,
+      itens: { orderBy: { createdAt: "asc" } },
+    },
+  })
+
+  if (!pedido) throw new Error(`CompraPedido ${entityId} not found`)
+
+  const obra = pedido.obra
+  const empresa = obra.empresa
+  const fornecedor = pedido.fornecedor
+
+  // Build data for template
+  const itens = pedido.itens.map((item) => ({
+    id: item.id,
+    descricao: item.descricao,
+    unidade: item.unidade,
+    quantidade: parseFloat(String(item.quantidade)),
+    precoUnitario: parseFloat(String(item.precoUnitario)),
+  }))
+
+  const totalEstimado = itens.reduce((sum, item) => sum + item.quantidade * item.precoUnitario, 0)
+
+  const data: PedidoCompraData = {
+    empresaNome: empresa.nome,
+    obraNome: obra.nome,
+    pedidoId: pedido.id,
+    numeroPedido: pedido.id.slice(-8).toUpperCase(),
+    dataGeracao: format(new Date(), "dd/MM/yyyy"),
+    fornecedorNome: fornecedor.nome,
+    fornecedorCnpj: fornecedor.cnpj,
+    fornecedorContato: fornecedor.contato,
+    fornecedorEmail: fornecedor.email,
+    fornecedorTelefone: fornecedor.telefone,
+    itens,
+    totalEstimado,
+    observacoes: pedido.observacoes,
+  }
+
+  // Render PDF
+  const element = React.createElement(PedidoCompra, { data }) as unknown as ReactElement<DocumentProps, string | JSXElementConstructor<unknown>>
+  const pdfBuffer = await renderToBuffer(element)
+
+  // Upload to R2
+  const r2Key = `pdfs/${tenantId}/pedido-compra/${entityId}-${Date.now()}.pdf`
+  await r2.send(
+    new PutObjectCommand({
+      Bucket: process.env.R2_BUCKET_NAME!,
+      Key: r2Key,
+      Body: pdfBuffer,
+      ContentType: "application/pdf",
+    })
+  )
+
+  // Update CompraPedido with pdfR2Key
+  await prisma.compraPedido.update({
+    where: { id: entityId },
+    data: { pdfR2Key: r2Key },
+  })
+
+  return { r2Key, obraId }
+}
+
 // ---- Worker ----
 
 export const pdfGenerationWorker = new Worker<PdfGenerationJobData>(
@@ -131,9 +205,11 @@ export const pdfGenerationWorker = new Worker<PdfGenerationJobData>(
         r2Key = result.r2Key
         break
       }
-      case "pedido-compra":
-        // TODO: implement in Plan 04-03
-        throw new Error("pedido-compra PDF not yet implemented")
+      case "pedido-compra": {
+        const result = await generatePedidoCompra(entityId, obraId, tenantId)
+        r2Key = result.r2Key
+        break
+      }
       case "boletim-medicao":
         // TODO: implement in Plan 04-05
         throw new Error("boletim-medicao PDF not yet implemented")
