@@ -8,6 +8,7 @@
     "rootDir": "src",
     "lib": ["ES2022"],
     "skipLibCheck": true,
+    "jsx": "react",
     "paths": {
       "@projetapro/db": ["../../packages/db/src/index.ts"],
       "@projetapro/types": ["../../packages/types/src/index.ts"]

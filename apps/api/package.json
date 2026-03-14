@@ -19,6 +19,7 @@
     "@hyzyla/pdfium": "^2.1.12",
     "@projetapro/db": "workspace:*",
     "@projetapro/types": "workspace:*",
+    "@react-pdf/renderer": "^4.3.2",
     "bullmq": "^5.71.0",
     "date-fns": "^4.1.0",
     "fastify": "^5.0.0",

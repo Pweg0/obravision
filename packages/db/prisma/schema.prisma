@@ -438,6 +438,7 @@ model Orcamento {
   obraId    String           @unique
   obra      Obra             @relation(fields: [obraId], references: [id])
   bdi       Decimal          @db.Decimal(5, 2) @default(0)
+  pdfR2Key  String?
   etapas    OrcamentoEtapa[]
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
