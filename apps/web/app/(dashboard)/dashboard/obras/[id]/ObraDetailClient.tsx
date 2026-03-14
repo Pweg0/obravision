@@ -139,6 +139,12 @@ export function ObraDetailClient({
           </button>
         ))}
         <Link
+          href={`/dashboard/obras/${obraId}/plantas`}
+          className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
+        >
+          Plantas
+        </Link>
+        <Link
           href={`/dashboard/obras/${obraId}/cronograma`}
           className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
         >
