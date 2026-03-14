@@ -34,18 +34,24 @@ export default async function ObraDetailPage({
 
   if (!obra) notFound()
 
-  // Count related data + fetch recent activity for dashboard feeds
   const [
     plantaCount,
     etapaCount,
     rdoCount,
     orcamento,
-    requisicaoCount,
     medicaoCount,
     recentPlantas,
     recentRdos,
     recentTarefas,
     tarefasProgress,
+    // Purchase data for charts
+    requisicoes,
+    pedidos,
+    cotacaoCount,
+    // Budget data
+    orcamentoFull,
+    // Medicao data
+    medicoesFisicas,
   ] = await Promise.all([
     tenantClient.planta.count({ where: { obraId: id } }),
     tenantClient.etapa.count({ where: { obraId: id } }),
@@ -54,7 +60,6 @@ export default async function ObraDetailPage({
       where: { obraId: id },
       select: { id: true },
     }),
-    tenantClient.compraRequisicao.count({ where: { obraId: id } }),
     tenantClient.medicaoFisica.count({ where: { obraId: id } }),
     // Recent plant revisions
     tenantClient.plantaRevisao.findMany({
@@ -95,9 +100,53 @@ export default async function ObraDetailPage({
       where: { obraId: id },
       select: { progressoReal: true },
     }),
+    // All requisitions with status for pie chart
+    tenantClient.compraRequisicao.findMany({
+      where: { obraId: id },
+      select: { status: true },
+    }),
+    // All purchase orders with status for pie chart
+    tenantClient.compraPedido.findMany({
+      where: { obraId: id },
+      select: { status: true, totalEstimado: true },
+    }),
+    // Total cotações
+    tenantClient.compraCotacao.count({
+      where: { requisicao: { obraId: id } },
+    }),
+    // Budget with etapas and items for cost breakdown
+    tenantClient.orcamento.findUnique({
+      where: { obraId: id },
+      include: {
+        etapas: {
+          include: {
+            itens: {
+              select: {
+                descricao: true,
+                quantidade: true,
+                custoUnitario: true,
+              },
+            },
+          },
+          orderBy: { ordem: "asc" },
+        },
+      },
+    }),
+    // Medicoes fisicas for progress over time
+    tenantClient.medicaoFisica.findMany({
+      where: { obraId: id },
+      select: {
+        periodo: true,
+        status: true,
+        itens: {
+          select: { percentualMedido: true, acumulado: true },
+        },
+      },
+      orderBy: { periodo: "asc" },
+    }),
   ])
 
-  // Calculate overall obra progress (avg of all task progress)
+  // Calculate overall obra progress
   const progressoGeral =
     tarefasProgress.length > 0
       ? Math.round(
@@ -105,6 +154,49 @@ export default async function ObraDetailPage({
             tarefasProgress.length
         )
       : 0
+
+  // Aggregate requisicao statuses for pie chart
+  const requisicaoByStatus: Record<string, number> = {}
+  for (const r of requisicoes) {
+    requisicaoByStatus[r.status] = (requisicaoByStatus[r.status] ?? 0) + 1
+  }
+
+  // Aggregate pedido statuses for pie chart
+  const pedidoByStatus: Record<string, number> = {}
+  let totalPedidos = 0
+  for (const p of pedidos) {
+    pedidoByStatus[p.status] = (pedidoByStatus[p.status] ?? 0) + 1
+    totalPedidos += Number(p.totalEstimado ?? 0)
+  }
+
+  // Budget breakdown by etapa
+  const orcamentoEtapas = orcamentoFull
+    ? orcamentoFull.etapas.map((e) => ({
+        nome: e.nome,
+        total: e.itens.reduce(
+          (sum, i) => sum + Number(i.custoUnitario) * Number(i.quantidade),
+          0
+        ),
+        itemCount: e.itens.length,
+      }))
+    : []
+
+  const orcamentoTotal = orcamentoEtapas.reduce((sum, e) => sum + e.total, 0)
+  const bdi = orcamentoFull ? Number(orcamentoFull.bdi) : 0
+
+  // Medicao progress over time
+  const medicaoProgresso = medicoesFisicas.map((m) => {
+    const avgAcumulado =
+      m.itens.length > 0
+        ? m.itens.reduce((sum, i) => sum + Number(i.acumulado), 0) /
+          m.itens.length
+        : 0
+    return {
+      periodo: m.periodo,
+      status: m.status,
+      progresso: Math.round(avgAcumulado * 100) / 100,
+    }
+  })
 
   return (
     <ObraDashboardClient
@@ -117,9 +209,18 @@ export default async function ObraDetailPage({
       etapaCount={etapaCount}
       rdoCount={rdoCount}
       hasOrcamento={!!orcamento}
-      requisicaoCount={requisicaoCount}
+      requisicaoByStatus={requisicaoByStatus}
+      requisicaoTotal={requisicoes.length}
+      pedidoByStatus={pedidoByStatus}
+      pedidoTotal={pedidos.length}
+      pedidoValorTotal={totalPedidos}
+      cotacaoCount={cotacaoCount}
       medicaoCount={medicaoCount}
       progressoGeral={progressoGeral}
+      orcamentoEtapas={orcamentoEtapas}
+      orcamentoTotal={orcamentoTotal}
+      bdi={bdi}
+      medicaoProgresso={medicaoProgresso}
       recentPlantas={recentPlantas.map((r) => ({
         id: r.id,
         revisao: r.revisao,
