@@ -301,7 +301,7 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
         <div className="rounded-lg border overflow-hidden">
           <Gantt
             tasks={tasks}
-            onTaskUpdate={canEdit ? (handleTaskUpdate as (task: unknown) => void) : undefined}
+            onTaskUpdate={canEdit ? (handleTaskUpdate as (task: unknown) => void) : (() => {})}
             scales={[
               { unit: "month", step: 1, format: "MMM yyyy" },
               { unit: "week", step: 1, format: "'Sem' w" },
