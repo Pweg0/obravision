@@ -63,10 +63,12 @@ type GanttTask = {
   id: string
   text: string
   start: Date
-  end: Date
+  duration: number
+  end?: Date
   parent?: string
   type?: string
   progress?: number
+  open?: boolean
   /** custom fields */
   _status?: string
   _climaSensivel?: boolean | null
@@ -124,24 +126,30 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
         ? new Date(Math.max(...tarefaDates.map((d) => d.end.getTime())))
         : new Date()
 
+    const etapaDuration = Math.max(1, differenceInDays(etapaEnd, etapaStart) + 1)
+
     tasks.push({
       id: etapa.id,
       text: etapa.nome,
       start: etapaStart,
-      end: etapaEnd,
+      duration: etapaDuration,
       type: "summary",
+      open: true,
     })
 
     for (const tarefa of etapa.tarefas) {
       const delayDays = getDelayDays(tarefa)
+      const tStart = new Date(tarefa.startDate)
+      const tEnd = new Date(tarefa.endDate)
+      const tDuration = Math.max(1, differenceInDays(tEnd, tStart) + 1)
       tasks.push({
         id: tarefa.id,
         text:
           tarefa.status === "ATRASADA" && delayDays > 0
             ? `${tarefa.nome} (-${delayDays}d)`
             : tarefa.nome,
-        start: new Date(tarefa.startDate),
-        end: new Date(tarefa.endDate),
+        start: tStart,
+        duration: tDuration,
         parent: etapa.id,
         progress: tarefa.progressoReal,
         _status: tarefa.status,
@@ -154,9 +162,11 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
 
   function handleTaskUpdate(task: GanttTask) {
     startTransition(async () => {
+      const endDate = new Date(task.start)
+      endDate.setDate(endDate.getDate() + (task.duration - 1))
       await updateTarefaDates(task.id, {
         startDate: task.start,
-        endDate: task.end,
+        endDate,
       })
     })
   }
