@@ -156,6 +156,12 @@ export function ObraDetailClient({
         >
           Diario de Obra
         </Link>
+        <Link
+          href={`/dashboard/obras/${obraId}/orcamento`}
+          className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors -mb-px"
+        >
+          Orcamento
+        </Link>
       </div>
 
       {/* Details tab */}
