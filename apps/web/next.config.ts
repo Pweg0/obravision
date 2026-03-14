@@ -1,7 +1,6 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
-  output: "standalone",
   transpilePackages: ["@obravision/db", "@obravision/types", "@svar-ui/react-gantt"],
   webpack: (config) => {
     // Required for react-pdf v9 + pdfjs-dist — avoids canvas Node.js build errors
