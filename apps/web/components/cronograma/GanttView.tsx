@@ -9,9 +9,17 @@ import { EtapaForm } from "./EtapaForm"
 import { TarefaForm } from "./TarefaForm"
 import { Button } from "@/components/ui/button"
 
-// Dynamically import the Gantt component with SSR disabled
-const Gantt = dynamic(
-  () => import("@svar-ui/react-gantt").then((m) => m.Gantt),
+// Dynamically import Gantt + Willow theme with SSR disabled
+const GanttModule = dynamic(
+  () => import("@svar-ui/react-gantt").then((m) => {
+    const { Gantt, Willow } = m
+    // eslint-disable-next-line react/display-name
+    return { default: (props: Record<string, unknown>) => (
+      <Willow>
+        <Gantt {...props} />
+      </Willow>
+    )}
+  }),
   { ssr: false, loading: () => <div className="h-64 flex items-center justify-center text-muted-foreground text-sm">Carregando cronograma...</div> }
 )
 
@@ -309,12 +317,11 @@ export function GanttView({ etapas, obraId, members, currentUserRole }: GanttVie
         </div>
       ) : (
         <div className="rounded-lg border overflow-hidden">
-          <Gantt
+          <GanttModule
             tasks={tasks}
-            onTaskUpdate={canEdit ? (handleTaskUpdate as (task: unknown) => void) : (() => {})}
             scales={[
-              { unit: "month", step: 1, format: "MMM yyyy" },
-              { unit: "day", step: 1, format: "d" },
+              { unit: "month", step: 1, format: "%F %Y" },
+              { unit: "day", step: 1, format: "%j" },
             ]}
             cellWidth={40}
             cellHeight={38}
