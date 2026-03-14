@@ -125,24 +125,31 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
         />
       )}
 
-      {/* Sidebar - narrow icon style */}
+      {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-[82px] flex flex-col transition-transform duration-300 ease-out lg:static lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 flex flex-col transition-all duration-300 ease-out lg:static lg:translate-x-0",
+          isInsideObra ? "w-[220px]" : "w-[82px]",
           mobileOpen ? "translate-x-0" : "-translate-x-full"
         )}
         style={{ background: "linear-gradient(180deg, #1a2332 0%, #0f1724 100%)" }}
       >
         {/* Logo */}
-        <div className="flex items-center justify-center h-16 flex-shrink-0">
-          <Link href="/dashboard" className="flex items-center justify-center">
+        <div className={cn(
+          "flex items-center h-16 flex-shrink-0",
+          isInsideObra ? "justify-between px-4" : "justify-center"
+        )}>
+          <Link href="/dashboard" className="flex items-center gap-2">
             <span className="text-white font-bold text-sm">
               P<span className="text-emerald-400">P</span>
             </span>
+            {isInsideObra && (
+              <span className="text-white/60 text-xs font-medium">ProjetaPro</span>
+            )}
           </Link>
           <button
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden absolute top-4 right-2 text-white/50 hover:text-white cursor-pointer"
+            className="lg:hidden text-white/50 hover:text-white cursor-pointer"
             aria-label="Fechar menu"
           >
             <X className="w-4 h-4" />
@@ -157,26 +164,41 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
               <Link
                 href="/dashboard/obras"
                 onClick={() => setMobileOpen(false)}
-                className="flex flex-col items-center gap-1 py-2 px-1 rounded-lg text-white/40 hover:bg-white/10 hover:text-white/70 transition-all duration-200 cursor-pointer mb-2"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-white/40 hover:bg-white/10 hover:text-white/70 transition-all duration-200 cursor-pointer text-xs"
               >
-                <ArrowLeft className="w-4 h-4" />
-                <span className="text-[8px] uppercase tracking-wide">Voltar</span>
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Voltar</span>
               </Link>
 
-              {/* Obra nav items */}
+              {/* Obra name as title */}
+              <div className="px-3 py-3 mb-1">
+                <p className="text-white font-semibold text-sm truncate">
+                  {obraNav.obraNome}
+                </p>
+                <div className="w-8 h-0.5 bg-emerald-400 rounded-full mt-1.5" />
+              </div>
+
+              {/* Obra nav items - horizontal with icon + text */}
               {obraItems.map((item) => {
                 const isActive = item.exact
                   ? pathname === item.href
                   : pathname.startsWith(item.href)
+                const Icon = item.icon
                 return (
-                  <SidebarItem
+                  <Link
                     key={item.href}
                     href={item.href}
-                    label={item.label}
-                    icon={item.icon}
-                    isActive={isActive}
                     onClick={() => setMobileOpen(false)}
-                  />
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 cursor-pointer text-sm",
+                      isActive
+                        ? "bg-white/15 text-white font-medium"
+                        : "text-white/50 hover:bg-white/10 hover:text-white/80"
+                    )}
+                  >
+                    <Icon className="w-[18px] h-[18px] flex-shrink-0" />
+                    <span>{item.label}</span>
+                  </Link>
                 )
               })}
             </>
@@ -204,30 +226,58 @@ export function DashboardLayout({ children, user }: DashboardLayoutProps) {
 
         {/* User section */}
         <div className="border-t border-white/10 p-2 flex-shrink-0">
-          <div className="flex flex-col items-center gap-2 py-2">
-            {user.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={user.image}
-                alt={displayName}
-                className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10"
-              />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-emerald-500/30 text-emerald-400 flex items-center justify-center text-[10px] font-semibold">
-                {initials}
+          {isInsideObra ? (
+            <div className="flex items-center gap-3 px-2 py-2">
+              {user.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={user.image}
+                  alt={displayName}
+                  className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10 flex-shrink-0"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-emerald-500/30 text-emerald-400 flex items-center justify-center text-[10px] font-semibold flex-shrink-0">
+                  {initials}
+                </div>
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="text-xs text-white font-medium truncate">{displayName}</p>
+                <p className="text-[10px] text-white/40">{ROLE_LABELS[user.role] ?? user.role}</p>
               </div>
-            )}
-            <span className="text-[8px] text-white/40 uppercase tracking-wide text-center truncate w-full px-1">
-              {ROLE_LABELS[user.role] ?? user.role}
-            </span>
-            <button
-              onClick={() => signOut({ callbackUrl: "/login" })}
-              className="text-white/30 hover:text-white transition-colors cursor-pointer"
-              title="Sair"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="text-white/30 hover:text-white transition-colors cursor-pointer flex-shrink-0"
+                title="Sair"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2 py-2">
+              {user.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={user.image}
+                  alt={displayName}
+                  className="w-8 h-8 rounded-full object-cover ring-2 ring-white/10"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-emerald-500/30 text-emerald-400 flex items-center justify-center text-[10px] font-semibold">
+                  {initials}
+                </div>
+              )}
+              <span className="text-[8px] text-white/40 uppercase tracking-wide text-center truncate w-full px-1">
+                {ROLE_LABELS[user.role] ?? user.role}
+              </span>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="text-white/30 hover:text-white transition-colors cursor-pointer"
+                title="Sair"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
