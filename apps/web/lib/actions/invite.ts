@@ -75,8 +75,11 @@ export async function inviteByEmail(formData: FormData) {
   }
 
   try {
-    await resend.emails.send({
-      from: "ProjetaPro <noreply@projetapro.com.br>",
+    // Use verified Resend domain, or fallback to Resend test sender for development
+    const fromAddress = process.env.RESEND_FROM_EMAIL ?? "ProjetaPro <onboarding@resend.dev>"
+
+    const result = await resend.emails.send({
+      from: fromAddress,
       to: email,
       subject: `Voce foi convidado para ${ctx.empresa.nome} no ProjetaPro`,
       html: `
@@ -105,9 +108,11 @@ export async function inviteByEmail(formData: FormData) {
         </div>
       `,
     })
-  } catch {
-    // Email send failure should not block invite creation
-    console.error("Failed to send invite email")
+    if (result.error) {
+      console.error("[invite] Resend API error:", JSON.stringify(result.error))
+    }
+  } catch (err) {
+    console.error("[invite] Failed to send invite email:", err)
   }
 
   revalidatePath("/dashboard/obras")

@@ -147,8 +147,9 @@ export async function forgotPassword(
     // Send reset email via Resend
     const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`
 
+    const fromAddress = process.env.RESEND_FROM_EMAIL ?? "ProjetaPro <onboarding@resend.dev>"
     await resend?.emails.send({
-      from: "ProjetaPro <noreply@projetapro.com.br>",
+      from: fromAddress,
       to: email,
       subject: "Redefinir sua senha — ProjetaPro",
       html: `
